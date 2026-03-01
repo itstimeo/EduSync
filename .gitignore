@@ -1,0 +1,32 @@
+# Dependencies
+/vendor/
+composer.lock
+
+# Environment
+.env
+
+# Claude / AI assistant files
+CLAUDE.md
+.claude/
+*.claude.md
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+*.log
+/logs/
+
+# Uploads (user files, not versioned)
+/public/uploads/
+
+# Cache
+/cache/
