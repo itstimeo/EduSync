@@ -9,8 +9,10 @@ use EduSync\Core\Session;
 use EduSync\Core\View;
 use EduSync\Controllers\AuthController;
 use EduSync\Controllers\DashboardController;
+use EduSync\Services\AuthService;
 
 Session::start();
+AuthService::attemptRememberLogin();
 View::setViewsPath(ROOT_PATH . '/src/Views');
 
 $router = new Router();

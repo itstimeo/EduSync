@@ -19,6 +19,10 @@ define('DB_NAME', $_ENV['DB_NAME'] ?? 'edusync');
 define('DB_USER', $_ENV['DB_USER'] ?? 'root');
 define('DB_PASS', $_ENV['DB_PASS'] ?? '');
 
+// Remember me
+define('REMEMBER_INACTIVE_DAYS', (int) ($_ENV['REMEMBER_INACTIVE_DAYS'] ?? 14));
+define('REMEMBER_MAX_DAYS',      (int) ($_ENV['REMEMBER_MAX_DAYS']      ?? 60));
+
 // Mail
 define('MAIL_HOST', $_ENV['MAIL_HOST'] ?? '');
 define('MAIL_PORT', (int) ($_ENV['MAIL_PORT'] ?? 587));
