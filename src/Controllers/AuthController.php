@@ -11,6 +11,9 @@ class AuthController
 {
     public function showLogin(): void
     {
+        if (Session::has('user_id')) {
+            Session::redirect('/dashboard');
+        }
         View::render('auth/login', ['flash' => Session::getFlash()]);
     }
 
