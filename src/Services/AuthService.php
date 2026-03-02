@@ -2,7 +2,9 @@
 
 namespace EduSync\Services;
 
+use EduSync\Core\Database;
 use EduSync\Core\Session;
+use EduSync\Models\RememberToken;
 use EduSync\Models\User;
 use EduSync\Models\UserTrustedIp;
 use EduSync\Models\VerificationCode;
@@ -41,7 +43,56 @@ class AuthService
         return ['ok' => true];
     }
 
-    public static function login(string $email, string $password): array
+    public static function attemptRememberLogin(): void
+    {
+        if (Session::has('user_id')) {
+            return;
+        }
+
+        $raw = $_COOKIE['remember_token'] ?? null;
+        if (!$raw) {
+            return;
+        }
+
+        $hash   = hash('sha256', $raw);
+        $record = RememberToken::findByHash($hash);
+
+        if (!$record) {
+            return;
+        }
+
+        $inactiveDays = (time() - strtotime($record['last_used_at'])) / 86400;
+        if ($inactiveDays > REMEMBER_INACTIVE_DAYS) {
+            RememberToken::deleteByHash($hash);
+            setcookie('remember_token', '', time() - 3600, '/', '', false, true);
+            return;
+        }
+
+        if (time() > strtotime($record['expires_at'])) {
+            RememberToken::deleteByHash($hash);
+            setcookie('remember_token', '', time() - 3600, '/', '', false, true);
+            return;
+        }
+
+        // Rotation du token
+        RememberToken::deleteByHash($hash);
+        $newRaw    = bin2hex(random_bytes(32));
+        $newHash   = hash('sha256', $newRaw);
+        $expiresAt = $record['expires_at'];
+        RememberToken::create((int) $record['user_id'], $newHash, $expiresAt);
+        setcookie('remember_token', $newRaw, strtotime($expiresAt), '/', '', false, true);
+
+        $db   = Database::getInstance();
+        $stmt = $db->prepare('SELECT first_name FROM users WHERE id = ? LIMIT 1');
+        $stmt->execute([$record['user_id']]);
+        $user = $stmt->fetch();
+
+        Session::set('user_id',       (int) $record['user_id']);
+        Session::set('user_name',     $user['first_name'] ?? '');
+        Session::set('last_activity', time());
+    }
+
+    public static function login(string $email, string $password, bool $rememberMe = false): array
     {
         $user = User::findByEmail($email);
 
@@ -55,6 +106,9 @@ class AuthService
             UserTrustedIp::updateLastSeen((int) $user['id'], $ip);
             Session::set('user_id', (int) $user['id']);
             Session::set('user_name', $user['first_name']);
+            if ($rememberMe) {
+                self::setRememberToken((int) $user['id']);
+            }
             return ['ok' => true, 'trusted' => true];
         }
 
@@ -130,6 +184,15 @@ class AuthService
         Session::set('user_name', $row['first_name'] ?? '');
 
         return ['ok' => true];
+    }
+
+    private static function setRememberToken(int $userId): void
+    {
+        $raw       = bin2hex(random_bytes(32));
+        $hash      = hash('sha256', $raw);
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+' . REMEMBER_MAX_DAYS . ' days'));
+        RememberToken::create($userId, $hash, $expiresAt);
+        setcookie('remember_token', $raw, strtotime($expiresAt), '/', '', false, true);
     }
 
     private static function buildEmailVerifyEmail(string $firstName, string $code): string
