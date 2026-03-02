@@ -104,6 +104,12 @@ class AuthController
         Session::redirect('/dashboard');
     }
 
+    public function logout(): void
+    {
+        Session::destroy();
+        Session::redirect('/login');
+    }
+
     public function showVerifyIp(): void
     {
         if (!Session::has('pending_user_id')) {
