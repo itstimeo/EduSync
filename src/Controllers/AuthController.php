@@ -4,6 +4,7 @@ namespace EduSync\Controllers;
 
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Models\RememberToken;
 use EduSync\Services\AuthService;
 
 class AuthController
@@ -23,7 +24,8 @@ class AuthController
             Session::redirect('/login');
         }
 
-        $result = AuthService::login($email, $password);
+        $rememberMe = isset($_POST['remember_me']) && $_POST['remember_me'] === '1';
+        $result = AuthService::login($email, $password, $rememberMe);
 
         if (!$result['ok']) {
             Session::flash('error', $result['error']);
@@ -102,6 +104,17 @@ class AuthController
         }
 
         Session::redirect('/dashboard');
+    }
+
+    public function logout(): void
+    {
+        $raw = $_COOKIE['remember_token'] ?? null;
+        if ($raw) {
+            RememberToken::deleteByHash(hash('sha256', $raw));
+            setcookie('remember_token', '', time() - 3600, '/', '', false, true);
+        }
+        Session::destroy();
+        Session::redirect('/login');
     }
 
     public function showVerifyIp(): void
