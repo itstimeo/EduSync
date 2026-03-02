@@ -32,8 +32,11 @@ $router->get('/logout', [$auth, 'logout']);
 $dashboard = new DashboardController();
 $router->get('/dashboard', [$dashboard, 'show']);
 
-// Redirect root to login
+// Redirect root based on auth state
 $router->get('/', function () {
+    if (\EduSync\Core\Session::has('user_id')) {
+        \EduSync\Core\Session::redirect('/dashboard');
+    }
     \EduSync\Core\Session::redirect('/login');
 });
 
