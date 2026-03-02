@@ -8,6 +8,7 @@ use EduSync\Core\Router;
 use EduSync\Core\Session;
 use EduSync\Core\View;
 use EduSync\Controllers\AuthController;
+use EduSync\Controllers\DashboardController;
 
 Session::start();
 View::setViewsPath(ROOT_PATH . '/src/Views');
@@ -24,12 +25,10 @@ $router->post('/verify-email', [$auth, 'verifyEmail']);
 $router->get('/verify-ip',     [$auth, 'showVerifyIp']);
 $router->post('/verify-ip',    [$auth, 'verifyIp']);
 
-// Placeholder dashboard
-$router->get('/dashboard', function () {
-    $name = \EduSync\Core\Session::get('user_name', 'User');
-    http_response_code(200);
-    echo '<h1>Welcome, ' . htmlspecialchars($name) . '!</h1><p>Dashboard — coming soon.</p>';
-});
+$router->get('/logout', [$auth, 'logout']);
+
+$dashboard = new DashboardController();
+$router->get('/dashboard', [$dashboard, 'show']);
 
 // Redirect root to login
 $router->get('/', function () {
