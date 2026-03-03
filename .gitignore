@@ -9,6 +9,7 @@ composer.lock
 CLAUDE.md
 .claude/
 *.claude.md
+MEMORY.md
 
 # OS files
 .DS_Store
