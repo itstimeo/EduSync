@@ -8,6 +8,7 @@ use EduSync\Core\Router;
 use EduSync\Core\Session;
 use EduSync\Core\View;
 use EduSync\Controllers\AuthController;
+use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
 use EduSync\Services\AuthService;
 
@@ -31,6 +32,43 @@ $router->get('/logout', [$auth, 'logout']);
 
 $dashboard = new DashboardController();
 $router->get('/dashboard', [$dashboard, 'show']);
+
+$courses = new CoursesController();
+
+// Subjects
+$router->get('/courses',        [$courses, 'showSubjects']);
+$router->get('/courses/create', [$courses, 'showCreateSubject']);
+$router->post('/courses/create',[$courses, 'createSubject']);
+$router->get('/courses/edit',   [$courses, 'showEditSubject']);
+$router->post('/courses/edit',  [$courses, 'updateSubject']);
+$router->post('/courses/delete',[$courses, 'deleteSubject']);
+
+// Themes
+$router->get('/themes',         [$courses, 'showThemes']);
+$router->get('/themes/create',  [$courses, 'showCreateTheme']);
+$router->post('/themes/create', [$courses, 'createTheme']);
+$router->get('/themes/edit',    [$courses, 'showEditTheme']);
+$router->post('/themes/edit',   [$courses, 'updateTheme']);
+$router->post('/themes/delete', [$courses, 'deleteTheme']);
+
+// Chapters
+$router->get('/chapters',          [$courses, 'showChapters']);
+$router->get('/chapters/create',   [$courses, 'showCreateChapter']);
+$router->post('/chapters/create',  [$courses, 'createChapter']);
+$router->get('/chapters/edit',     [$courses, 'showEditChapter']);
+$router->post('/chapters/edit',    [$courses, 'updateChapter']);
+$router->post('/chapters/delete',  [$courses, 'deleteChapter']);
+
+// Documents
+$router->get('/documents',           [$courses, 'showDocuments']);
+$router->get('/documents/upload',    [$courses, 'showUploadDocument']);
+$router->post('/documents/upload',   [$courses, 'uploadDocument']);
+$router->post('/documents/delete',   [$courses, 'deleteDocument']);
+$router->get('/documents/download',  [$courses, 'downloadDocument']);
+$router->get('/documents/serve',     [$courses, 'serveDocument']);
+$router->get('/documents/view',      [$courses, 'viewDocument']);
+$router->get('/documents/edit',      [$courses, 'showEditDocument']);
+$router->post('/documents/edit',     [$courses, 'updateDocument']);
 
 // Redirect root based on auth state
 $router->get('/', function () {
