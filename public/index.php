@@ -10,6 +10,7 @@ use EduSync\Core\View;
 use EduSync\Controllers\AuthController;
 use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
+use EduSync\Controllers\GradesController;
 use EduSync\Services\AuthService;
 
 Session::start();
@@ -69,6 +70,14 @@ $router->get('/documents/serve',     [$courses, 'serveDocument']);
 $router->get('/documents/view',      [$courses, 'viewDocument']);
 $router->get('/documents/edit',      [$courses, 'showEditDocument']);
 $router->post('/documents/edit',     [$courses, 'updateDocument']);
+
+$grades = new GradesController();
+$router->get('/grades',         [$grades, 'showGrades']);
+$router->get('/grades/create',  [$grades, 'showCreateGrade']);
+$router->post('/grades/create', [$grades, 'createGrade']);
+$router->get('/grades/edit',    [$grades, 'showEditGrade']);
+$router->post('/grades/edit',   [$grades, 'updateGrade']);
+$router->post('/grades/delete', [$grades, 'deleteGrade']);
 
 // Redirect root based on auth state
 $router->get('/', function () {

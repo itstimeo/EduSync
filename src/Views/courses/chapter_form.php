@@ -1,5 +1,5 @@
 <style>
-.breadcrumb{font-size:.85rem;color:#6b7280;margin-bottom:1.25rem}
+.breadcrumb{font-size:.85rem;color:#6b7280;max-width:460px;margin:0 auto 1.25rem}
 .breadcrumb a{color:#6366f1;text-decoration:none}
 .form-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;max-width:460px;margin:0 auto}
 .form-card h1{font-size:1.1rem;font-weight:700;margin-bottom:1.25rem}
@@ -11,6 +11,11 @@
 .btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
 .btn-secondary{background:#f3f4f6;color:#374151}.btn-secondary:hover{background:#e5e7eb}
+.req{color:#ef4444;margin-left:2px}
+.field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem}
+.field-err.show{display:block}
+.field-invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
+.req-note{font-size:.78rem;color:#9ca3af;margin-top:1.25rem}
 </style>
 
 <p class="breadcrumb">
@@ -22,15 +27,16 @@
 
 <div class="form-card">
     <h1><?= $chapter ? 'Edit chapter' : 'New chapter' ?></h1>
-    <form method="post" action="<?= $chapter ? '/chapters/edit' : '/chapters/create' ?>">
+    <form method="post" action="<?= $chapter ? '/chapters/edit' : '/chapters/create' ?>" novalidate>
         <?php if ($chapter): ?>
             <input type="hidden" name="id" value="<?= (int)$chapter['id'] ?>">
         <?php endif; ?>
         <input type="hidden" name="theme_id" value="<?= (int)$theme['id'] ?>">
         <div class="field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" maxlength="150" required autofocus
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" maxlength="150" autofocus
                    value="<?= htmlspecialchars($chapter['name'] ?? '', ENT_QUOTES) ?>">
+            <span class="field-err" id="err-name">Please enter a name.</span>
         </div>
         <div class="field">
             <label>Color</label>
@@ -40,9 +46,26 @@
                 include __DIR__ . '/_color_picker.php';
             ?>
         </div>
+        <p class="req-note"><span class="req">*</span> Required</p>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="/chapters?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>
+
+<script>
+(function(){
+    var nameEl = document.getElementById('name');
+    var errEl  = document.getElementById('err-name');
+    nameEl.addEventListener('input', function(){ nameEl.classList.remove('field-invalid'); errEl.classList.remove('show'); });
+    nameEl.closest('form').addEventListener('submit', function(e){
+        if (!nameEl.value.trim()) {
+            e.preventDefault();
+            nameEl.classList.add('field-invalid');
+            errEl.classList.add('show');
+            nameEl.focus();
+        }
+    });
+})();
+</script>
