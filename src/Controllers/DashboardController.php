@@ -6,6 +6,7 @@ use EduSync\Core\Session;
 use EduSync\Core\View;
 use EduSync\Models\Grade;
 use EduSync\Models\Event;
+use EduSync\Models\EventTypeColor;
 use EduSync\Models\RevisionSession;
 
 class DashboardController
@@ -29,8 +30,9 @@ class DashboardController
             'userName'  => Session::get('user_name', ''),
             'grades'    => $grades,
             'average'   => $average,
-            'events'    => $events,
-            'revisions' => $revisions,
+            'events'     => $events,
+            'typeColors' => EventTypeColor::getByUser($userId),
+            'revisions'  => $revisions,
         ], 'layouts/app');
     }
 }
