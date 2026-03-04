@@ -11,8 +11,12 @@
     .card ul li .subject { color: #6b7280; font-size: .8rem; }
     .card ul li .grade { font-weight: 600; color: #1a1a1a; }
     .card ul li .date { font-size: .78rem; color: #9ca3af; }
-    .card ul li .event-title { flex: 1; }
-    .card ul li .event-date { font-size: .78rem; color: #9ca3af; white-space: nowrap; margin-left: .5rem; }
+    .event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-right: .4rem; }
+    .event-content { flex: 1; min-width: 0; }
+    .event-name-row { display: flex; align-items: center; gap: .35rem; }
+    .card ul li .event-title { font-weight: 600; font-size: .875rem; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .card ul li .event-date { font-size: .75rem; color: #9ca3af; white-space: nowrap; flex-shrink: 0; }
+    .event-type-label { font-size: .72rem; color: #9ca3af; margin-top: .1rem; padding-left: 12px; }
     .empty { color: #9ca3af; font-size: .875rem; text-align: center; padding: 1rem 0; }
     .grade-list { display: flex; flex-direction: column; gap: .5rem; }
     .grade-card { display: flex; align-items: center; border: 1px solid #f3f4f6; border-radius: 7px; overflow: hidden; background: #fafafa; }
@@ -68,10 +72,22 @@
             <p class="empty">No events this week.</p>
         <?php else: ?>
             <ul>
-                <?php foreach ($events as $e): ?>
+                <?php foreach ($events as $e):
+                    $eTypeLabel = $typeColors[$e['type']]['label'] ?? ucfirst($e['type'] ?? '');
+                    $eDateStr   = date('d/m', strtotime($e['start_date']));
+                    if (!empty($e['end_date']) && $e['end_date'] !== $e['start_date']) {
+                        $eDateStr .= ' → ' . date('d/m', strtotime($e['end_date']));
+                    }
+                ?>
                     <li>
-                        <span class="event-title"><?= htmlspecialchars($e['title']) ?></span>
-                        <span class="event-date"><?= htmlspecialchars(date('D d/m', strtotime($e['start_date']))) ?></span>
+                        <div class="event-content">
+                            <div class="event-name-row">
+                                <span class="event-dot" style="background:<?= htmlspecialchars($e['color'] ?? '#6366f1', ENT_QUOTES) ?>"></span>
+                                <span class="event-title"><?= htmlspecialchars($e['title']) ?></span>
+                                <span class="event-date"><?= htmlspecialchars($eDateStr) ?></span>
+                            </div>
+                            <div class="event-type-label"><?= htmlspecialchars($eTypeLabel, ENT_QUOTES) ?></div>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
