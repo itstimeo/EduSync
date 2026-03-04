@@ -38,6 +38,7 @@
                           || str_starts_with($uri, '/documents');
         ?>
         <a href="/courses"<?= $coursesActive ? ' class="active"' : '' ?>>Courses</a>
+        <a href="/grades"<?= str_starts_with($uri, '/grades') ? ' class="active"' : '' ?>>Grades</a>
     </nav>
     <div class="wrapper">
         <?php if (!empty($flash)): ?>

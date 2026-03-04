@@ -5,15 +5,25 @@
     .card ul { list-style: none; }
     .card ul li { padding: .5rem 0; border-bottom: 1px solid #f3f4f6; font-size: .875rem; display: flex; justify-content: space-between; }
     .card ul li:last-child { border-bottom: none; }
-    .average-row { margin-top: .75rem; padding-top: .75rem; border-top: 2px solid #e5e7eb; display: flex; justify-content: space-between; font-size: .875rem; }
-    .average-row .label { color: #6b7280; font-weight: 600; }
-    .average-row .value { font-weight: 700; color: #6366f1; }
+    .average-row { margin-top: .85rem; padding-top: .75rem; border-top: 2px solid #e5e7eb; display: flex; justify-content: space-between; align-items: baseline; }
+    .average-row .label { color: #6b7280; font-size: .875rem; font-weight: 600; }
+    .average-row .value { font-size: 1.4rem; font-weight: 800; color: #6366f1; }
     .card ul li .subject { color: #6b7280; font-size: .8rem; }
     .card ul li .grade { font-weight: 600; color: #1a1a1a; }
     .card ul li .date { font-size: .78rem; color: #9ca3af; }
     .card ul li .event-title { flex: 1; }
     .card ul li .event-date { font-size: .78rem; color: #9ca3af; white-space: nowrap; margin-left: .5rem; }
     .empty { color: #9ca3af; font-size: .875rem; text-align: center; padding: 1rem 0; }
+    .grade-list { display: flex; flex-direction: column; gap: .5rem; }
+    .grade-card { display: flex; align-items: center; border: 1px solid #f3f4f6; border-radius: 7px; overflow: hidden; background: #fafafa; }
+    .grade-card-strip { width: 5px; align-self: stretch; flex-shrink: 0; }
+    .grade-card-body { flex: 1; padding: .5rem .75rem; min-width: 0; }
+    .grade-card-name { font-size: .875rem; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .grade-card-sub { font-size: .75rem; color: #9ca3af; margin-top: .05rem; }
+    .grade-card-right { display: flex; flex-direction: column; align-items: flex-end; padding: .5rem .75rem; flex-shrink: 0; gap: .1rem; }
+    .grade-card-val { font-size: .95rem; font-weight: 700; color: #1a1a1a; }
+    .grade-card-max { font-size: .75rem; font-weight: 400; color: #9ca3af; }
+    .grade-card-date { font-size: .72rem; color: #9ca3af; }
     @media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }
 </style>
 
@@ -25,20 +35,23 @@
         <?php if (empty($grades)): ?>
             <p class="empty">No grades yet.</p>
         <?php else: ?>
-            <ul>
+            <div class="grade-list">
                 <?php foreach ($grades as $g): ?>
-                    <li>
-                        <span>
-                            <?= htmlspecialchars($g['name']) ?>
-                            <br><span class="subject"><?= htmlspecialchars($g['subject_name']) ?></span>
-                        </span>
-                        <span>
-                            <span class="grade"><?= htmlspecialchars($g['value']) ?>/<?= htmlspecialchars($g['max_value']) ?></span>
-                            <br><span class="date"><?= $g['graded_at'] ? date('d/m/Y', strtotime($g['graded_at'])) : '' ?></span>
-                        </span>
-                    </li>
+                    <div class="grade-card">
+                        <div class="grade-card-strip" style="background:<?= htmlspecialchars($g['subject_color'] ?? '#d1d5db', ENT_QUOTES) ?>"></div>
+                        <div class="grade-card-body">
+                            <div class="grade-card-name"><?= htmlspecialchars($g['name'], ENT_QUOTES) ?></div>
+                            <div class="grade-card-sub"><?= htmlspecialchars($g['subject_name'], ENT_QUOTES) ?></div>
+                        </div>
+                        <div class="grade-card-right">
+                            <span class="grade-card-val"><?= htmlspecialchars($g['value'], ENT_QUOTES) ?><span class="grade-card-max">/<?= htmlspecialchars($g['max_value'], ENT_QUOTES) ?></span></span>
+                            <?php if ($g['graded_at']): ?>
+                                <span class="grade-card-date"><?= date('d/m/Y', strtotime($g['graded_at'])) ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
+            </div>
             <?php if ($average !== null): ?>
                 <div class="average-row">
                     <span class="label">Overall average</span>
