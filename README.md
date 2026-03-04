@@ -30,7 +30,8 @@ cp .env.example .env
 # 3. Import database schema
 mysql -u root -p < database/migrations/001_create_initial_schema.sql
 
-# 4. Point your web server document root to /public
+# 4. Start the built-in PHP server
+php -S localhost:8080 -t public
 ```
 
 ## Gmail SMTP setup

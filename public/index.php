@@ -11,6 +11,7 @@ use EduSync\Controllers\AuthController;
 use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
 use EduSync\Controllers\GradesController;
+use EduSync\Controllers\EventsController;
 use EduSync\Services\AuthService;
 
 Session::start();
@@ -78,6 +79,17 @@ $router->post('/grades/create', [$grades, 'createGrade']);
 $router->get('/grades/edit',    [$grades, 'showEditGrade']);
 $router->post('/grades/edit',   [$grades, 'updateGrade']);
 $router->post('/grades/delete', [$grades, 'deleteGrade']);
+
+$events = new EventsController();
+$router->get('/planning',          [$events, 'showPlanning']);
+$router->get('/planning/create',   [$events, 'showCreateEvent']);
+$router->post('/planning/create',  [$events, 'createEvent']);
+$router->get('/planning/edit',     [$events, 'showEditEvent']);
+$router->post('/planning/edit',    [$events, 'updateEvent']);
+$router->post('/planning/delete',  [$events, 'deleteEvent']);
+$router->get('/planning/settings',          [$events, 'showSettings']);
+$router->post('/planning/settings',         [$events, 'saveSettings']);
+$router->post('/planning/settings/add-type',[$events, 'addType']);
 
 // Redirect root based on auth state
 $router->get('/', function () {
