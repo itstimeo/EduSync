@@ -53,7 +53,7 @@
 </div>
 
 <div class="form-card">
-    <h2>Add a type</h2>
+    <h2>Add a type <span style="color:#ef4444">*</span></h2>
     <form method="post" action="/planning/settings/add-type" novalidate id="add-type-form">
         <div class="add-row">
             <input type="text" class="add-label-input" name="new_label" placeholder="Type name (e.g. Lab Work)"
