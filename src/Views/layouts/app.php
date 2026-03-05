@@ -18,6 +18,13 @@
         .flash { padding: .6rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: .9rem; }
         .flash.error   { background: #fee2e2; color: #b91c1c; }
         .flash.success { background: #dcfce7; color: #15803d; }
+        /* ── Global icon buttons ── */
+        .btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;border:1px solid #e5e7eb;background:transparent;color:#6b7280;text-decoration:none;flex-shrink:0}
+        .btn-edit{background:#f3f4f6;color:#6b7280;border-color:#e5e7eb}.btn-edit:hover{background:#e5e7eb}
+        .btn-delete{background:#fee2e2;color:#f87171;border-color:#fecaca}.btn-delete:hover{background:#fecaca}
+        .btn-download{background:#dbeafe;color:#60a5fa;border-color:#bfdbfe}.btn-download:hover{background:#bfdbfe}
+        .btn-done{background:#dcfce7;color:#22c55e;border-color:#bbf7d0}.btn-done:hover{background:#bbf7d0}
+        .btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
     </style>
 </head>
 <body>
@@ -40,6 +47,7 @@
         <a href="/courses"<?= $coursesActive ? ' class="active"' : '' ?>>Courses</a>
         <a href="/grades"<?= str_starts_with($uri, '/grades') ? ' class="active"' : '' ?>>Grades</a>
         <a href="/planning"<?= str_starts_with($uri, '/planning') ? ' class="active"' : '' ?>>Planning</a>
+        <a href="/revision"<?= str_starts_with($uri, '/revision') ? ' class="active"' : '' ?>>Revision</a>
     </nav>
     <div class="wrapper">
         <?php if (!empty($flash)): ?>

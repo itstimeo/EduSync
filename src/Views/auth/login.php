@@ -1,11 +1,11 @@
 <?php $title = 'Login'; ?>
 <h1>Sign in to EduSync</h1>
 <form method="POST" action="/login">
-    <label for="email">Email address</label>
+    <label for="email">Email address <span style="color:#ef4444">*</span></label>
     <input type="email" id="email" name="email" required autofocus
            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
 
-    <label for="password">Password</label>
+    <label for="password">Password <span style="color:#ef4444">*</span></label>
     <input type="password" id="password" name="password" required>
 
     <label style="flex-direction:row;gap:.5rem;align-items:center;font-weight:400;margin-top:1rem;">
