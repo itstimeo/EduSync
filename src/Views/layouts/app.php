@@ -7,13 +7,17 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
-        header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: .75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-        header .logo { font-weight: 700; font-size: 1.1rem; color: #6366f1; }
-        header .user { font-size: .875rem; color: #6b7280; }
-        nav { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 0 1.5rem; }
-        nav a { display: inline-block; padding: .75rem 1rem; font-size: .875rem; color: #6b7280; text-decoration: none; border-bottom: 2px solid transparent; }
-        nav a.active { color: #6366f1; border-bottom-color: #6366f1; font-weight: 600; }
-        nav a:hover { color: #6366f1; }
+        body::before { content: ''; display: block; height: 4px; background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7); }
+        header { background: #fff; border-radius: 0 0 99px 99px; box-shadow: 0 4px 20px rgba(0,0,0,.1), 0 1px 4px rgba(0,0,0,.06); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 56px; padding: 0 1rem; gap: 2.5rem; margin: 0 1.5rem; }
+        header .nav-left  { display: flex; align-items: center; justify-content: flex-end; gap: .25rem; }
+        header .nav-center { display: flex; align-items: center; justify-content: center; }
+        header .nav-center a { font-weight: 800; font-size: 1.55rem; color: #6366f1; text-decoration: none; line-height: 1; letter-spacing: -.02em; }
+        header .nav-center a:hover { color: #4f46e5; }
+        header .nav-right { display: flex; align-items: center; justify-content: flex-start; gap: .25rem; }
+        header .user { margin-left: auto; font-size: .875rem; color: #6b7280; white-space: nowrap; }
+        .nav-link { display: inline-flex; align-items: center; height: 38px; padding: 0 1.1rem; font-size: .875rem; color: #6b7280; text-decoration: none; border-radius: 99px; font-weight: 500; white-space: nowrap; }
+        .nav-link.active { background: #6366f1; color: #fff; font-weight: 600; }
+        .nav-link:hover:not(.active) { color: #6366f1; background: #f5f3ff; }
         .wrapper { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
         .flash { padding: .6rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: .9rem; }
         .flash.error   { background: #fee2e2; color: #b91c1c; }
@@ -28,27 +32,30 @@
     </style>
 </head>
 <body>
+    <?php
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $coursesActive = str_starts_with($uri, '/courses')
+                      || str_starts_with($uri, '/themes')
+                      || str_starts_with($uri, '/chapters')
+                      || str_starts_with($uri, '/documents');
+    ?>
     <header>
-        <span class="logo">EduSync</span>
-        <span class="user">
-            <?= htmlspecialchars($userName ?? '') ?>
-            <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#6366f1'" onmouseout="this.style.color='#9ca3af'">Log out</a>
-        </span>
+        <div class="nav-left">
+            <a href="/courses" class="nav-link<?= $coursesActive ? ' active' : '' ?>">Courses</a>
+            <a href="/grades"  class="nav-link<?= str_starts_with($uri, '/grades') ? ' active' : '' ?>">Grades</a>
+        </div>
+        <div class="nav-center">
+            <a href="/dashboard">EduSync</a>
+        </div>
+        <div class="nav-right">
+            <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
+            <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
+            <span class="user">
+                <?= htmlspecialchars($userName ?? '') ?>
+                <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#6366f1'" onmouseout="this.style.color='#9ca3af'">Log out</a>
+            </span>
+        </div>
     </header>
-    <nav>
-        <?php $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH); ?>
-        <a href="/dashboard"<?= $uri === '/dashboard' ? ' class="active"' : '' ?>>Dashboard</a>
-        <?php
-            $coursesActive = str_starts_with($uri, '/courses')
-                          || str_starts_with($uri, '/themes')
-                          || str_starts_with($uri, '/chapters')
-                          || str_starts_with($uri, '/documents');
-        ?>
-        <a href="/courses"<?= $coursesActive ? ' class="active"' : '' ?>>Courses</a>
-        <a href="/grades"<?= str_starts_with($uri, '/grades') ? ' class="active"' : '' ?>>Grades</a>
-        <a href="/planning"<?= str_starts_with($uri, '/planning') ? ' class="active"' : '' ?>>Planning</a>
-        <a href="/revision"<?= str_starts_with($uri, '/revision') ? ' class="active"' : '' ?>>Revision</a>
-    </nav>
     <div class="wrapper">
         <?php if (!empty($flash)): ?>
             <div class="flash <?= htmlspecialchars($flash['type']) ?>">
