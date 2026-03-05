@@ -1,0 +1,23 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#6366f1" fill-opacity=".6"/>
+    </marker>
+  </defs>
+  <path d="M4 56 C8 46,16 36,22 40 C28 44,30 48,36 42 C42 36,46 22,48 16" stroke="#6366f1" stroke-width="1.5" stroke-linecap="butt" fill="none" stroke-opacity=".6" marker-end="url(#a)"/>
+  <rect x="10" y="35" width="44" height="23" rx="1" fill="#6366f1" opacity=".2" stroke="#6366f1" stroke-width="1.5" stroke-opacity=".7"/>
+  <rect x="10" y="30" width="16" height="6" fill="#6366f1" opacity=".35" stroke="#6366f1" stroke-width="1.2" stroke-opacity=".7"/>
+  <rect x="38" y="30" width="16" height="6" fill="#6366f1" opacity=".35" stroke="#6366f1" stroke-width="1.2" stroke-opacity=".7"/>
+  <path d="M22 30l6-10h8l6 10H22z" fill="#6366f1" opacity=".5" stroke="#6366f1" stroke-width="1.5" stroke-opacity=".7" stroke-linejoin="round"/>
+  <path d="M32 20v-6" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".7"/>
+  <path d="M32 14l5 2-5 2" fill="#6366f1" stroke="#6366f1" stroke-width="1" stroke-linejoin="round" opacity=".7"/>
+  <rect x="13" y="37" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="20" y="37" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="40" y="37" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="47" y="37" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="13" y="43" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="20" y="43" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="40" y="43" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="47" y="43" width="4" height="4" rx=".4" fill="#6366f1" opacity=".65"/>
+  <rect x="28" y="47" width="8" height="11" rx="4" fill="#6366f1" opacity=".85"/>
+</svg>
