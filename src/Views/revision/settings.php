@@ -45,6 +45,7 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
     .step-row { display: flex; align-items: center; gap: .5rem; }
     .step-row .step-index { font-size: .75rem; font-weight: 700; color: #9ca3af; width: 1.5rem; text-align: right; flex-shrink: 0; }
     .step-row input[type="number"] { width: 80px; padding: .45rem .6rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: .875rem; color: #1a1a1a; background: #fff; flex-shrink: 0; }
+    .step-invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
     .step-row input[type="text"] { flex: 1; padding: .45rem .6rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: .875rem; color: #1a1a1a; background: #fff; }
     .step-header { display: flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 600; color: #9ca3af; padding-bottom: .25rem; }
     .step-header .col-day   { width: 80px; margin-left: 2rem; flex-shrink: 0; }
@@ -116,7 +117,7 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 <!-- Create / Edit preset form -->
 <div class="section-title" id="form-title">New preset</div>
 <div class="card">
-    <form method="POST" action="/revision/settings/save" id="preset-form">
+    <form method="POST" action="/revision/settings/save" id="preset-form" novalidate>
         <input type="hidden" name="preset_id" id="preset_id" value="0">
 
         <div class="form-group">
@@ -157,6 +158,10 @@ function addStep(day, action) {
         '<input type="number" name="steps[' + idx + '][day]" min="0" placeholder="Day" value="' + (day !== undefined ? day : '') + '">' +
         '<input type="text" name="steps[' + idx + '][action]" placeholder="e.g. Re-read notes" value="' + (action !== undefined ? escHtml(action) : '') + '">' +
         '<button type="button" class="btn-icon btn-delete" onclick="removeStep(this)" title="Remove step" style="width:28px;height:28px;">' + SVG_CLOSE + '</button>';
+    row.querySelector('input[type="number"]').addEventListener('input', function () {
+        this.classList.remove('step-invalid');
+        document.getElementById('err-steps').style.display = 'none';
+    });
     editor.appendChild(row);
     reindexSteps();
 }
@@ -204,7 +209,13 @@ function resetForm() {
     document.getElementById('form-cancel-btn').style.display = 'none';
     document.getElementById('err-name').style.display = 'none';
     document.getElementById('err-steps').style.display = 'none';
+    document.getElementById('name').classList.remove('step-invalid');
 }
+
+document.getElementById('name').addEventListener('input', function () {
+    this.classList.remove('step-invalid');
+    document.getElementById('err-name').style.display = 'none';
+});
 
 document.getElementById('preset-form').addEventListener('submit', function(e) {
     var ok = true;
@@ -215,11 +226,11 @@ document.getElementById('preset-form').addEventListener('submit', function(e) {
     if (!nameEl.value.trim()) {
         errName.textContent = 'Preset name is required.';
         errName.style.display = 'block';
-        nameEl.style.borderColor = '#ef4444';
+        nameEl.classList.add('step-invalid');
         ok = false;
     } else {
         errName.style.display = 'none';
-        nameEl.style.borderColor = '';
+        nameEl.classList.remove('step-invalid');
     }
 
     var rows = document.querySelectorAll('#steps-editor .step-row');
@@ -233,14 +244,14 @@ document.getElementById('preset-form').addEventListener('submit', function(e) {
             var inp = row.querySelector('input[type="number"]');
             var v   = inp.value.trim();
             if (v === '' || isNaN(parseInt(v)) || parseInt(v) < 0) {
-                inp.style.borderColor = '#ef4444';
+                inp.classList.add('step-invalid');
                 invalid = true;
             } else {
-                inp.style.borderColor = '';
+                inp.classList.remove('step-invalid');
             }
         });
         if (invalid) {
-            errSteps.textContent = 'Each step must have a valid day (integer ≥ 0).';
+            errSteps.textContent = 'Each step must have a valid day (integer \u2265 0).';
             errSteps.style.display = 'block';
             ok = false;
         } else {
