@@ -12,6 +12,7 @@ use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
 use EduSync\Controllers\GradesController;
 use EduSync\Controllers\EventsController;
+use EduSync\Controllers\RevisionController;
 use EduSync\Services\AuthService;
 
 Session::start();
@@ -90,6 +91,19 @@ $router->post('/planning/delete',  [$events, 'deleteEvent']);
 $router->get('/planning/settings',          [$events, 'showSettings']);
 $router->post('/planning/settings',         [$events, 'saveSettings']);
 $router->post('/planning/settings/add-type',[$events, 'addType']);
+
+$revision = new RevisionController();
+$router->get('/revision',                       [$revision, 'show']);
+$router->post('/revision/add',                  [$revision, 'addItem']);
+$router->post('/revision/done',                 [$revision, 'markDone']);
+$router->post('/revision/delete',               [$revision, 'deleteItem']);
+$router->get('/revision/settings',              [$revision, 'showSettings']);
+$router->post('/revision/settings/save',        [$revision, 'savePreset']);
+$router->post('/revision/settings/delete',      [$revision, 'deletePreset']);
+$router->post('/revision/settings/set-default',   [$revision, 'setDefaultPreset']);
+$router->post('/revision/settings/unset-default', [$revision, 'unsetDefaultPreset']);
+$router->post('/revision/toggle',                 [$revision, 'toggleReview']);
+$router->post('/revision/edit',                   [$revision, 'editSession']);
 
 // Redirect root based on auth state
 $router->get('/', function () {

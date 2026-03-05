@@ -14,15 +14,16 @@
 .btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
 .btn-secondary{background:#f3f4f6;color:#374151}.btn-secondary:hover{background:#e5e7eb}
-.btn-icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;cursor:pointer;border:none;flex-shrink:0}
-.btn-delete{background:#fee2e2;color:#b91c1c}.btn-delete:hover{background:#fecaca}
 .btn-add{background:#6366f1;color:#fff;padding:.45rem .9rem;font-size:.85rem}.btn-add:hover{background:#4f46e5}
 .add-row{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:1rem;border-top:1px solid #e5e7eb}
 .add-label-input{flex:1;padding:.4rem .6rem;border:1px solid #d1d5db;border-radius:6px;font-size:.875rem}
 .add-label-input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
 </style>
 
-<p class="breadcrumb"><a href="/planning">Planning</a> › Settings</p>
+<div style="display:flex;align-items:center;gap:.75rem;max-width:500px;margin:0 auto 1.25rem;">
+    <a href="/planning" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning">Planning</a> › Settings</p>
+</div>
 
 <div class="form-card">
     <h1>Event types</h1>
@@ -47,7 +48,6 @@
 
         <div class="form-actions">
             <button type="submit" name="save_types" value="1" class="btn btn-primary">Save</button>
-            <a href="/planning" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

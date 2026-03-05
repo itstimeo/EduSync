@@ -1,5 +1,5 @@
 <style>
-.breadcrumb{font-size:.85rem;color:#6b7280;margin-bottom:1.25rem}.breadcrumb a{color:#6366f1;text-decoration:none}
+.breadcrumb{font-size:.85rem;color:#6b7280}.breadcrumb a{color:#6366f1;text-decoration:none}
 .doc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
 .doc-title{font-size:1.2rem;font-weight:700}
 .doc-desc{color:#6b7280;font-size:.9rem;margin-top:.35rem;line-height:1.5}
@@ -15,13 +15,10 @@
 .no-preview p{margin-bottom:1rem;font-size:.95rem}
 </style>
 
-<p class="breadcrumb">
-    <a href="/courses">Subjects</a> ›
-    <a href="/themes?subject_id=<?= (int)$doc['subject_id'] ?>"><?= htmlspecialchars($doc['subject_name'], ENT_QUOTES) ?></a> ›
-    <a href="/chapters?theme_id=<?= (int)$doc['theme_id'] ?>"><?= htmlspecialchars($doc['theme_name'], ENT_QUOTES) ?></a> ›
-    <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>"><?= htmlspecialchars($doc['chapter_name'], ENT_QUOTES) ?></a> ›
-    <?= htmlspecialchars($doc['title'], ENT_QUOTES) ?>
-</p>
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+    <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;"><a href="/courses">Subjects</a> › <a href="/themes?subject_id=<?= (int)$doc['subject_id'] ?>"><?= htmlspecialchars($doc['subject_name'], ENT_QUOTES) ?></a> › <a href="/chapters?theme_id=<?= (int)$doc['theme_id'] ?>"><?= htmlspecialchars($doc['theme_name'], ENT_QUOTES) ?></a> › <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>"><?= htmlspecialchars($doc['chapter_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($doc['title'], ENT_QUOTES) ?></p>
+</div>
 
 <div class="doc-header">
     <div>
