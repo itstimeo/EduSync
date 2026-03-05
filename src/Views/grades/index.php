@@ -7,9 +7,6 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 .page-hd h1{font-size:1.25rem;font-weight:700}
 .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;cursor:pointer;border:none;text-decoration:none;flex-shrink:0}
-.btn-edit{background:#f3f4f6;color:#374151}.btn-edit:hover{background:#e5e7eb}
-.btn-delete{background:#fee2e2;color:#b91c1c}.btn-delete:hover{background:#fecaca}
 .avg-banner{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:.85rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between}
 .avg-banner .label{font-size:.875rem;color:#6b7280;font-weight:600}
 .avg-banner .value{font-size:1.1rem;font-weight:700;color:#6366f1}

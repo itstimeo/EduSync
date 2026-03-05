@@ -16,13 +16,17 @@
 .field-err.show{display:block}
 .field-invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
 .req-note{font-size:.78rem;color:#9ca3af;margin-top:1.25rem}
+.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
 </style>
 
-<p class="breadcrumb">
-    <a href="/courses">Subjects</a> ›
-    <a href="/themes?subject_id=<?= (int)$subject['id'] ?>"><?= htmlspecialchars($subject['name'], ENT_QUOTES) ?></a> ›
-    <?= $theme ? 'Edit theme' : 'New theme' ?>
-</p>
+<div style="display:flex;align-items:center;gap:.75rem;max-width:460px;margin:0 auto 1.25rem;">
+    <a href="/themes?subject_id=<?= (int)$subject['id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;max-width:none;">
+        <a href="/courses">Subjects</a> ›
+        <a href="/themes?subject_id=<?= (int)$subject['id'] ?>"><?= htmlspecialchars($subject['name'], ENT_QUOTES) ?></a> ›
+        <?= $theme ? 'Edit theme' : 'New theme' ?>
+    </p>
+</div>
 
 <div class="form-card">
     <h1><?= $theme ? 'Edit theme' : 'New theme' ?></h1>
@@ -48,7 +52,6 @@
         <p class="req-note"><span class="req">*</span> Required</p>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="/themes?subject_id=<?= (int)$subject['id'] ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

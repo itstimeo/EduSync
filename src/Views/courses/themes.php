@@ -3,7 +3,7 @@ $iconEdit = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16M10 3h4a1 1 0 011 1v3H9V4a1 1 0 011-1z"/></svg>';
 ?>
 <style>
-.breadcrumb{font-size:.85rem;color:#6b7280;margin-bottom:1.25rem}.breadcrumb a{color:#6366f1;text-decoration:none}
+.breadcrumb{font-size:.85rem;color:#6b7280}.breadcrumb a{color:#6366f1;text-decoration:none}
 .page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .page-hd h1{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:.55rem}
 .subj-dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0}
@@ -13,9 +13,6 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 .view-toggle button.active{background:#6366f1;color:#fff;border-color:#6366f1}
 .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;cursor:pointer;border:none;text-decoration:none;flex-shrink:0}
-.btn-edit{background:#f3f4f6;color:#374151}.btn-edit:hover{background:#e5e7eb}
-.btn-delete{background:#fee2e2;color:#b91c1c}.btn-delete:hover{background:#fecaca}
 .empty{color:#9ca3af;font-size:.9rem;padding:3rem 0;text-align:center}
 .card-list{display:flex;flex-direction:column;gap:.55rem}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:box-shadow .15s;overflow:hidden}
@@ -32,10 +29,10 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 .card-grid .card-actions{padding:.45rem .75rem .6rem;display:flex;flex-wrap:wrap;gap:.35rem;border-top:1px solid #f3f4f6}
 </style>
 
-<p class="breadcrumb">
-    <a href="/courses">Subjects</a> ›
-    <?= htmlspecialchars($subject['name'], ENT_QUOTES) ?>
-</p>
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
+    <a href="/courses" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;"><a href="/courses">Subjects</a> › <?= htmlspecialchars($subject['name'], ENT_QUOTES) ?></p>
+</div>
 <div class="page-hd">
     <h1>
         <span class="subj-dot" style="background:<?= htmlspecialchars($subject['color'], ENT_QUOTES) ?>"></span>

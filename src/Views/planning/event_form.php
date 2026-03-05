@@ -53,6 +53,7 @@
 .dp-day.today{color:#6366f1;font-weight:700}
 .dp-day.selected{background:#6366f1;color:#fff;font-weight:700}
 .dp-day.other-month{color:#d1d5db}
+.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
 </style>
 
 <?php
@@ -61,7 +62,10 @@ $currentType  = $event['type'] ?? 'other';
 $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366f1');
 ?>
 
-<p class="breadcrumb"><a href="/planning">Planning</a> › <?= $event ? 'Edit' : 'New event' ?></p>
+<div style="display:flex;align-items:center;gap:.75rem;max-width:520px;margin:0 auto 1.25rem;">
+    <a href="/planning" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning">Planning</a> › <?= $event ? 'Edit' : 'New event' ?></p>
+</div>
 
 <div class="form-card">
     <h1><?= $event ? 'Edit event' : 'New event' ?></h1>
@@ -162,7 +166,6 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="/planning" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>
