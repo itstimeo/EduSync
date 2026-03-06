@@ -30,6 +30,10 @@
         .btn-download{background:#dbeafe;color:#60a5fa;border-color:#bfdbfe}.btn-download:hover{background:#bfdbfe}
         .btn-done{background:#dcfce7;color:#22c55e;border-color:#bbf7d0}.btn-done:hover{background:#bbf7d0}
         .btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
+        a[href],button,[onclick]:not(.card-actions),.card{transition:transform .15s ease;}
+        a[href]:hover,button:hover,[onclick]:not(.card-actions):hover,.card:hover{transform:scale(1.03);}
+        header{transition:transform .15s ease;transform-origin:top center;}
+        header:hover{transform:scale(1.015);}
         footer{display:flex;align-items:center;gap:1rem;padding:2rem 2rem 1.5rem;font-size:.8rem;color:#9ca3af;}
         footer::before,footer::after{content:'';flex:1;height:1px;background:#e5e7eb;}
     </style>
@@ -92,7 +96,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v0.8.0</footer>
+    <footer>© 2026 EduSync · v0.10.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div style="background:#fff;border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
