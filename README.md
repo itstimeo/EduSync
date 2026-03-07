@@ -1,20 +1,41 @@
 # EduSync
 
-Student management application built with PHP and MySQL.
+Student management application built with PHP and MySQL — v1.0.0.
+
+## Screenshots
+
+**Dashboard** — overview with recent grades, upcoming events and today's revisions
+
+![Dashboard](public/assets/screenshots/dashboard.png)
+
+**Courses** — subjects organized by color, with themes, chapters and documents
+
+![Courses](public/assets/screenshots/courses.png)
+
+**Grades** — per-subject grade tracking with weighted averages
+
+![Grades](public/assets/screenshots/grades.png)
+
+**Planning** — monthly calendar with color-coded event types
+
+![Planning](public/assets/screenshots/planning.png)
+
+**Revision** — spaced repetition sessions due today and upcoming
+
+![Revision](public/assets/screenshots/revision.png)
 
 ## Features
 
-- User accounts with email/password authentication
-- New IP detection with email verification code
-- **Courses** — subjects > themes > chapters > documents
-- **Grades** — per-subject grade tracking with coefficients
-- **Planning** — calendar with exams, school trips, holidays, etc.
-- **Revision** — spaced repetition system (customizable intervals)
+- **Auth** — Register/login with email & password, email verification, new-IP detection with 6-digit code by email, Remember me (60-day token with rotation)
+- **Courses** — Subjects → Themes → Chapters → Documents (PDF, images, DOCX, PPT, TXT — up to 50 MB), inline viewer, HSV color picker, list/grid toggle
+- **Grades** — Per-subject grade tracking with coefficients, weighted average, custom subject dropdown with color badges, custom date picker, optional comment
+- **Planning** — Monthly calendar + event list, CRUD events, custom event types (add/rename/recolor/delete), dashboard week view
+- **Revision** — Spaced repetition (J+1/3/7/14/30 or custom intervals), link chapters or documents, preset management, today's widget on dashboard
 
 ## Requirements
 
-- PHP >= 8.1
-- MySQL >= 8.0
+- PHP >= 8.0
+- MySQL >= 8.0 (or MariaDB >= 10.4)
 - Composer
 - A Gmail account with an App Password (for email sending)
 
@@ -27,12 +48,29 @@ composer install
 # 2. Copy environment file and fill in your values
 cp .env.example .env
 
-# 3. Import database schema
-mysql -u root -p < database/migrations/001_create_initial_schema.sql
+# 3. Create the database and import the schema
+mysql -u root -p < database/migrations/schema.sql
 
 # 4. Start the built-in PHP server
 php -S localhost:8080 -t public
 ```
+
+## Environment variables
+
+| Variable                 | Description                                   |
+|--------------------------|-----------------------------------------------|
+| `DB_HOST`                | MySQL host (e.g. `localhost`)                 |
+| `DB_NAME`                | Database name (e.g. `edusync`)                |
+| `DB_USER`                | MySQL user                                    |
+| `DB_PASS`                | MySQL password                                |
+| `MAIL_HOST`              | SMTP host (e.g. `smtp.gmail.com`)             |
+| `MAIL_PORT`              | SMTP port (e.g. `587`)                        |
+| `MAIL_USERNAME`          | Gmail address                                 |
+| `MAIL_PASSWORD`          | Gmail App Password                            |
+| `MAIL_FROM_ADDRESS`      | Sender address                                |
+| `MAIL_FROM_NAME`         | Sender name (e.g. `EduSync`)                  |
+| `REMEMBER_MAX_DAYS`      | Max lifetime of remember-me token (e.g. `60`) |
+| `REMEMBER_INACTIVE_DAYS` | Inactivity limit in days (e.g. `14`)          |
 
 ## Gmail SMTP setup
 
@@ -49,11 +87,11 @@ src/
   Controllers/  HTTP request handlers
   Models/       Database models
   Views/        PHP templates
-  Services/     Mail, Auth, etc.
+  Services/     MailService, AuthService
   Core/         Router, Database, Session, View
-config/         Application configuration
+config/         Application configuration (loads .env)
 database/
-  migrations/   SQL schema files
+  migrations/   schema.sql — full database schema
 ```
 
 ## License

@@ -96,7 +96,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v0.10.0</footer>
+    <footer>© 2026 EduSync · v1.0.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div style="background:#fff;border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
