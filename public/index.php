@@ -17,6 +17,18 @@ use EduSync\Services\AuthService;
 
 Session::start();
 AuthService::attemptRememberLogin();
+
+if (Session::has('user_id')) {
+    $db   = \EduSync\Core\Database::getInstance();
+    $stmt = $db->prepare('SELECT id FROM users WHERE id = ? LIMIT 1');
+    $stmt->execute([Session::get('user_id')]);
+    if (!$stmt->fetch()) {
+        Session::destroy();
+        setcookie('remember_token', '', time() - 3600, '/', '', false, true);
+        Session::redirect('/login');
+    }
+}
+
 View::setViewsPath(ROOT_PATH . '/src/Views');
 
 $router = new Router();
