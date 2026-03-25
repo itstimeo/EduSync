@@ -1,28 +1,58 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.1.0.
+Student management application built with PHP and MySQL — v1.2.0.
 
 ## Screenshots
 
 **Dashboard** — overview with recent grades, upcoming events and today's revisions
 
-![Dashboard](public/assets/screenshots/dashboard.png)
+<table><tr>
+  <td><img src="public/assets/screenshots/dashboard-light.png" width="400"/></td>
+  <td><img src="public/assets/screenshots/dashboard-dark.png" width="400"/></td>
+</tr><tr>
+  <td align="center">Light</td>
+  <td align="center">Dark</td>
+</tr></table>
 
 **Courses** — subjects organized by color, with themes, chapters and documents
 
-![Courses](public/assets/screenshots/courses.png)
+<table><tr>
+  <td><img src="public/assets/screenshots/courses-light.png" width="400"/></td>
+  <td><img src="public/assets/screenshots/courses-dark.png" width="400"/></td>
+</tr><tr>
+  <td align="center">Light</td>
+  <td align="center">Dark</td>
+</tr></table>
 
 **Grades** — per-subject grade tracking with weighted averages
 
-![Grades](public/assets/screenshots/grades.png)
+<table><tr>
+  <td><img src="public/assets/screenshots/grades-light.png" width="400"/></td>
+  <td><img src="public/assets/screenshots/grades-dark.png" width="400"/></td>
+</tr><tr>
+  <td align="center">Light</td>
+  <td align="center">Dark</td>
+</tr></table>
 
 **Planning** — monthly calendar with color-coded event types
 
-![Planning](public/assets/screenshots/planning.png)
+<table><tr>
+  <td><img src="public/assets/screenshots/planning-light.png" width="400"/></td>
+  <td><img src="public/assets/screenshots/planning-dark.png" width="400"/></td>
+</tr><tr>
+  <td align="center">Light</td>
+  <td align="center">Dark</td>
+</tr></table>
 
 **Revision** — spaced repetition sessions due today and upcoming
 
-![Revision](public/assets/screenshots/revision.png)
+<table><tr>
+  <td><img src="public/assets/screenshots/revision-light.png" width="400"/></td>
+  <td><img src="public/assets/screenshots/revision-dark.png" width="400"/></td>
+</tr><tr>
+  <td align="center">Light</td>
+  <td align="center">Dark</td>
+</tr></table>
 
 ## Features
 

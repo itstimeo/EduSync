@@ -9,45 +9,45 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 ?>
 <style>
     .settings-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; }
-    .settings-header h1 { font-size: 1.4rem; font-weight: 700; color: #1a1a1a; flex: 1; }
+    .settings-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--text); flex: 1; }
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: .5rem 1rem; border-radius: 6px; font-size: .875rem; font-weight: 500; cursor: pointer; text-decoration: none; border: none; }
     .btn-primary { background: #6366f1; color: #fff; }
     .btn-primary:hover { background: #4f46e5; }
-    .btn-ghost { background: transparent; color: #6b7280; border: 1px solid #e5e7eb; }
-    .btn-ghost:hover { background: #f3f4f6; color: #1a1a1a; }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg-subtle); color: var(--text); }
     .btn-sm { padding: .35rem .75rem; font-size: .8rem; }
     .btn-icon-star:hover { background: #fef9c3; color: #b45309; border-color: #fde68a; }
-    .btn-icon-plus { border-style: dashed; border-color: #a5b4fc; color: #6366f1; background: #f5f3ff; }
-    .btn-icon-plus:hover { background: #ede9fe; }
+    .btn-icon-plus { border-style: dashed; border-color: #a5b4fc; color: #6366f1; background: var(--purple-tint); }
+    .btn-icon-plus:hover { background: var(--purple-tint-2); }
 
-    .section-title { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #9ca3af; margin-bottom: .75rem; }
+    .section-title { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-subtle); margin-bottom: .75rem; }
 
-    .preset-list { background: #fff; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.07); overflow: hidden; margin-bottom: 2rem; }
-    .preset-row { display: flex; align-items: flex-start; gap: .75rem; padding: .85rem 1.25rem; border-bottom: 1px solid #f3f4f6; }
+    .preset-list { background: var(--surface); border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.07); overflow: hidden; margin-bottom: 2rem; }
+    .preset-row { display: flex; align-items: flex-start; gap: .75rem; padding: .85rem 1.25rem; border-bottom: 1px solid var(--bg-subtle); }
     .preset-row:last-child { border-bottom: none; }
-    .preset-name { font-weight: 600; font-size: .9rem; color: #1a1a1a; min-width: 130px; padding-top: .25rem; }
+    .preset-name { font-weight: 600; font-size: .9rem; color: var(--text); min-width: 130px; padding-top: .25rem; }
     .preset-steps { flex: 1; display: flex; flex-wrap: wrap; gap: .35rem; padding-top: .1rem; }
-    .step-pill { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .6rem; border-radius: 99px; font-size: .75rem; background: #f3f4f6; color: #374151; }
+    .step-pill { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .6rem; border-radius: 99px; font-size: .75rem; background: var(--bg-subtle); color: var(--text); }
     .step-pill .step-day { font-weight: 700; color: #6366f1; }
     .preset-actions { display: flex; gap: .35rem; flex-shrink: 0; align-items: center; }
-    .badge-default { display: inline-block; padding: .15rem .5rem; border-radius: 99px; font-size: .7rem; font-weight: 700; background: #ede9fe; color: #6d28d9; margin-left: .4rem; }
+    .badge-default { display: inline-block; padding: .15rem .5rem; border-radius: 99px; font-size: .7rem; font-weight: 700; background: var(--purple-tint-2); color: #6d28d9; margin-left: .4rem; }
 
-    .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.07); padding: 1.5rem; }
+    .card { background: var(--surface); border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.07); padding: 1.5rem; }
     .form-group { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
-    .form-group label { font-size: .8rem; font-weight: 600; color: #374151; }
-    .form-group input[type="text"] { padding: .5rem .75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: .875rem; color: #1a1a1a; background: #fff; }
+    .form-group label { font-size: .8rem; font-weight: 600; color: var(--text); }
+    .form-group input[type="text"] { padding: .5rem .75rem; border: 1px solid var(--border-soft); border-radius: 6px; font-size: .875rem; color: var(--text); background: var(--input-bg); }
     .form-group input[type="text"]:focus, .form-group input[type="number"]:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.15); }
-    .hint { font-size: .75rem; color: #9ca3af; }
-    .empty { color: #9ca3af; font-size: .875rem; text-align: center; padding: 1.5rem 0; }
+    .hint { font-size: .75rem; color: var(--text-subtle); }
+    .empty { color: var(--text-subtle); font-size: .875rem; text-align: center; padding: 1.5rem 0; }
     .form-actions { display: flex; gap: .75rem; margin-top: 1.25rem; }
 
     .steps-editor { display: flex; flex-direction: column; gap: .5rem; margin-bottom: .75rem; }
     .step-row { display: flex; align-items: center; gap: .5rem; }
-    .step-row .step-index { font-size: .75rem; font-weight: 700; color: #9ca3af; width: 1.5rem; text-align: right; flex-shrink: 0; }
-    .step-row input[type="number"] { width: 80px; padding: .45rem .6rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: .875rem; color: #1a1a1a; background: #fff; flex-shrink: 0; }
+    .step-row .step-index { font-size: .75rem; font-weight: 700; color: var(--text-subtle); width: 1.5rem; text-align: right; flex-shrink: 0; }
+    .step-row input[type="number"] { width: 80px; padding: .45rem .6rem; border: 1px solid var(--border-soft); border-radius: 6px; font-size: .875rem; color: var(--text); background: var(--input-bg); flex-shrink: 0; }
     .step-invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
-    .step-row input[type="text"] { flex: 1; padding: .45rem .6rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: .875rem; color: #1a1a1a; background: #fff; }
-    .step-header { display: flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 600; color: #9ca3af; padding-bottom: .25rem; }
+    .step-row input[type="text"] { flex: 1; padding: .45rem .6rem; border: 1px solid var(--border-soft); border-radius: 6px; font-size: .875rem; color: var(--text); background: var(--input-bg); }
+    .step-header { display: flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 600; color: var(--text-subtle); padding-bottom: .25rem; }
     .step-header .col-day   { width: 80px; margin-left: 2rem; flex-shrink: 0; }
     .step-header .col-action { flex: 1; }
 </style>
@@ -60,7 +60,7 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 <!-- Preset list -->
 <div class="section-title">Your presets</div>
 <?php if (empty($presets)): ?>
-    <p class="empty" style="background:#fff;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:2rem;">No presets yet. Create one below.</p>
+    <p class="empty" style="background:var(--surface);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:2rem;">No presets yet. Create one below.</p>
 <?php else: ?>
     <div class="preset-list" style="margin-bottom:2rem;">
         <?php foreach ($presets as $p):

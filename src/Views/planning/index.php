@@ -29,47 +29,47 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 .hd-right{display:flex;align-items:center;gap:.6rem}
 .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-ghost{background:#f3f4f6;color:#374151;padding:.4rem .7rem;font-size:.8rem}.btn-ghost:hover{background:#e5e7eb}
+.btn-ghost{background:var(--bg-subtle);color:var(--text);padding:.4rem .7rem;font-size:.8rem}.btn-ghost:hover{background:var(--border)}
 /* Tabs */
-.tabs{display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin-bottom:1.5rem}
-.tab-btn{padding:.6rem 1.25rem;font-size:.875rem;font-weight:500;color:#6b7280;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
+.tab-btn{padding:.6rem 1.25rem;font-size:.875rem;font-weight:500;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
 .tab-btn.active{color:#6366f1;border-bottom-color:#6366f1;font-weight:600}
 .tab-panel{display:none}.tab-panel.active{display:block}
 /* Calendar */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.cal-nav-btn{background:#f3f4f6;border:none;border-radius:6px;padding:.35rem .65rem;cursor:pointer;font-size:1rem;color:#374151;text-decoration:none;line-height:1}
-.cal-nav-btn:hover{background:#e5e7eb}
-.cal-month{font-size:1rem;font-weight:700;color:#1a1a1a}
+.cal-nav-btn{background:var(--bg-subtle);border:none;border-radius:6px;padding:.35rem .65rem;cursor:pointer;font-size:1rem;color:var(--text);text-decoration:none;line-height:1}
+.cal-nav-btn:hover{background:var(--border)}
+.cal-month{font-size:1rem;font-weight:700;color:var(--text)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-dow{text-align:center;font-size:.72rem;font-weight:600;color:#9ca3af;padding:.3rem 0}
-.cal-cell{background:#fff;border:1px solid #e5e7eb;border-radius:6px;min-height:80px;padding:.35rem .4rem;cursor:pointer;transition:background .1s;vertical-align:top}
-.cal-cell:hover{background:#f5f3ff}
-.cal-cell.other-month{background:#f9fafb;opacity:.5;cursor:default}
-.cal-cell.other-month:hover{background:#f9fafb}
+.cal-dow{text-align:center;font-size:.72rem;font-weight:600;color:var(--text-subtle);padding:.3rem 0}
+.cal-cell{background:var(--surface);border:1px solid var(--border);border-radius:6px;min-height:80px;padding:.35rem .4rem;cursor:pointer;transition:background .1s;vertical-align:top}
+.cal-cell:hover{background:var(--purple-tint)}
+.cal-cell.other-month{background:var(--bg-hover);opacity:.5;cursor:default}
+.cal-cell.other-month:hover{background:var(--bg-hover)}
 .cal-cell.today{border-color:#6366f1;border-width:2px}
-.cal-day-num{font-size:.78rem;font-weight:600;color:#374151;margin-bottom:.25rem}
+.cal-day-num{font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
 .cal-cell.today .cal-day-num{color:#6366f1}
 .cal-event{display:flex;align-items:center;gap:.25rem;font-size:.7rem;margin-bottom:2px;border-radius:3px;padding:1px 3px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}
 .cal-event-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.cal-event-title{overflow:hidden;text-overflow:ellipsis;color:#374151}
+.cal-event-title{overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .cal-more{font-size:.68rem;color:#6366f1;font-weight:600;margin-top:1px}
 /* List */
-.event-row{background:#fff;border:1px solid #e5e7eb;border-radius:8px;display:flex;align-items:center;margin-bottom:.55rem;overflow:hidden}
+.event-row{background:var(--surface);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;margin-bottom:.55rem;overflow:hidden}
 .event-strip{width:5px;align-self:stretch;flex-shrink:0}
 .event-body{flex:1;padding:.65rem 1rem;min-width:0}
 .event-top{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.event-title{font-weight:600;font-size:.9rem;color:#1a1a1a}
+.event-title{font-weight:600;font-size:.9rem;color:var(--text)}
 .event-badge{font-size:.7rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;white-space:nowrap}
-.event-dates{font-size:.78rem;color:#9ca3af;margin-top:.15rem}
-.event-desc{font-size:.78rem;color:#6b7280;margin-top:.15rem}
+.event-dates{font-size:.78rem;color:var(--text-subtle);margin-top:.15rem}
+.event-desc{font-size:.78rem;color:var(--text-muted);margin-top:.15rem}
 .event-actions{padding:.4rem .75rem;display:flex;gap:.3rem;flex-shrink:0}
-.empty{color:#9ca3af;font-size:.9rem;padding:3rem 0;text-align:center}
+.empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
 </style>
 
 <div class="page-hd">
     <h1>Planning</h1>
     <div class="hd-right">
-        <a href="/planning/settings" class="btn-icon btn-edit" title="Settings" style="background:#d1d5db;color:#374151"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
+        <a href="/planning/settings" class="btn-icon btn-edit" title="Settings" style="background:var(--border-soft);color:var(--text)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
         <a href="/planning/create" class="btn btn-primary">+ New event</a>
     </div>
 </div>

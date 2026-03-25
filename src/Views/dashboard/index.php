@@ -1,49 +1,49 @@
 <style>
     .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.07); padding: 1.5rem; }
+    .card { background: var(--surface); border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.07); padding: 1.5rem; }
     .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .card-header h2 { font-size: 1rem; font-weight: 600; color: #374151; }
+    .card-header h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
     .card-header a.see-all { font-size: .75rem; font-weight: 500; color: #6366f1; text-decoration: none; display: inline-flex; align-items: center; gap: .2rem; opacity: .8; }
     .card-header a.see-all:hover { opacity: 1; }
     .card ul { list-style: none; }
-    .card ul li { border-bottom: 1px solid #f3f4f6; font-size: .875rem; }
+    .card ul li { border-bottom: 1px solid var(--bg-subtle); font-size: .875rem; }
     .card ul li:last-child { border-bottom: none; }
     /* Revision items */
     .rev-item-body { flex: 1; min-width: 0; }
-    .rev-item-name { font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .875rem; }
-    .rev-item-name.reviewed { text-decoration: line-through; color: #9ca3af; }
+    .rev-item-name { font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .875rem; }
+    .rev-item-name.reviewed { text-decoration: line-through; color: var(--text-subtle); }
     .rev-item-next { font-size: .72rem; color: #15803d; font-weight: 500; margin-top: .1rem; }
-    .rev-toggle-sm { width: 20px; height: 20px; flex-shrink: 0; border-radius: 4px; border: 2px solid #d1d5db; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; padding: 0; margin-top: 2px; }
+    .rev-toggle-sm { width: 20px; height: 20px; flex-shrink: 0; border-radius: 4px; border: 2px solid var(--border-soft); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; padding: 0; margin-top: 2px; }
     .rev-toggle-sm:hover { border-color: #22c55e; }
     .rev-toggle-sm.checked { background: #dcfce7; border-color: #22c55e; color: #22c55e; }
     .subj-dot-sm { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
     .rev-row { display: flex; align-items: flex-start; gap: .5rem; padding: .5rem 0; }
     a.rev-item-link { flex: 1; min-width: 0; text-decoration: none; display: block; }
     /* Grade items */
-    .average-row { margin-top: .85rem; padding-top: .75rem; border-top: 2px solid #e5e7eb; display: flex; justify-content: space-between; align-items: baseline; }
-    .average-row .label { color: #6b7280; font-size: .875rem; font-weight: 600; }
+    .average-row { margin-top: .85rem; padding-top: .75rem; border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+    .average-row .label { color: var(--text-muted); font-size: .875rem; font-weight: 600; }
     .average-row .value { font-size: 1.4rem; font-weight: 800; color: #6366f1; }
     .grade-list { display: flex; flex-direction: column; gap: .5rem; }
-    a.grade-card { display: flex; align-items: center; border: 1px solid #f3f4f6; border-radius: 7px; overflow: hidden; background: #fafafa; text-decoration: none; transition: box-shadow .15s, border-color .15s; }
-    a.grade-card:hover { box-shadow: 0 2px 8px rgba(99,102,241,.12); border-color: #e0e7ff; }
+    a.grade-card { display: flex; align-items: center; border: 1px solid var(--bg-subtle); border-radius: 7px; overflow: hidden; background: var(--bg-hover); text-decoration: none; transition: box-shadow .15s, border-color .15s; }
+    a.grade-card:hover { box-shadow: 0 2px 8px rgba(99,102,241,.12); border-color: var(--purple-tint-3); }
     .grade-card-strip { width: 5px; align-self: stretch; flex-shrink: 0; }
     .grade-card-body { flex: 1; padding: .5rem .75rem; min-width: 0; }
-    .grade-card-name { font-size: .875rem; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .grade-card-sub { font-size: .75rem; color: #9ca3af; margin-top: .05rem; }
+    .grade-card-name { font-size: .875rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .grade-card-sub { font-size: .75rem; color: var(--text-subtle); margin-top: .05rem; }
     .grade-card-right { display: flex; flex-direction: column; align-items: flex-end; padding: .5rem .75rem; flex-shrink: 0; gap: .1rem; }
-    .grade-card-val { font-size: .95rem; font-weight: 700; color: #1a1a1a; }
-    .grade-card-max { font-size: .75rem; font-weight: 400; color: #9ca3af; }
-    .grade-card-date { font-size: .72rem; color: #9ca3af; }
+    .grade-card-val { font-size: .95rem; font-weight: 700; color: var(--text); }
+    .grade-card-max { font-size: .75rem; font-weight: 400; color: var(--text-subtle); }
+    .grade-card-date { font-size: .72rem; color: var(--text-subtle); }
     /* Event items */
     a.event-row { display: flex; align-items: flex-start; padding: .5rem 0; text-decoration: none; border-radius: 5px; transition: background .1s; }
-    a.event-row:hover { background: #f9fafb; }
+    a.event-row:hover { background: var(--bg-hover); }
     .event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-right: .4rem; margin-top: 4px; }
     .event-content { flex: 1; min-width: 0; }
     .event-name-row { display: flex; align-items: center; gap: .35rem; }
-    .event-title { font-weight: 600; font-size: .875rem; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
-    .event-date { font-size: .75rem; color: #9ca3af; white-space: nowrap; flex-shrink: 0; }
-    .event-type-label { font-size: .72rem; color: #9ca3af; margin-top: .1rem; padding-left: 12px; }
-    .empty { color: #9ca3af; font-size: .875rem; text-align: center; padding: 1rem 0; }
+    .event-title { font-weight: 600; font-size: .875rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .event-date { font-size: .75rem; color: var(--text-subtle); white-space: nowrap; flex-shrink: 0; }
+    .event-type-label { font-size: .72rem; color: var(--text-subtle); margin-top: .1rem; padding-left: 12px; }
+    .empty { color: var(--text-subtle); font-size: .875rem; text-align: center; padding: 1rem 0; }
     .btn-see-all { display: inline-flex; align-items: center; gap: .2rem; font-size: .75rem; font-weight: 500; color: #6366f1; text-decoration: none; opacity: .85; }
     .btn-see-all:hover { opacity: 1; }
     @media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }
@@ -175,7 +175,7 @@
                                 <?php endif; ?>
                             </a>
                             <!-- Badge -->
-                            <span style="padding:.15rem .4rem;border-radius:99px;font-size:.68rem;font-weight:700;background:#ede9fe;color:#6d28d9;flex-shrink:0;">J+<?= htmlspecialchars((string)$currentStep['day'], ENT_QUOTES) ?></span>
+                            <span style="padding:.15rem .4rem;border-radius:99px;font-size:.68rem;font-weight:700;background:var(--purple-tint-2);color:#6d28d9;flex-shrink:0;">J+<?= htmlspecialchars((string)$currentStep['day'], ENT_QUOTES) ?></span>
                         </div>
                     </li>
                 <?php endforeach; ?>

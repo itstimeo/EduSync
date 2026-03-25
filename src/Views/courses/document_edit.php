@@ -1,23 +1,23 @@
 <style>
-.breadcrumb{font-size:.85rem;color:#6b7280;margin-bottom:1.25rem}.breadcrumb a{color:#6366f1;text-decoration:none}
-.form-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;max-width:500px;margin:0 auto}
+.breadcrumb{font-size:.85rem;color:var(--text-muted);margin-bottom:1.25rem}.breadcrumb a{color:#6366f1;text-decoration:none}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;max-width:500px;margin:0 auto}
 .form-card h1{font-size:1.1rem;font-weight:700;margin-bottom:1.25rem}
 .field{margin-bottom:1.1rem}
-.field label{display:block;font-size:.875rem;font-weight:500;margin-bottom:.35rem;color:#374151}
-.field input[type="text"],.field textarea{width:100%;padding:.5rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.9rem}
+.field label{display:block;font-size:.875rem;font-weight:500;margin-bottom:.35rem;color:var(--text)}
+.field input[type="text"],.field textarea{width:100%;padding:.5rem .75rem;border:1px solid var(--border-soft);border-radius:6px;font-size:.9rem;background:var(--input-bg);color:var(--text)}
 .field input[type="text"]:focus,.field textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
 .field textarea{resize:vertical;min-height:72px}
-.current-file{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .65rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;font-size:.82rem;color:#374151;margin-bottom:.5rem}
+.current-file{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .65rem;background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;font-size:.82rem;color:var(--text);margin-bottom:.5rem}
 .file-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.file-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:6px;border:1px solid #d1d5db;background:#f3f4f6;cursor:pointer;font-size:.85rem;color:#374151;user-select:none;white-space:nowrap}
-.file-btn:hover{background:#e5e7eb;border-color:#9ca3af}
-.file-name-lbl{font-size:.85rem;color:#6b7280}
-.field-hint{font-size:.78rem;color:#9ca3af;margin-top:.3rem}
+.file-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:6px;border:1px solid var(--border-soft);background:var(--bg-subtle);cursor:pointer;font-size:.85rem;color:var(--text);user-select:none;white-space:nowrap}
+.file-btn:hover{background:var(--border);border-color:var(--text-subtle)}
+.file-name-lbl{font-size:.85rem;color:var(--text-muted)}
+.field-hint{font-size:.78rem;color:var(--text-subtle);margin-top:.3rem}
 .form-actions{display:flex;gap:.75rem;margin-top:1.4rem}
 .btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-secondary{background:#f3f4f6;color:#374151}.btn-secondary:hover{background:#e5e7eb}
-.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
+.btn-secondary{background:var(--bg-subtle);color:var(--text)}.btn-secondary:hover{background:var(--border)}
+.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:var(--bg-subtle);color:var(--text)}
 </style>
 
 <div style="display:flex;align-items:center;gap:.75rem;max-width:500px;margin:0 auto 1.25rem;">
@@ -41,11 +41,11 @@
                    value="<?= htmlspecialchars($doc['title'], ENT_QUOTES) ?>">
         </div>
         <div class="field">
-            <label for="description">Description <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+            <label for="description">Description <span style="font-weight:400;color:var(--text-subtle)">(optional)</span></label>
             <textarea id="description" name="description" maxlength="1000"><?= htmlspecialchars($doc['description'] ?? '', ENT_QUOTES) ?></textarea>
         </div>
         <div class="field">
-            <label>Replace file <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+            <label>Replace file <span style="font-weight:400;color:var(--text-subtle)">(optional)</span></label>
             <?php if (!empty($doc['original_name'])): ?>
                 <div class="current-file">
                     <span>Current:</span>
