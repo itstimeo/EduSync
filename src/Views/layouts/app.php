@@ -5,37 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'Dashboard') ?> — EduSync</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
     <style>
+        :root {
+            --bg: #f5f5f5; --surface: #fff; --text: #1a1a1a;
+            --text-muted: #6b7280; --text-subtle: #9ca3af;
+            --border: #e5e7eb; --border-soft: #d1d5db;
+            --bg-subtle: #f3f4f6; --bg-hover: #f9fafb; --input-bg: #fff;
+            --nav-hover-bg: #f5f3ff;
+            --purple-tint: #f5f3ff; --purple-tint-2: #ede9fe; --purple-tint-3: #e0e7ff;
+        }
+        html.dark {
+            color-scheme: dark;
+            --bg: #0f172a; --surface: #1e293b; --text: #e2e8f0;
+            --text-muted: #94a3b8; --text-subtle: #64748b;
+            --border: #334155; --border-soft: #475569;
+            --bg-subtle: #162032; --bg-hover: #1e293b; --input-bg: #0f172a;
+            --nav-hover-bg: rgba(99,102,241,.15);
+            --purple-tint: #1e1b4b; --purple-tint-2: #1e1b4b; --purple-tint-3: #1e274d;
+        }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         body::before { content: ''; display: block; height: 4px; background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7); }
-        header { background: #fff; border-radius: 0 0 99px 99px; box-shadow: 0 4px 20px rgba(0,0,0,.1), 0 1px 4px rgba(0,0,0,.06); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 56px; padding: 0 1rem; gap: 2.5rem; margin: 0 1.5rem; }
+        header { background: var(--surface); border-radius: 0 0 99px 99px; box-shadow: 0 4px 20px rgba(0,0,0,.1), 0 1px 4px rgba(0,0,0,.06); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 56px; padding: 0 1rem; gap: 2.5rem; margin: 0 1.5rem; }
         header .nav-left  { display: flex; align-items: center; justify-content: flex-end; gap: .25rem; }
         header .nav-center { display: flex; align-items: center; justify-content: center; }
         header .nav-center a { font-weight: 800; font-size: 1.55rem; color: #6366f1; text-decoration: none; line-height: 1; letter-spacing: -.02em; }
         header .nav-center a:hover { color: #4f46e5; }
         header .nav-right { display: flex; align-items: center; justify-content: flex-start; gap: .25rem; padding-right: 1.5rem; }
-        header .user { margin-left: auto; font-size: .875rem; color: #6b7280; white-space: nowrap; }
-        .nav-link { display: inline-flex; align-items: center; height: 38px; padding: 0 1.1rem; font-size: .875rem; color: #6b7280; text-decoration: none; border-radius: 99px; font-weight: 500; white-space: nowrap; }
+        header .user { margin-left: auto; font-size: .875rem; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: .6rem; }
+        .nav-link { display: inline-flex; align-items: center; height: 38px; padding: 0 1.1rem; font-size: .875rem; color: var(--text-muted); text-decoration: none; border-radius: 99px; font-weight: 500; white-space: nowrap; }
         .nav-link.active { background: #6366f1; color: #fff; font-weight: 600; }
-        .nav-link:hover:not(.active) { color: #6366f1; background: #f5f3ff; }
+        .nav-link:hover:not(.active) { color: #6366f1; background: var(--nav-hover-bg); }
         .wrapper { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
         .flash { padding: .6rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: .9rem; }
         .flash.error   { background: #fee2e2; color: #b91c1c; }
         .flash.success { background: #dcfce7; color: #15803d; }
         /* ── Global icon buttons ── */
-        .btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;border:1px solid #e5e7eb;background:transparent;color:#6b7280;text-decoration:none;flex-shrink:0}
-        .btn-edit{background:#f3f4f6;color:#6b7280;border-color:#e5e7eb}.btn-edit:hover{background:#e5e7eb}
+        .btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-muted);text-decoration:none;flex-shrink:0}
+        .btn-edit{background:var(--bg-subtle);color:var(--text-muted);border-color:var(--border)}.btn-edit:hover{background:var(--border)}
         .btn-delete{background:#fee2e2;color:#f87171;border-color:#fecaca}.btn-delete:hover{background:#fecaca}
         .btn-download{background:#dbeafe;color:#60a5fa;border-color:#bfdbfe}.btn-download:hover{background:#bfdbfe}
         .btn-done{background:#dcfce7;color:#22c55e;border-color:#bbf7d0}.btn-done:hover{background:#bbf7d0}
-        .btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#6b7280;cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:#f3f4f6;color:#1a1a1a}
+        .btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:var(--bg-subtle);color:var(--text)}
         a[href],button,[onclick]:not(.card-actions),.card{transition:transform .15s ease;}
         a[href]:hover,button:hover,[onclick]:not(.card-actions):hover,.card:hover{transform:scale(1.03);}
         header{transition:transform .15s ease;transform-origin:top center;}
         header:hover{transform:scale(1.015);}
-        footer{display:flex;align-items:center;gap:1rem;padding:2rem 2rem 1.5rem;font-size:.8rem;color:#9ca3af;}
-        footer::before,footer::after{content:'';flex:1;height:1px;background:#e5e7eb;}
+        footer{display:flex;align-items:center;gap:1rem;padding:2rem 2rem 1.5rem;font-size:.8rem;color:var(--text-subtle);}
+        footer::before,footer::after{content:'';flex:1;height:1px;background:var(--border);}
+        /* ── Dark mode — global input/select overrides ── */
+        html.dark input, html.dark select, html.dark textarea {
+            background: var(--input-bg); color: var(--text); border-color: var(--border-soft);
+        }
+        html.dark input::placeholder, html.dark textarea::placeholder { color: var(--text-subtle); }
+        /* ── Theme toggle ── */
+        #theme-toggle { width: 38px; padding: 0; justify-content: center; background: var(--surface); border: 2px outset rgba(0,0,0,.2); }
+        html.dark #theme-toggle { border: 2px outset rgba(255,255,255,.15); }
     </style>
 </head>
 <body>
@@ -83,8 +109,9 @@
             <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
             <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
             <span class="user">
+                <button id="theme-toggle" class="nav-link" type="button" aria-label="Toggle dark mode"></button>
                 <?= htmlspecialchars($userName ?? '') ?>
-                <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:#9ca3af;text-decoration:none;" onmouseover="this.style.color='#6366f1'" onmouseout="this.style.color='#9ca3af'">Log out</a>
+                <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:var(--text-subtle);text-decoration:none;">Log out</a>
             </span>
         </div>
     </header>
@@ -96,17 +123,21 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.0.0</footer>
+    <footer>© 2026 EduSync · v1.1.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
-        <div style="background:#fff;border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
-            <p id="es-modal-msg" style="margin-bottom:1.5rem;font-size:.95rem;color:#1a1a1a;line-height:1.5;"></p>
+        <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
+            <p id="es-modal-msg" style="margin-bottom:1.5rem;font-size:.95rem;line-height:1.5;"></p>
             <div style="display:flex;gap:.75rem;justify-content:flex-end;">
-                <button id="es-modal-cancel" style="padding:.5rem 1.1rem;border:1px solid #d1d5db;border-radius:6px;background:#f3f4f6;cursor:pointer;font-size:.875rem;font-weight:500;">Cancel</button>
+                <button id="es-modal-cancel" class="modal-cancel-btn" style="padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.875rem;font-weight:500;">Cancel</button>
                 <button id="es-modal-confirm" style="padding:.5rem 1.1rem;border:none;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer;font-size:.875rem;font-weight:600;">Delete</button>
             </div>
         </div>
     </div>
+    <style>
+        .modal-box { background: var(--surface); color: var(--text); }
+        .modal-cancel-btn { border: 1px solid var(--border-soft); background: var(--bg-subtle); color: var(--text); }
+    </style>
     <script>
     (function () {
         var overlay = document.getElementById('es-modal');
@@ -125,6 +156,21 @@
         };
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay) { overlay.style.display = 'none'; _fn = null; }
+        });
+    })();
+    // ── Dark mode toggle ──
+    (function () {
+        var MOON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+        var SUN  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+        var btn = document.getElementById('theme-toggle');
+        function updateIcon() {
+            btn.innerHTML = document.documentElement.classList.contains('dark') ? MOON : SUN;
+        }
+        updateIcon();
+        btn.addEventListener('click', function () {
+            var isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateIcon();
         });
     })();
     </script>

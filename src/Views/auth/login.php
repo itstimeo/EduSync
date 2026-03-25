@@ -5,8 +5,8 @@
 .field-invalid{border-color:#ef4444!important;outline:none!important;box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
 .pw-wrap{position:relative;display:flex;align-items:center}
 .pw-wrap input{padding-right:2.5rem}
-.pw-toggle{position:absolute;right:.5rem;background:none;border:none;cursor:pointer;color:#999;padding:.2rem;display:flex;align-items:center;line-height:1}
-.pw-toggle:hover{color:#444}
+.pw-toggle{position:absolute;right:.5rem;background:none;border:none;cursor:pointer;color:var(--text-subtle);padding:.2rem;display:flex;align-items:center;line-height:1}
+.pw-toggle:hover{color:var(--text)}
 </style>
 <h1>Sign in to EduSync</h1>
 <form method="POST" action="/login" novalidate>

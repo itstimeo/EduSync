@@ -12,34 +12,34 @@ function docIcon(string $type): string {
 }
 ?>
 <style>
-.breadcrumb{font-size:.85rem;color:#6b7280}.breadcrumb a{color:#6366f1;text-decoration:none}
+.breadcrumb{font-size:.85rem;color:var(--text-muted)}.breadcrumb a{color:#6366f1;text-decoration:none}
 .page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .page-hd h1{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:.55rem}
 .subj-dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0}
 .hd-right{display:flex;align-items:center;gap:.75rem}
 .view-toggle{display:flex;gap:2px}
-.view-toggle button{padding:.35rem .55rem;border:1px solid #d1d5db;border-radius:5px;background:#fff;cursor:pointer;font-size:.85rem;color:#6b7280;line-height:1}
+.view-toggle button{padding:.35rem .55rem;border:1px solid var(--border-soft);border-radius:5px;background:var(--surface);cursor:pointer;font-size:.85rem;color:var(--text-muted);line-height:1}
 .view-toggle button.active{background:#6366f1;color:#fff;border-color:#6366f1}
 .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
 .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.empty{color:#9ca3af;font-size:.9rem;padding:3rem 0;text-align:center}
+.empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
 .card-list{display:flex;flex-direction:column;gap:.55rem}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:box-shadow .15s;overflow:hidden}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:box-shadow .15s;overflow:hidden}
 .card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
 .card-list .card{display:flex;align-items:center}
 .card-list .card-strip{width:6px;align-self:stretch;flex-shrink:0;font-size:0}
 .card-list .card-icon{font-size:1.2rem;padding:0 .6rem 0 .9rem;flex-shrink:0}
 .card-list .card-body{flex:1;padding:.75rem .75rem .75rem 0}
 .card-name{font-weight:600;font-size:.9rem}
-.card-meta{font-size:.78rem;color:#9ca3af;margin-top:.1rem}
+.card-meta{font-size:.78rem;color:var(--text-subtle);margin-top:.1rem}
 .card-list .card-actions{padding:.4rem 1rem .4rem 0;display:flex;gap:.35rem;align-items:center;flex-shrink:0}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.75rem}
 .card-grid .card{display:flex;flex-direction:column}
 .card-grid .card-strip{height:54px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
 .card-grid .card-icon{display:none}
 .card-grid .card-body{flex:1;padding:.7rem .9rem .4rem}
-.card-grid .card-meta{font-size:.75rem;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.2rem}
-.card-grid .card-actions{padding:.45rem .75rem .6rem;display:flex;flex-wrap:wrap;gap:.35rem;border-top:1px solid #f3f4f6}
+.card-grid .card-meta{font-size:.75rem;color:var(--text-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.2rem}
+.card-grid .card-actions{padding:.45rem .75rem .6rem;display:flex;flex-wrap:wrap;gap:.35rem;border-top:1px solid var(--bg-subtle)}
 </style>
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
