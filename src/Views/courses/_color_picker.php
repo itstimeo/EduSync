@@ -48,6 +48,9 @@ static $cpLoaded = false;
 #adv-cancel-btn{border:1px solid var(--border-soft);background:var(--bg-subtle);color:var(--text)}
 #adv-apply-btn{border:none;background:#6366f1;color:#fff}
 #adv-apply-btn:hover{background:#4f46e5}
+@media (max-width: 640px) {
+    .cp-popover { position: fixed !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; max-height: 80vh; overflow-y: auto; }
+}
 </style>
 
 <div id="adv-picker">
