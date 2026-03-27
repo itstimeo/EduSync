@@ -37,6 +37,10 @@
         .link a:hover { text-decoration: underline; }
         #theme-toggle { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border-radius: 99px; background: var(--surface); border: 2px outset rgba(0,0,0,.2); color: var(--text-muted); cursor: pointer; }
         html.dark #theme-toggle { border: 2px outset rgba(255,255,255,.15); }
+        @media (max-width: 480px) {
+            body { padding: 3.5rem 1rem 1.5rem; align-items: flex-start; }
+            .card { padding: 1.5rem 1.25rem; }
+        }
     </style>
 </head>
 <body>

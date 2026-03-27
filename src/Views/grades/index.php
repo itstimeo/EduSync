@@ -41,6 +41,12 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 .chrono-meta{font-size:.78rem;color:var(--text-subtle);margin-top:.1rem}
 .chrono-actions{padding:.4rem .75rem;display:flex;gap:.3rem;flex-shrink:0}
 .empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
+@media (max-width: 640px) {
+    .tabs { overflow-x: auto; white-space: nowrap; }
+    .grade-date, .grade-coeff { display: none; }
+    .chrono-subject { display: none; }
+    .avg-banner { flex-direction: column; align-items: flex-start; gap: .25rem; }
+}
 </style>
 
 <div class="page-hd">

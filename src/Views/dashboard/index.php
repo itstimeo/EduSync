@@ -46,7 +46,8 @@
     .empty { color: var(--text-subtle); font-size: .875rem; text-align: center; padding: 1rem 0; }
     .btn-see-all { display: inline-flex; align-items: center; gap: .2rem; font-size: .75rem; font-weight: 500; color: #6366f1; text-decoration: none; opacity: .85; }
     .btn-see-all:hover { opacity: 1; }
-    @media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .dashboard-grid { grid-template-columns: 1fr; } }
 </style>
 
 <div class="dashboard-grid">

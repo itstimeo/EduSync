@@ -60,8 +60,41 @@
         }
         html.dark input::placeholder, html.dark textarea::placeholder { color: var(--text-subtle); }
         /* ── Theme toggle ── */
-        #theme-toggle { width: 38px; padding: 0; justify-content: center; background: var(--surface); border: 2px outset rgba(0,0,0,.2); }
-        html.dark #theme-toggle { border: 2px outset rgba(255,255,255,.15); }
+        #theme-toggle, #theme-toggle-m { width: 38px; height: 38px; padding: 0; justify-content: center; background: var(--surface); border: 2px outset rgba(0,0,0,.2); border-radius: 99px; }
+        html.dark #theme-toggle, html.dark #theme-toggle-m { border: 2px outset rgba(255,255,255,.15); }
+        /* ── Mobile nav ── */
+        .nav-mobile { display: none; align-items: center; gap: .4rem; }
+        .nav-hamburger { background: none; border: none; border-radius: 99px; width: 38px; height: 38px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); padding: 0; flex-shrink: 0; transition: color .15s, background .15s; }
+        .nav-hamburger:hover { background: var(--nav-hover-bg); color: #6366f1; }
+        .nav-hamburger .bar { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 99px; transition: transform .22s ease, opacity .18s ease, background .15s; }
+        .nav-hamburger.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .nav-hamburger.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nav-hamburger.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        @keyframes menuSlideDown { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+        .mobile-menu { display: none; flex-direction: column; gap: .15rem; background: var(--surface); border-radius: 0 0 16px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.12); margin: 0 .75rem; padding: .5rem .75rem .75rem; position: relative; z-index: 50; transform-origin: top; }
+        .mobile-menu.open { display: flex; animation: menuSlideDown .22s ease forwards; }
+        .mobile-menu .nav-link { width: 100%; justify-content: flex-start; border-radius: 8px; height: 40px; padding: 0 .75rem; }
+        .mobile-menu-user { display: flex; align-items: center; justify-content: space-between; padding: .6rem .75rem 0; margin-top: .25rem; border-top: 1px solid var(--border); font-size: .875rem; color: var(--text-muted); }
+        .mobile-menu-user a { color: var(--text-subtle); font-size: .8rem; text-decoration: none; }
+        .mobile-menu-user a:hover { color: var(--text); }
+        /* ── Responsive ── */
+        @media (max-width: 767px) {
+            header { display: flex; align-items: center; position: relative; margin: 0 .75rem; gap: 0; padding: 0 .75rem; transition: border-radius .22s ease; }
+            header .nav-left, header .nav-right { display: none; }
+            header .nav-mobile { display: flex; margin-left: auto; margin-right: .5rem; }
+            header .nav-center { position: absolute; left: 50%; transform: translateX(-50%); justify-content: center; }
+            header.menu-open { border-radius: 99px 99px 0 0; }
+            .mobile-menu { margin-top: 0; }
+            .mobile-menu.open { box-shadow: 0 6px 20px rgba(0,0,0,.1), 0 2px 4px rgba(0,0,0,.06); }
+            .wrapper { padding: 0 1rem; margin-top: 1.25rem; }
+            .btn-icon, .btn-back { width: 36px; height: 36px; }
+            footer { padding: 1.5rem 1rem 1rem; font-size: .75rem; }
+            .page-hd { flex-wrap: wrap; gap: .5rem; }
+        }
+        @media (hover: none) {
+            a[href]:hover, button:hover, [onclick]:not(.card-actions):hover, .card:hover { transform: none; }
+            header:hover { transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -114,7 +147,27 @@
                 <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:var(--text-subtle);text-decoration:none;">Log out</a>
             </span>
         </div>
+        <div class="nav-mobile">
+            <button class="nav-hamburger" id="nav-hamburger" type="button" aria-label="Open menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
     </header>
+    <nav class="mobile-menu" id="mobile-menu">
+        <a href="/courses"  class="nav-link<?= $coursesActive ? ' active' : '' ?>">Courses</a>
+        <a href="/grades"   class="nav-link<?= str_starts_with($uri, '/grades')   ? ' active' : '' ?>">Grades</a>
+        <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
+        <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
+        <div class="mobile-menu-user">
+            <span><?= htmlspecialchars($userName ?? '') ?></span>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <button id="theme-toggle-m" type="button" class="nav-link" aria-label="Toggle dark mode"></button>
+                <a href="/logout">Log out</a>
+            </div>
+        </div>
+    </nav>
     <div class="wrapper">
         <?php if (!empty($flash)): ?>
             <div class="flash <?= htmlspecialchars($flash['type']) ?>">
@@ -123,7 +176,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.1.0</footer>
+    <footer>© 2026 EduSync · v1.3.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
@@ -162,15 +215,38 @@
     (function () {
         var MOON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
         var SUN  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
-        var btn = document.getElementById('theme-toggle');
+        var btns = ['theme-toggle', 'theme-toggle-m'].map(function (id) { return document.getElementById(id); }).filter(Boolean);
         function updateIcon() {
-            btn.innerHTML = document.documentElement.classList.contains('dark') ? MOON : SUN;
+            var icon = document.documentElement.classList.contains('dark') ? MOON : SUN;
+            btns.forEach(function (b) { b.innerHTML = icon; });
         }
         updateIcon();
-        btn.addEventListener('click', function () {
-            var isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateIcon();
+        btns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateIcon();
+            });
+        });
+    })();
+    // ── Hamburger menu ──
+    (function () {
+        var hamburger = document.getElementById('nav-hamburger');
+        var menu = document.getElementById('mobile-menu');
+        if (!hamburger || !menu) return;
+        var navHeader = document.querySelector('header');
+        hamburger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = menu.classList.toggle('open');
+            hamburger.classList.toggle('open', isOpen);
+            if (navHeader) navHeader.classList.toggle('menu-open', isOpen);
+        });
+        document.addEventListener('click', function (e) {
+            if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+                menu.classList.remove('open');
+                hamburger.classList.remove('open');
+                if (navHeader) navHeader.classList.remove('menu-open');
+            }
         });
     })();
     </script>

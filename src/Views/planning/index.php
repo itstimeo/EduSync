@@ -64,6 +64,16 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 .event-desc{font-size:.78rem;color:var(--text-muted);margin-top:.15rem}
 .event-actions{padding:.4rem .75rem;display:flex;gap:.3rem;flex-shrink:0}
 .empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
+@media (max-width: 640px) {
+    .hd-right { gap: .4rem; }
+    .cal-grid { gap: 2px; }
+    .cal-cell { min-height: 44px; padding: .2rem .2rem; }
+    .cal-day-num { font-size: .68rem; margin-bottom: .1rem; }
+    .cal-event-title, .cal-more { display: none; }
+    .cal-event { padding: 0; background: none; gap: 1px; margin-bottom: 1px; }
+    .cal-event-dot { width: 6px; height: 6px; }
+    .page-hd h1 { font-size: 1.1rem; }
+}
 </style>
 
 <div class="page-hd">
@@ -188,5 +198,83 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
     }
     window.switchTab = switchTab;
     switchTab(localStorage.getItem(key) || 'calendar');
+})();
+</script>
+
+<!-- Mobile day detail popup -->
+<div id="day-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center;">
+    <div style="background:var(--surface);border-radius:16px 16px 0 0;padding:1.25rem;width:100%;max-width:500px;max-height:70vh;overflow-y:auto;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <span id="day-popup-title" style="font-weight:700;font-size:1rem;color:var(--text);"></span>
+            <button id="day-popup-close" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1.1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;">✕</button>
+        </div>
+        <div id="day-popup-events"></div>
+        <a id="day-popup-add" href="#" style="display:flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.55rem;background:#6366f1;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:.875rem;">+ New event</a>
+    </div>
+</div>
+
+<script>
+(function () {
+    var dayMapData = <?= json_encode($dayMap, JSON_HEX_TAG) ?>;
+    var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var yearNum  = <?= (int)$yearNum ?>;
+    var monthNum = <?= (int)$monthNum ?>;
+
+    var popup    = document.getElementById('day-popup');
+    var titleEl  = document.getElementById('day-popup-title');
+    var eventsEl = document.getElementById('day-popup-events');
+    var addLink  = document.getElementById('day-popup-add');
+    var closeBtn = document.getElementById('day-popup-close');
+
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function showPopup(dateStr, createHref) {
+        var day = parseInt(dateStr.split('-')[2], 10);
+        titleEl.textContent = day + ' ' + monthNames[monthNum - 1] + ' ' + yearNum;
+        addLink.href = createHref;
+        var evs = dayMapData[dateStr] || [];
+        if (evs.length === 0) {
+            eventsEl.innerHTML = '<p style="color:var(--text-subtle);font-size:.875rem;padding:.25rem 0 .5rem;">No events on this day.</p>';
+        } else {
+            eventsEl.innerHTML = evs.map(function (ev) {
+                return '<a href="/planning/edit?id=' + ev.id + '" style="display:flex;align-items:center;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--bg-subtle);text-decoration:none;">'
+                     + '<span style="width:10px;height:10px;border-radius:50%;background:' + esc(ev.color) + ';flex-shrink:0;"></span>'
+                     + '<span style="font-size:.875rem;font-weight:500;color:var(--text);">' + esc(ev.title) + '</span>'
+                     + '</a>';
+            }).join('');
+        }
+        popup.style.display = 'flex';
+    }
+
+    document.querySelectorAll('.cal-cell:not(.other-month)').forEach(function (cell) {
+        var oc = cell.getAttribute('onclick') || '';
+        var m = oc.match(/'([^']+)'/);
+        var createHref = m ? m[1] : null;
+        if (!createHref) return;
+        var dm = createHref.match(/date=(\d{4}-\d{2}-\d{2})/);
+        if (!dm) return;
+        var dateStr = dm[1];
+        cell.removeAttribute('onclick');
+        cell.addEventListener('click', function () {
+            if (window.innerWidth >= 640) { location.href = createHref; return; }
+            showPopup(dateStr, createHref);
+        });
+    });
+
+    document.querySelectorAll('.cal-event').forEach(function (ev) {
+        var oc = ev.getAttribute('onclick') || '';
+        ev.removeAttribute('onclick');
+        ev.addEventListener('click', function (e) {
+            if (window.innerWidth >= 640) {
+                e.stopPropagation();
+                var m = oc.match(/'([^']+)'/);
+                if (m) location.href = m[1];
+            }
+            // Mobile: don't stopPropagation — let the cell click show the popup
+        });
+    });
+
+    closeBtn.addEventListener('click', function () { popup.style.display = 'none'; });
+    popup.addEventListener('click', function (e) { if (e.target === popup) popup.style.display = 'none'; });
 })();
 </script>

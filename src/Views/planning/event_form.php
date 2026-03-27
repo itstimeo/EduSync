@@ -54,6 +54,10 @@
 .dp-day.selected{background:#6366f1;color:#fff;font-weight:700}
 .dp-day.other-month{color:var(--border-soft)}
 .btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:var(--bg-subtle);color:var(--text)}
+@media (max-width: 640px) {
+    .row-2 { grid-template-columns: 1fr; }
+    .dp-calendar { width: min(260px, calc(100vw - 2rem)); }
+}
 </style>
 
 <?php

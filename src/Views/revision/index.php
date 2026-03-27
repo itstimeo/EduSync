@@ -57,6 +57,14 @@ $presetsJson   = json_encode($presets);
     .hint { font-size: .75rem; color: var(--text-subtle); margin-top: .2rem; }
     .empty { color: var(--text-subtle); font-size: .875rem; text-align: center; padding: 1.5rem 0; }
     .section { margin-bottom: 2rem; }
+    @media (max-width: 640px) {
+        .rev-header { flex-wrap: wrap; }
+        .rev-card { gap: .5rem; padding: .75rem 1rem; }
+        .rev-card-name { white-space: normal; }
+        .badge-type { display: none; }
+        .upcoming-row { flex-wrap: wrap; gap: .25rem; }
+        .form-row { flex-direction: column; }
+    }
 
     /* Custom select */
     .cs-wrap { position: relative; user-select: none; }
