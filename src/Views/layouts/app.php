@@ -34,6 +34,9 @@
         header .nav-center a:hover { color: #4f46e5; }
         header .nav-right { display: flex; align-items: center; justify-content: flex-start; gap: .25rem; padding-right: 1.5rem; }
         header .user { margin-left: auto; font-size: .875rem; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: .6rem; }
+        .nav-avatar-link { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; overflow:hidden; text-decoration:none; flex-shrink:0; }
+        .nav-avatar-img { width:32px; height:32px; border-radius:50%; object-fit:cover; display:block; }
+        .nav-avatar-initials { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-size:.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
         .nav-link { display: inline-flex; align-items: center; height: 38px; padding: 0 1.1rem; font-size: .875rem; color: var(--text-muted); text-decoration: none; border-radius: 99px; font-weight: 500; white-space: nowrap; }
         .nav-link.active { background: #6366f1; color: #fff; font-weight: 600; }
         .nav-link:hover:not(.active) { color: #6366f1; background: var(--nav-hover-bg); }
@@ -143,8 +146,12 @@
             <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
             <span class="user">
                 <button id="theme-toggle" class="nav-link" type="button" aria-label="Toggle dark mode"></button>
-                <?= htmlspecialchars($userName ?? '') ?>
-                <a href="/logout" style="margin-left:1rem;font-size:.8rem;color:var(--text-subtle);text-decoration:none;">Log out</a>
+                <a href="/profile" class="nav-avatar-link" title="Profile">
+                    <img src="/profile/photo" class="nav-avatar-img" alt=""
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="nav-avatar-initials" style="display:none"><?= htmlspecialchars(mb_strtoupper(mb_substr($userName ?? '?', 0, 1))) ?></span>
+                </a>
+                <a href="/logout" style="margin-left:.25rem;font-size:.8rem;color:var(--text-subtle);text-decoration:none;">Log out</a>
             </span>
         </div>
         <div class="nav-mobile">
@@ -161,7 +168,11 @@
         <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
         <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
         <div class="mobile-menu-user">
-            <span><?= htmlspecialchars($userName ?? '') ?></span>
+            <a href="/profile" class="nav-avatar-link" title="Profile" style="flex-shrink:0;">
+                <img src="/profile/photo" class="nav-avatar-img" alt=""
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <span class="nav-avatar-initials" style="display:none"><?= htmlspecialchars(mb_strtoupper(mb_substr($userName ?? '?', 0, 1))) ?></span>
+            </a>
             <div style="display:flex;align-items:center;gap:.75rem;">
                 <button id="theme-toggle-m" type="button" class="nav-link" aria-label="Toggle dark mode"></button>
                 <a href="/logout">Log out</a>
@@ -176,7 +187,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.3.0</footer>
+    <footer>© 2026 EduSync · v1.4.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
