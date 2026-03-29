@@ -8,12 +8,12 @@ class VerificationCode
 {
     public static function create(int $userId, string $code, string $type, int $minutesTtl = 15): void
     {
-        $db   = Database::getInstance();
-        $stmt = $db->prepare(
-            'INSERT INTO verification_codes (user_id, code, type, expires_at)
-             VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE))'
+        $db        = Database::getInstance();
+        $expiresAt = date('Y-m-d H:i:s', time() + $minutesTtl * 60);
+        $stmt      = $db->prepare(
+            'INSERT INTO verification_codes (user_id, code, type, expires_at) VALUES (?, ?, ?, ?)'
         );
-        $stmt->execute([$userId, $code, $type, $minutesTtl]);
+        $stmt->execute([$userId, $code, $type, $expiresAt]);
     }
 
     public static function findValid(int $userId, string $code, string $type): ?array

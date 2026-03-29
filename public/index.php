@@ -12,6 +12,7 @@ use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
 use EduSync\Controllers\GradesController;
 use EduSync\Controllers\EventsController;
+use EduSync\Controllers\ProfileController;
 use EduSync\Controllers\RevisionController;
 use EduSync\Services\AuthService;
 
@@ -103,6 +104,17 @@ $router->post('/planning/delete',  [$events, 'deleteEvent']);
 $router->get('/planning/settings',          [$events, 'showSettings']);
 $router->post('/planning/settings',         [$events, 'saveSettings']);
 $router->post('/planning/settings/add-type',[$events, 'addType']);
+
+$profile = new ProfileController();
+$router->get('/profile',               [$profile, 'show']);
+$router->post('/profile/info',         [$profile, 'updateInfo']);
+$router->get('/profile/photo',         [$profile, 'servePhoto']);
+$router->post('/profile/photo',        [$profile, 'updatePhoto']);
+$router->post('/profile/photo/delete', [$profile, 'deletePhoto']);
+$router->get('/profile/photo/source',  [$profile, 'servePhotoSource']);
+$router->post('/profile/email/request',[$profile, 'requestEmailChange']);
+$router->post('/profile/email/verify', [$profile, 'verifyEmailChange']);
+$router->post('/profile/password',     [$profile, 'updatePassword']);
 
 $revision = new RevisionController();
 $router->get('/revision',                       [$revision, 'show']);
