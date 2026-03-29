@@ -1,68 +1,26 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.4.0.
+Student management application built with PHP and MySQL — v1.4.1.
 
 ## Screenshots
 
-**Dashboard** — overview with recent grades, upcoming events and today's revisions
+### Desktop
 
-<table><tr>
-  <td><img src="public/assets/screenshots/dashboard-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/dashboard-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
+| <img src="public/assets/screenshots/dashboard-light.png" width="400"/> | <img src="public/assets/screenshots/courses-light.png" width="400"/> |
+|:---:|:---:|
+| **Dashboard** | **Courses** |
+| <img src="public/assets/screenshots/grades-light.png" width="400"/> | <img src="public/assets/screenshots/planning-light.png" width="400"/> |
+| **Grades** | **Planning** |
+| <img src="public/assets/screenshots/revision-light.png" width="400"/> | <img src="public/assets/screenshots/profile-light.png" width="400"/> |
+| **Revision** | **Profile** |
 
-**Courses** — subjects organized by color, with themes, chapters and documents
+### Mobile
 
-<table><tr>
-  <td><img src="public/assets/screenshots/courses-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/courses-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
-
-**Grades** — per-subject grade tracking with weighted averages
-
-<table><tr>
-  <td><img src="public/assets/screenshots/grades-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/grades-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
-
-**Planning** — monthly calendar with color-coded event types
-
-<table><tr>
-  <td><img src="public/assets/screenshots/planning-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/planning-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
-
-**Revision** — spaced repetition sessions due today and upcoming
-
-<table><tr>
-  <td><img src="public/assets/screenshots/revision-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/revision-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
-
-**Profile** — edit name, photo with custom crop, email and password management
-
-<table><tr>
-  <td><img src="public/assets/screenshots/profile-light.png" width="400"/></td>
-  <td><img src="public/assets/screenshots/profile-dark.png" width="200"/></td>
-</tr><tr>
-  <td align="center">Desktop · Light</td>
-  <td align="center">Mobile · Dark</td>
-</tr></table>
+| <img src="public/assets/screenshots/dashboard-dark.png" width="250"/> | <img src="public/assets/screenshots/courses-dark.png" width="250"/> | <img src="public/assets/screenshots/grades-dark.png" width="250"/> |
+|:---:|:---:|:---:|
+| **Dashboard** | **Courses** | **Grades** |
+| <img src="public/assets/screenshots/planning-dark.png" width="250"/> | <img src="public/assets/screenshots/revision-dark.png" width="250"/> | <img src="public/assets/screenshots/profile-dark.png" width="250"/> |
+| **Planning** | **Revision** | **Profile** |
 
 ## Features
 
