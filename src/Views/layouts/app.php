@@ -62,6 +62,10 @@
             background: var(--input-bg); color: var(--text); border-color: var(--border-soft);
         }
         html.dark input::placeholder, html.dark textarea::placeholder { color: var(--text-subtle); }
+        /* ── Global round checkboxes ── */
+        input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:16px!important; height:16px; border-radius:50%; border:2px solid var(--border-soft); background:transparent!important; cursor:pointer; position:relative; flex-shrink:0; transition:background .15s,border-color .15s; vertical-align:middle; padding:0!important; }
+        input[type="checkbox"]:checked { background:#6366f1!important; border-color:#6366f1!important; }
+        input[type="checkbox"]:checked::after { content:''; position:absolute; left:50%; top:50%; width:4px; height:8px; border:2px solid #fff; border-top:none; border-left:none; transform:translate(-50%,-60%) rotate(45deg); }
         /* ── Theme toggle ── */
         #theme-toggle, #theme-toggle-m { width: 38px; height: 38px; padding: 0; justify-content: center; background: var(--surface); border: 2px outset rgba(0,0,0,.2); border-radius: 99px; }
         html.dark #theme-toggle, html.dark #theme-toggle-m { border: 2px outset rgba(255,255,255,.15); }
@@ -187,7 +191,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.4.2</footer>
+    <footer>© 2026 EduSync · v1.5.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">

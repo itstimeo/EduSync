@@ -110,9 +110,10 @@ $presetsJson   = json_encode($presets);
     .dp-day.other-month { color: var(--border); cursor: default; }
 
     /* Toggle checkbox button */
-    .rev-toggle { width: 26px; height: 26px; flex-shrink: 0; border-radius: 6px; border: 2px solid var(--border-soft); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; }
+    .rev-toggle { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border-soft); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; }
     .rev-toggle:hover { border-color: #22c55e; }
     .rev-toggle.checked { background: #dcfce7; border-color: #22c55e; color: #22c55e; }
+    html.dark .rev-toggle.checked { background: rgba(34,197,94,.15); border-color: #4ade80; color: #4ade80; }
     .rev-card-reviewed .rev-card-name { text-decoration: line-through; color: var(--text-subtle); }
     .rev-card-next { font-size: .75rem; color: #15803d; margin-top: .25rem; font-weight: 500; }
 
