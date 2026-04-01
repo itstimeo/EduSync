@@ -37,6 +37,10 @@
         .link a:hover { text-decoration: underline; }
         #theme-toggle { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border-radius: 99px; background: var(--surface); border: 2px outset rgba(0,0,0,.2); color: var(--text-muted); cursor: pointer; }
         html.dark #theme-toggle { border: 2px outset rgba(255,255,255,.15); }
+        /* ── Global round checkboxes ── */
+        input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:16px!important; height:16px; border-radius:50%; border:2px solid var(--border-soft); background:transparent!important; cursor:pointer; position:relative; flex-shrink:0; transition:background .15s,border-color .15s; vertical-align:middle; padding:0!important; }
+        input[type="checkbox"]:checked { background:#6366f1!important; border-color:#6366f1!important; }
+        input[type="checkbox"]:checked::after { content:''; position:absolute; left:50%; top:50%; width:4px; height:8px; border:2px solid #fff; border-top:none; border-left:none; transform:translate(-50%,-60%) rotate(45deg); }
         @media (max-width: 480px) {
             body { padding: 3.5rem 1rem 1.5rem; align-items: flex-start; }
             .card { padding: 1.5rem 1.25rem; }

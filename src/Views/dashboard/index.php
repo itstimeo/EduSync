@@ -13,9 +13,10 @@
     .rev-item-name { font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .875rem; }
     .rev-item-name.reviewed { text-decoration: line-through; color: var(--text-subtle); }
     .rev-item-next { font-size: .72rem; color: #15803d; font-weight: 500; margin-top: .1rem; }
-    .rev-toggle-sm { width: 20px; height: 20px; flex-shrink: 0; border-radius: 4px; border: 2px solid var(--border-soft); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; padding: 0; margin-top: 2px; }
+    .rev-toggle-sm { width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border-soft); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; padding: 0; margin-top: 2px; }
     .rev-toggle-sm:hover { border-color: #22c55e; }
     .rev-toggle-sm.checked { background: #dcfce7; border-color: #22c55e; color: #22c55e; }
+    html.dark .rev-toggle-sm.checked { background: rgba(34,197,94,.15); border-color: #4ade80; color: #4ade80; }
     .subj-dot-sm { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
     .rev-row { display: flex; align-items: flex-start; gap: .5rem; padding: .5rem 0; }
     a.rev-item-link { flex: 1; min-width: 0; text-decoration: none; display: block; }
