@@ -76,15 +76,20 @@ $router->post('/chapters/edit',    [$courses, 'updateChapter']);
 $router->post('/chapters/delete',  [$courses, 'deleteChapter']);
 
 // Documents
-$router->get('/documents',           [$courses, 'showDocuments']);
-$router->get('/documents/upload',    [$courses, 'showUploadDocument']);
-$router->post('/documents/upload',   [$courses, 'uploadDocument']);
-$router->post('/documents/delete',   [$courses, 'deleteDocument']);
-$router->get('/documents/download',  [$courses, 'downloadDocument']);
-$router->get('/documents/serve',     [$courses, 'serveDocument']);
-$router->get('/documents/view',      [$courses, 'viewDocument']);
-$router->get('/documents/edit',      [$courses, 'showEditDocument']);
-$router->post('/documents/edit',     [$courses, 'updateDocument']);
+$router->get('/documents',              [$courses, 'showDocuments']);
+$router->get('/documents/upload',       [$courses, 'showUploadDocument']);
+$router->post('/documents/upload',      [$courses, 'uploadDocument']);
+$router->post('/documents/delete',      [$courses, 'deleteDocument']);
+$router->get('/documents/download',     [$courses, 'downloadDocument']);
+$router->get('/documents/serve',        [$courses, 'serveDocument']);
+$router->get('/documents/view',         [$courses, 'viewDocument']);
+$router->get('/documents/edit',         [$courses, 'showEditDocument']);
+$router->post('/documents/edit',        [$courses, 'updateDocument']);
+$router->get('/documents/note/print',   [$courses, 'printNote']);
+$router->get('/documents/note/new',     [$courses, 'showCreateNote']);
+$router->post('/documents/note/new',    [$courses, 'createNote']);
+$router->get('/documents/note/edit',    [$courses, 'showEditNote']);
+$router->post('/documents/note/edit',   [$courses, 'updateNote']);
 
 $grades = new GradesController();
 $router->get('/grades',         [$grades, 'showGrades']);

@@ -505,12 +505,164 @@ class CoursesController
             Session::redirect('/courses');
         }
 
+        if ($doc['file_type'] === 'text/html') {
+            $full = Document::getByIdForUser($id, $userId);
+            $doc['note_content'] = $full ? (string) $full['content'] : '';
+        }
+
         View::render('courses/document_view', [
             'title'    => htmlspecialchars($doc['title']),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'doc'      => $doc,
         ], 'layouts/app');
+    }
+
+    public function showCreateNote(): void
+    {
+        $this->requireAuth();
+        $userId    = $this->userId();
+        $chapterId = (int) ($_GET['chapter_id'] ?? 0);
+
+        $chapter = Chapter::getByIdForUser($chapterId, $userId);
+        if (!$chapter) {
+            Session::redirect('/courses');
+        }
+
+        View::render('courses/note_editor', [
+            'title'    => 'New note',
+            'flash'    => Session::getFlash(),
+            'userName' => Session::get('user_name', ''),
+            'chapter'  => $chapter,
+            'note'     => null,
+        ], 'layouts/app');
+    }
+
+    public function createNote(): void
+    {
+        $this->requireAuth();
+        $userId    = $this->userId();
+        $chapterId = (int) ($_POST['chapter_id'] ?? 0);
+
+        $chapter = Chapter::getByIdForUser($chapterId, $userId);
+        if (!$chapter) {
+            Session::redirect('/courses');
+        }
+
+        $noteTitle   = trim($_POST['title']       ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $content     = $_POST['content']           ?? '';
+
+        if ($noteTitle === '') {
+            Session::flash('error', 'Title is required.');
+            Session::redirect('/documents/note/new?chapter_id=' . $chapterId);
+        }
+
+        Document::createNote($chapterId, $noteTitle, $description, $content);
+        Session::flash('success', 'Note created.');
+        Session::redirect('/documents?chapter_id=' . $chapterId);
+    }
+
+    public function showEditNote(): void
+    {
+        $this->requireAuth();
+        $userId = $this->userId();
+        $id     = (int) ($_GET['id'] ?? 0);
+
+        $doc = Document::getByIdForUser($id, $userId);
+        if (!$doc || $doc['file_type'] !== 'text/html') {
+            Session::redirect('/courses');
+        }
+
+        View::render('courses/note_editor', [
+            'title'    => 'Edit note',
+            'flash'    => Session::getFlash(),
+            'userName' => Session::get('user_name', ''),
+            'chapter'  => [
+                'id'           => $doc['chapter_id'],
+                'name'         => $doc['chapter_name'],
+                'color'        => $doc['chapter_color'],
+                'theme_id'     => $doc['theme_id'],
+                'theme_name'   => $doc['theme_name'],
+                'subject_id'   => $doc['subject_id'],
+                'subject_name' => $doc['subject_name'],
+            ],
+            'note' => $doc,
+        ], 'layouts/app');
+    }
+
+    public function printNote(): void
+    {
+        $this->requireAuth();
+        $userId = $this->userId();
+        $id     = (int) ($_GET['id'] ?? 0);
+
+        $doc = Document::getByIdForUser($id, $userId);
+        if (!$doc || $doc['file_type'] !== 'text/html') {
+            Session::redirect('/courses');
+        }
+
+        $title   = htmlspecialchars($doc['title'], ENT_QUOTES);
+        $content = (string) $doc['content'];
+        $filename = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $doc['title']) . '.pdf';
+
+        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+              . '<style>'
+              . '*{box-sizing:border-box;margin:0;padding:0}'
+              . 'body{font-family:DejaVu Sans,sans-serif;font-size:12pt;color:#111;line-height:1.75;padding:1cm 1.2cm}'
+              . 'h1.note-title{font-size:18pt;font-weight:700;margin-bottom:.4cm;border-bottom:1px solid #ccc;padding-bottom:.2cm}'
+              . '.note-body h1{font-size:15pt;font-weight:700;margin:1em 0 .3em}'
+              . '.note-body h2{font-size:13pt;font-weight:700;margin:1em 0 .3em}'
+              . '.note-body h3{font-size:11pt;font-weight:700;margin:.8em 0 .25em}'
+              . '.note-body p,.note-body div{margin:.3em 0}'
+              . '.note-body ul,.note-body ol{padding-left:1.5em;margin:.4em 0}'
+              . '.note-body li{margin:.15em 0}'
+              . '.note-body b,.note-body strong{font-weight:700}'
+              . '.note-body i,.note-body em{font-style:italic}'
+              . '.note-body u{text-decoration:underline}'
+              . '.note-body s,.note-body strike{text-decoration:line-through}'
+              . '.note-body sup{font-size:.75em;vertical-align:super}'
+              . '.note-body sub{font-size:.75em;vertical-align:sub}'
+              . '.note-body hr{border:none;border-top:1px solid #ccc;margin:.5em 0}'
+              . '</style>'
+              . '</head><body>'
+              . '<h1 class="note-title">' . $title . '</h1>'
+              . '<div class="note-body">' . $content . '</div>'
+              . '</body></html>';
+
+        $options = new \Dompdf\Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new \Dompdf\Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream($filename, ['Attachment' => true]);
+        exit;
+    }
+
+    public function updateNote(): void
+    {
+        $this->requireAuth();
+        $userId = $this->userId();
+        $id     = (int) ($_POST['id'] ?? 0);
+
+        $doc = Document::getMetaByIdForUser($id, $userId);
+        if (!$doc || $doc['file_type'] !== 'text/html') {
+            Session::redirect('/courses');
+        }
+
+        $noteTitle   = trim($_POST['title']       ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $content     = $_POST['content']           ?? '';
+
+        if ($noteTitle === '') {
+            Session::flash('error', 'Title is required.');
+            Session::redirect('/documents/note/edit?id=' . $id);
+        }
+
+        Document::updateNote($id, $noteTitle, $description, $content);
+        Session::flash('success', 'Note saved.');
+        Session::redirect('/documents/view?id=' . $id);
     }
 
     public function serveDocument(): void

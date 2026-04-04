@@ -11,10 +11,6 @@
 .type-label-input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
 .type-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .form-actions{display:flex;gap:.75rem;margin-top:1.25rem}
-.btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-secondary{background:var(--bg-subtle);color:var(--text)}.btn-secondary:hover{background:var(--border)}
-.btn-add{background:#6366f1;color:#fff;padding:.45rem .9rem;font-size:.85rem}.btn-add:hover{background:#4f46e5}
 .add-row{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
 .add-label-input{flex:1;padding:.4rem .6rem;border:1px solid var(--border-soft);border-radius:6px;font-size:.875rem}
 .add-label-input:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
@@ -63,7 +59,7 @@
                 $colorPickerValue = '#6366f1';
                 include __DIR__ . '/../courses/_color_picker.php';
             ?>
-            <button type="submit" class="btn btn-add">Add</button>
+            <button type="submit" class="btn btn-primary">Add</button>
         </div>
         <span id="err-new-label" style="display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem;display:none">Please enter a type name.</span>
     </form>

@@ -4,9 +4,10 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 $iconDl   = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>';
 
 function docIcon(string $type): string {
-    if (str_contains($type, 'pdf'))   return '📄';
-    if (str_contains($type, 'image')) return '🖼';
-    if (str_contains($type, 'word') || str_contains($type, 'document')) return '📝';
+    if ($type === 'text/html')         return '📝';
+    if (str_contains($type, 'pdf'))    return '📄';
+    if (str_contains($type, 'image'))  return '🖼';
+    if (str_contains($type, 'word') || str_contains($type, 'document')) return '🗒';
     if (str_contains($type, 'presentation') || str_contains($type, 'powerpoint')) return '📊';
     return '📁';
 }
@@ -20,8 +21,6 @@ function docIcon(string $type): string {
 .view-toggle{display:flex;gap:2px}
 .view-toggle button{padding:.35rem .55rem;border:1px solid var(--border-soft);border-radius:5px;background:var(--surface);cursor:pointer;font-size:.85rem;color:var(--text-muted);line-height:1}
 .view-toggle button.active{background:#6366f1;color:#fff;border-color:#6366f1}
-.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
 .empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
 .card-list{display:flex;flex-direction:column;gap:.55rem}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:box-shadow .15s;overflow:hidden}
@@ -56,6 +55,7 @@ function docIcon(string $type): string {
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
+        <a href="/documents/note/new?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary">✎ Write</a>
         <a href="/documents/upload?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-primary">+ Upload</a>
     </div>
 </div>
@@ -72,11 +72,17 @@ function docIcon(string $type): string {
                 <div class="card-icon"><?= $icon ?></div>
                 <div class="card-body">
                     <div class="card-name"><?= htmlspecialchars($d['title'], ENT_QUOTES) ?></div>
-                    <div class="card-meta"><?= htmlspecialchars($d['original_name'] ?? '', ENT_QUOTES) ?></div>
+                    <?php $cardMeta = $d['file_type'] === 'text/html' ? ($d['description'] ?? '') : ($d['original_name'] ?? ''); ?>
+                    <div class="card-meta"><?= htmlspecialchars($cardMeta, ENT_QUOTES) ?></div>
                 </div>
                 <div class="card-actions" onclick="event.stopPropagation()">
-                    <a href="/documents/edit?id=<?= (int)$d['id'] ?>" class="btn-icon btn-edit" title="Edit"><?= $iconEdit ?></a>
+                    <?php $editUrl = $d['file_type'] === 'text/html' ? '/documents/note/edit?id=' . (int)$d['id'] : '/documents/edit?id=' . (int)$d['id']; ?>
+                    <a href="<?= $editUrl ?>" class="btn-icon btn-edit" title="Edit"><?= $iconEdit ?></a>
+                    <?php if ($d['file_type'] === 'text/html'): ?>
+                    <a href="/documents/note/print?id=<?= (int)$d['id'] ?>" class="btn-icon btn-download" title="Download"><?= $iconDl ?></a>
+                    <?php else: ?>
                     <a href="/documents/download?id=<?= (int)$d['id'] ?>" class="btn-icon btn-download" title="Download"><?= $iconDl ?></a>
+                    <?php endif; ?>
                     <form method="post" action="/documents/delete">
                         <input type="hidden" name="id" value="<?= (int)$d['id'] ?>">
                         <input type="hidden" name="chapter_id" value="<?= (int)$chapter['id'] ?>">
