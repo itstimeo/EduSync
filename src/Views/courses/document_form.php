@@ -15,15 +15,11 @@
 .file-name-lbl{font-size:.85rem;color:var(--text-muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .field-hint{font-size:.78rem;color:var(--text-subtle);margin-top:.3rem}
 .form-actions{display:flex;gap:.75rem;margin-top:1.4rem}
-.btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-secondary{background:var(--bg-subtle);color:var(--text)}.btn-secondary:hover{background:var(--border)}
 .req{color:#ef4444;margin-left:2px}
 .field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem}
 .field-err.show{display:block}
 .field-invalid{border-color:#ef4444!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
 .req-note{font-size:.78rem;color:var(--text-subtle);margin-top:1.25rem}
-.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:var(--bg-subtle);color:var(--text)}
 </style>
 
 <div style="display:flex;align-items:center;gap:.75rem;max-width:500px;margin:0 auto 1.25rem;">

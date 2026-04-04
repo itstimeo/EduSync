@@ -10,11 +10,6 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 <style>
     .settings-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; }
     .settings-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--text); flex: 1; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: .5rem 1rem; border-radius: 6px; font-size: .875rem; font-weight: 500; cursor: pointer; text-decoration: none; border: none; }
-    .btn-primary { background: #6366f1; color: #fff; }
-    .btn-primary:hover { background: #4f46e5; }
-    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { background: var(--bg-subtle); color: var(--text); }
     .btn-sm { padding: .35rem .75rem; font-size: .8rem; }
     .btn-icon-star:hover { background: #fef9c3; color: #b45309; border-color: #fde68a; }
     .btn-icon-plus { border-style: dashed; border-color: #a5b4fc; color: #6366f1; background: var(--purple-tint); }
