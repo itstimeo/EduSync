@@ -9,9 +9,6 @@
     .pf-group input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
     .pf-group input.inp-error { border-color: #f87171; }
     .pf-inline-error { font-size: .75rem; color: #ef4444; margin-top: .25rem; display: none; }
-    .btn-save { padding: .5rem 1.2rem; background: #6366f1; color: #fff; border: none; border-radius: 6px; font-size: .875rem; font-weight: 600; cursor: pointer; }
-    .btn-save:hover { background: #4f46e5; }
-    .btn-save:disabled { opacity: .6; cursor: default; }
     /* Photo section */
     .photo-divider { margin: 1.5rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .875rem; font-weight: 600; color: var(--text); }
     .photo-editor { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
@@ -30,16 +27,12 @@
     .pcrop-handle-sw { bottom:-6px; left:-6px; cursor:sw-resize; }
     .pcrop-handle-se { bottom:-6px; right:-6px; cursor:se-resize; }
     .crop-actions { display: flex; gap: .6rem; margin-top: .75rem; flex-wrap: wrap; align-items: center; }
-    .btn-upload-label { display: inline-flex; align-items: center; padding: .4rem .9rem; font-size: .8rem; font-weight: 600; border: 1px solid var(--border-soft); border-radius: 6px; background: var(--bg-subtle); color: var(--text); cursor: pointer; }
-    .btn-upload-label:hover { background: var(--border); }
     /* Security */
     .security-list { display: flex; flex-direction: column; gap: .75rem; }
     .security-item { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; border: 1px solid var(--border); border-radius: 8px; gap: 1rem; }
     .security-item-info { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
     .security-item-label { font-size: .875rem; font-weight: 600; color: var(--text); }
     .security-item-value { font-size: .8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .btn-sec { padding: .4rem .9rem; font-size: .8rem; font-weight: 600; border: 1px solid var(--border-soft); border-radius: 6px; background: var(--bg-subtle); color: var(--text); cursor: pointer; flex-shrink: 0; }
-    .btn-sec:hover { background: var(--border); }
     /* Popup */
     .pp-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998; align-items: center; justify-content: center; }
     .pp-overlay.open { display: flex; }
@@ -49,10 +42,6 @@
     .pp-step.active { display: block; }
     .pp-hint { font-size: .82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; }
     .pp-actions { display: flex; gap: .6rem; justify-content: flex-end; margin-top: 1rem; }
-    .btn-pp-cancel { padding: .5rem 1rem; border: 1px solid var(--border-soft); border-radius: 6px; background: var(--bg-subtle); color: var(--text); font-size: .875rem; cursor: pointer; }
-    .btn-pp-confirm { padding: .5rem 1rem; border: none; border-radius: 6px; background: #6366f1; color: #fff; font-size: .875rem; font-weight: 600; cursor: pointer; }
-    .btn-pp-confirm:hover { background: #4f46e5; }
-    .btn-pp-confirm:disabled { opacity: .6; cursor: default; }
     @media (max-width: 600px) {
         .name-fields { flex-direction: column; gap: .5rem; }
         .photo-editor { flex-direction: column; }
@@ -79,7 +68,7 @@
                 <div class="pf-inline-error" id="err-last-name"></div>
             </div>
         </div>
-        <button type="submit" class="btn-save">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 
     <div class="photo-divider">Profile photo</div>
@@ -98,7 +87,7 @@
         <div class="crop-area">
             <!-- Upload prompt (shown only when no photo) -->
             <div id="upload-prompt" style="<?= $user['has_photo'] ? 'display:none' : '' ?>">
-                <label for="photo-file-input" class="btn-upload-label">Upload a photo</label>
+                <label for="photo-file-input" class="btn btn-secondary">Upload a photo</label>
                 <div style="font-size:.8rem;color:var(--text-subtle);margin-top:.5rem;">JPEG, PNG or WebP — max 10 MB</div>
             </div>
 
@@ -106,8 +95,8 @@
             <div id="crop-section" style="<?= $user['has_photo'] ? '' : 'display:none' ?>">
                 <div id="cropper-wrap"></div>
                 <div class="crop-actions">
-                    <label for="photo-file-input" class="btn-upload-label">Change image</label>
-                    <button type="button" class="btn-save" id="btn-save-photo">Save photo</button>
+                    <label for="photo-file-input" class="btn btn-secondary">Change image</label>
+                    <button type="button" class="btn btn-primary" id="btn-save-photo">Save photo</button>
                     <?php if ($user['has_photo']): ?>
                         <form method="POST" action="/profile/photo/delete" style="margin:0;">
                             <button type="button"
@@ -136,14 +125,14 @@
                 <span class="security-item-label">Email address</span>
                 <span class="security-item-value" id="current-email-display"><?= htmlspecialchars($user['email']) ?></span>
             </div>
-            <button type="button" class="btn-sec" id="btn-open-email">Change</button>
+            <button type="button" class="btn btn-secondary" id="btn-open-email">Change</button>
         </div>
         <div class="security-item">
             <div class="security-item-info">
                 <span class="security-item-label">Password</span>
                 <span class="security-item-value">••••••••</span>
             </div>
-            <button type="button" class="btn-sec" id="btn-open-password">Change</button>
+            <button type="button" class="btn btn-secondary" id="btn-open-password">Change</button>
         </div>
     </div>
 </section>
@@ -164,8 +153,8 @@
                 <div class="pf-inline-error" id="err-email-new"></div>
             </div>
             <div class="pp-actions">
-                <button class="btn-pp-cancel" onclick="closePopup('popup-email')">Cancel</button>
-                <button class="btn-pp-confirm" id="btn-email-send">Send codes</button>
+                <button class="btn btn-secondary" onclick="closePopup('popup-email')">Cancel</button>
+                <button class="btn btn-primary" id="btn-email-send">Send codes</button>
             </div>
         </div>
         <div class="pp-step" id="email-step-2">
@@ -181,8 +170,8 @@
                 <div class="pf-inline-error" id="err-code-new"></div>
             </div>
             <div class="pp-actions">
-                <button class="btn-pp-cancel" onclick="closePopup('popup-email')">Cancel</button>
-                <button class="btn-pp-confirm" id="btn-email-verify">Confirm</button>
+                <button class="btn btn-secondary" onclick="closePopup('popup-email')">Cancel</button>
+                <button class="btn btn-primary" id="btn-email-verify">Confirm</button>
             </div>
         </div>
     </div>
@@ -208,8 +197,8 @@
             <div class="pf-inline-error" id="err-pw-confirm"></div>
         </div>
         <div class="pp-actions">
-            <button class="btn-pp-cancel" onclick="closePopup('popup-password')">Cancel</button>
-            <button class="btn-pp-confirm" id="btn-pw-save">Save</button>
+            <button class="btn btn-secondary" onclick="closePopup('popup-password')">Cancel</button>
+            <button class="btn btn-primary" id="btn-pw-save">Save</button>
         </div>
     </div>
 </div>

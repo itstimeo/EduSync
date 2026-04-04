@@ -44,6 +44,12 @@
         .flash { padding: .6rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: .9rem; }
         .flash.error   { background: #fee2e2; color: #b91c1c; }
         .flash.success { background: #dcfce7; color: #15803d; }
+        /* ── Global buttons ── */
+        .btn{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1rem;border-radius:6px;font-size:.875rem;font-weight:500;font-family:inherit;text-decoration:none;cursor:pointer;border:none}
+        .btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
+        .btn-secondary{background:var(--bg-subtle);color:var(--text);border:1px solid var(--border-soft)}.btn-secondary:hover{background:var(--border)}
+        .btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg-subtle);color:var(--text)}
+        .btn:disabled,.btn-primary:disabled{opacity:.6;cursor:default}
         /* ── Global icon buttons ── */
         .btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-muted);text-decoration:none;flex-shrink:0}
         .btn-edit{background:var(--bg-subtle);color:var(--text-muted);border-color:var(--border)}.btn-edit:hover{background:var(--border)}
@@ -191,7 +197,7 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.5.0</footer>
+    <footer>© 2026 EduSync · v1.6.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">

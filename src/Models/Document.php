@@ -153,4 +153,41 @@ class Document
         $stmt = $db->prepare('DELETE FROM documents WHERE id = ?');
         $stmt->execute([$id]);
     }
+
+    public static function createNote(int $chapterId, string $title, string $description, string $htmlContent): int
+    {
+        $content = self::sanitizeNoteHtml($htmlContent);
+        $db      = Database::getInstance();
+        $stmt    = $db->prepare(
+            'INSERT INTO documents (chapter_id, title, description, original_name, file_type, content)
+             VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $chapterId,
+            $title,
+            $description ?: null,
+            $title . '.html',
+            'text/html',
+            $content,
+        ]);
+        return (int) $db->lastInsertId();
+    }
+
+    public static function updateNote(int $id, string $title, string $description, string $htmlContent): void
+    {
+        $content = self::sanitizeNoteHtml($htmlContent);
+        $db      = Database::getInstance();
+        $stmt    = $db->prepare(
+            'UPDATE documents SET title = ?, description = ?, original_name = ?, content = ? WHERE id = ?'
+        );
+        $stmt->execute([$title, $description ?: null, $title . '.html', $content, $id]);
+    }
+
+    private static function sanitizeNoteHtml(string $html): string
+    {
+        $safe = strip_tags($html, '<p><div><br><b><strong><i><em><u><s><strike><h1><h2><h3><ul><ol><li><span><sup><sub><hr><font>');
+        $safe = preg_replace('/\s+on\w+\s*=\s*"[^"]*"/i', '', $safe);
+        $safe = preg_replace('/\s+on\w+\s*=\s*\'[^\']*\'/i', '', $safe);
+        return $safe;
+    }
 }

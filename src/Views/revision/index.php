@@ -18,11 +18,6 @@ $presetsJson   = json_encode($presets);
     .rev-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--text); }
     .rev-header-actions { display: flex; gap: .5rem; align-items: center; }
 
-    .btn { display: inline-flex; align-items: center; gap: .35rem; padding: .5rem 1rem; border-radius: 6px; font-size: .875rem; font-weight: 500; cursor: pointer; text-decoration: none; border: none; }
-    .btn-primary { background: #6366f1; color: #fff; }
-    .btn-primary:hover { background: #4f46e5; }
-    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { background: var(--bg-subtle); color: var(--text); }
     .btn-sm { padding: .35rem .75rem; font-size: .8rem; }
     .btn-danger { background: transparent; color: #dc2626; border: 1px solid #fca5a5; }
     .btn-danger:hover { background: #fee2e2; }

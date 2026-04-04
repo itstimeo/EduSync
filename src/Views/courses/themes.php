@@ -11,8 +11,6 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 .view-toggle{display:flex;gap:2px}
 .view-toggle button{padding:.35rem .55rem;border:1px solid var(--border-soft);border-radius:5px;background:var(--surface);cursor:pointer;font-size:.85rem;color:var(--text-muted);line-height:1}
 .view-toggle button.active{background:#6366f1;color:#fff;border-color:#6366f1}
-.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
 .empty{color:var(--text-subtle);font-size:.9rem;padding:3rem 0;text-align:center}
 .card-list{display:flex;flex-direction:column;gap:.55rem}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:box-shadow .15s;overflow:hidden}

@@ -10,9 +10,6 @@
 .field textarea{resize:vertical;min-height:80px}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
 .form-actions{display:flex;gap:.75rem;margin-top:1.4rem}
-.btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-secondary{background:var(--bg-subtle);color:var(--text)}.btn-secondary:hover{background:var(--border)}
 .req{color:#ef4444;margin-left:2px}
 .field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem}
 .field-err.show{display:block}
@@ -53,7 +50,6 @@
 .dp-day.today{color:#6366f1;font-weight:700}
 .dp-day.selected{background:#6366f1;color:#fff;font-weight:700}
 .dp-day.other-month{color:var(--border-soft)}
-.btn-back{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-decoration:none;flex-shrink:0}.btn-back:hover{background:var(--bg-subtle);color:var(--text)}
 @media (max-width: 640px) {
     .row-2 { grid-template-columns: 1fr; }
     .dp-calendar { width: min(260px, calc(100vw - 2rem)); }

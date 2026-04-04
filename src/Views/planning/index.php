@@ -27,9 +27,6 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 .page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .page-hd h1{font-size:1.25rem;font-weight:700}
 .hd-right{display:flex;align-items:center;gap:.6rem}
-.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-ghost{background:var(--bg-subtle);color:var(--text);padding:.4rem .7rem;font-size:.8rem}.btn-ghost:hover{background:var(--border)}
 /* Tabs */
 .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
 .tab-btn{padding:.6rem 1.25rem;font-size:.875rem;font-weight:500;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}

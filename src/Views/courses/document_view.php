@@ -4,15 +4,27 @@
 .doc-title{font-size:1.2rem;font-weight:700}
 .doc-desc{color:var(--text-muted);font-size:.9rem;margin-top:.35rem;line-height:1.5}
 .doc-actions{display:flex;gap:.5rem;flex-shrink:0}
-.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .9rem;border-radius:6px;font-size:.85rem;font-weight:500;text-decoration:none;cursor:pointer;border:none}
-.btn-primary{background:#6366f1;color:#fff}.btn-primary:hover{background:#4f46e5}
-.btn-secondary{background:var(--bg-subtle);color:var(--text)}.btn-secondary:hover{background:var(--border)}
 .viewer-box{margin-top:1rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-hover)}
 .viewer-box iframe{display:block;width:100%;height:76vh;border:none}
 .viewer-box img{display:block;max-width:100%;margin:0 auto;padding:1rem}
 #docx-container{padding:1.5rem 2rem;background:var(--surface);min-height:400px;line-height:1.7}
 .no-preview{padding:3rem;text-align:center;color:var(--text-subtle)}
 .no-preview p{margin-bottom:1rem;font-size:.95rem}
+.note-render{padding:1.5rem 2rem;background:var(--surface);min-height:200px;line-height:1.75;font-size:.95rem;color:var(--text)}
+.note-render h1{font-size:1.4rem;font-weight:700;margin:.75rem 0 .35rem}
+.note-render h2{font-size:1.2rem;font-weight:700;margin:.75rem 0 .35rem}
+.note-render h3{font-size:1.05rem;font-weight:600;margin:.6rem 0 .25rem}
+.note-render p,.note-render div{margin:.25rem 0}
+.note-render ul,.note-render ol{padding-left:1.5rem;margin:.35rem 0}
+.note-render li{margin:.15rem 0}
+.note-render b,.note-render strong{font-weight:700}
+.note-render i,.note-render em{font-style:italic}
+.note-render u{text-decoration:underline}
+.note-render s,.note-render strike{text-decoration:line-through}
+.note-render sup{font-size:.75em;vertical-align:super}
+.note-render sub{font-size:.75em;vertical-align:sub}
+.note-render hr{border:none;border-top:1px solid var(--border);margin:.75rem 0}
+.note-render [style*="background-color"]{color:#111111}
 </style>
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
@@ -28,14 +40,22 @@
         <?php endif; ?>
     </div>
     <div class="doc-actions">
-        <a href="/documents/edit?id=<?= (int)$doc['id'] ?>" class="btn btn-secondary">
+        <?php $editUrl = $doc['file_type'] === 'text/html' ? '/documents/note/edit?id=' . (int)$doc['id'] : '/documents/edit?id=' . (int)$doc['id']; ?>
+        <a href="<?= $editUrl ?>" class="btn btn-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6.5-6.5a2.121 2.121 0 013 3L12 14l-4 1 1-4z"/></svg>
             Edit
         </a>
+        <?php if ($doc['file_type'] === 'text/html'): ?>
+        <a href="/documents/note/print?id=<?= (int)$doc['id'] ?>" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>
+            Download
+        </a>
+        <?php else: ?>
         <a href="/documents/download?id=<?= (int)$doc['id'] ?>" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>
             Download
         </a>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -44,10 +64,14 @@
     $isPdf   = str_contains($type, 'pdf');
     $isImage = str_contains($type, 'image');
     $isDocx  = $type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    $isNote  = $type === 'text/html';
 ?>
 
 <div class="viewer-box">
-    <?php if ($isPdf): ?>
+    <?php if ($isNote): ?>
+        <div class="note-render"><?= $doc['note_content'] ?></div>
+
+    <?php elseif ($isPdf): ?>
         <iframe src="/documents/serve?id=<?= (int)$doc['id'] ?>"
                 title="<?= htmlspecialchars($doc['title'], ENT_QUOTES) ?>"></iframe>
 
