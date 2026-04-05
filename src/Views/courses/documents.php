@@ -55,6 +55,7 @@ function docIcon(string $type): string {
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
+        <a href="/courses/export?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary"><?= $iconDl ?> Export</a>
         <a href="/documents/note/new?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary">✎ Write</a>
         <a href="/documents/upload?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-primary">+ Upload</a>
     </div>

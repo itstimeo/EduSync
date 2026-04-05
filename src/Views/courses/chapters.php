@@ -1,6 +1,7 @@
 <?php
 $iconEdit = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6.5-6.5a2.121 2.121 0 013 3L12 14l-4 1 1-4z"/></svg>';
 $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16M10 3h4a1 1 0 011 1v3H9V4a1 1 0 011-1z"/></svg>';
+$iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>';
 ?>
 <style>
 .breadcrumb{font-size:.85rem;color:var(--text-muted)}.breadcrumb a{color:#6366f1;text-decoration:none}
@@ -41,6 +42,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
+        <a href="/courses/export?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-secondary"><?= $iconExp ?> Export</a>
         <a href="/chapters/create?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-primary">+ New chapter</a>
     </div>
 </div>
@@ -56,6 +58,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                     <div class="card-name"><?= htmlspecialchars($c['name'], ENT_QUOTES) ?></div>
                 </div>
                 <div class="card-actions" onclick="event.stopPropagation()">
+                    <a href="/courses/export?chapter_id=<?= (int)$c['id'] ?>" class="btn-icon btn-download" title="Export"><?= $iconExp ?></a>
                     <a href="/chapters/edit?id=<?= (int)$c['id'] ?>" class="btn-icon btn-edit" title="Edit"><?= $iconEdit ?></a>
                     <form method="post" action="/chapters/delete">
                         <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">

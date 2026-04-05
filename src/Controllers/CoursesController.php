@@ -756,6 +756,144 @@ class CoursesController
         Session::redirect('/documents/view?id=' . $id);
     }
 
+    public function exportCourses(): void
+    {
+        $this->requireAuth();
+        $userId = $this->userId();
+
+        $subjectId = isset($_GET['subject_id']) ? (int) $_GET['subject_id'] : null;
+        $themeId   = isset($_GET['theme_id'])   ? (int) $_GET['theme_id']   : null;
+        $chapterId = isset($_GET['chapter_id']) ? (int) $_GET['chapter_id'] : null;
+
+        if ($chapterId) {
+            $chapter = Chapter::getByIdForUser($chapterId, $userId);
+            if (!$chapter) Session::redirect('/courses');
+            $docs    = Document::getAllByChapterForExport($chapterId, $userId);
+            $zipName = $this->safeName($chapter['name']) . '.zip';
+        } elseif ($themeId) {
+            $theme   = Theme::getByIdForUser($themeId, $userId);
+            if (!$theme) Session::redirect('/courses');
+            $docs    = Document::getAllByThemeForExport($themeId, $userId);
+            $zipName = $this->safeName($theme['name']) . '.zip';
+        } elseif ($subjectId) {
+            $subject = Subject::getByIdAndUser($subjectId, $userId);
+            if (!$subject) Session::redirect('/courses');
+            $docs    = Document::getAllBySubjectForExport($subjectId, $userId);
+            $zipName = $this->safeName($subject['name']) . '.zip';
+        } else {
+            $docs    = Document::getAllForExport($userId);
+            $zipName = 'Courses.zip';
+        }
+
+        if (empty($docs)) {
+            Session::flash('error', 'No documents to export.');
+            Session::redirect('/courses');
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'es_zip_');
+        $zip     = new \ZipArchive();
+        if ($zip->open($tmpFile, \ZipArchive::OVERWRITE) !== true) {
+            Session::flash('error', 'Could not create ZIP archive.');
+            Session::redirect('/courses');
+        }
+
+        // Create complete folder structure (including subjects/themes/chapters with no documents)
+        if (!$chapterId) {
+            foreach (Document::getChaptersHierarchyForExport($userId, $subjectId, $themeId) as $row) {
+                $parts = [];
+                if (!$subjectId && !$themeId && $row['subject_name'] !== null) {
+                    $parts[] = $this->safeName($row['subject_name']);
+                }
+                if (!$themeId && $row['theme_name'] !== null) {
+                    $parts[] = $this->safeName($row['theme_name']);
+                }
+                if ($row['chapter_name'] !== null) {
+                    $parts[] = $this->safeName($row['chapter_name']);
+                }
+                if (!empty($parts)) {
+                    $zip->addEmptyDir(implode('/', $parts));
+                }
+            }
+        }
+
+        foreach ($docs as $doc) {
+            $parts = [];
+
+            if (!$subjectId && !$themeId && !$chapterId) {
+                $parts[] = $this->safeName($doc['subject_name']);
+            }
+            if (!$themeId && !$chapterId) {
+                $parts[] = $this->safeName($doc['theme_name']);
+            }
+            if (!$chapterId) {
+                $parts[] = $this->safeName($doc['chapter_name']);
+            }
+
+            if ($doc['file_type'] === 'text/html') {
+                $parts[]     = $this->safeName($doc['title']) . '.pdf';
+                $fileContent = $this->htmlNoteToPdf($doc['title'], (string) $doc['content']);
+            } else {
+                $ext     = pathinfo((string) $doc['original_name'], PATHINFO_EXTENSION);
+                $base    = pathinfo((string) $doc['original_name'], PATHINFO_FILENAME);
+                $parts[] = $this->safeName($base) . ($ext !== '' ? '.' . $ext : '');
+                $fileContent = (string) $doc['content'];
+            }
+
+            $zip->addFromString(implode('/', $parts), $fileContent);
+        }
+
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $zipName . '"');
+        header('Content-Length: ' . filesize($tmpFile));
+        readfile($tmpFile);
+        unlink($tmpFile);
+        exit;
+    }
+
+    private function htmlNoteToPdf(string $title, string $content): string
+    {
+        $safeTitle = htmlspecialchars($title, ENT_QUOTES);
+        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+              . '<style>'
+              . '*{box-sizing:border-box;margin:0;padding:0}'
+              . 'body{font-family:DejaVu Sans,sans-serif;font-size:12pt;color:#111;line-height:1.75;padding:1cm 1.2cm}'
+              . 'h1.note-title{font-size:18pt;font-weight:700;margin-bottom:.4cm;border-bottom:1px solid #ccc;padding-bottom:.2cm}'
+              . '.note-body h1{font-size:15pt;font-weight:700;margin:1em 0 .3em}'
+              . '.note-body h2{font-size:13pt;font-weight:700;margin:1em 0 .3em}'
+              . '.note-body h3{font-size:11pt;font-weight:700;margin:.8em 0 .25em}'
+              . '.note-body p,.note-body div{margin:.3em 0}'
+              . '.note-body ul,.note-body ol{padding-left:1.5em;margin:.4em 0}'
+              . '.note-body li{margin:.15em 0}'
+              . '.note-body b,.note-body strong{font-weight:700}'
+              . '.note-body i,.note-body em{font-style:italic}'
+              . '.note-body u{text-decoration:underline}'
+              . '.note-body s,.note-body strike{text-decoration:line-through}'
+              . '.note-body sup{font-size:.75em;vertical-align:super}'
+              . '.note-body sub{font-size:.75em;vertical-align:sub}'
+              . '.note-body hr{border:none;border-top:1px solid #ccc;margin:.5em 0}'
+              . '</style>'
+              . '</head><body>'
+              . '<h1 class="note-title">' . $safeTitle . '</h1>'
+              . '<div class="note-body">' . $content . '</div>'
+              . '</body></html>';
+
+        $options = new \Dompdf\Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new \Dompdf\Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        return $dompdf->output();
+    }
+
+    private function safeName(string $name): string
+    {
+        $safe = preg_replace('/[\/\\\\:*?"<>|]/', '_', $name);
+        return trim($safe) ?: 'unnamed';
+    }
+
     // ================================================================
     // Helpers
     // ================================================================

@@ -183,6 +183,98 @@ class Document
         $stmt->execute([$title, $description ?: null, $title . '.html', $content, $id]);
     }
 
+    public static function getChaptersHierarchyForExport(int $userId, ?int $subjectId = null, ?int $themeId = null): array
+    {
+        $db     = Database::getInstance();
+        $sql    = 'SELECT s.name AS subject_name, t.name AS theme_name, c.name AS chapter_name
+                   FROM subjects s
+                   LEFT JOIN themes t ON t.subject_id = s.id
+                   LEFT JOIN chapters c ON c.theme_id = t.id
+                   WHERE s.user_id = ?';
+        $params = [$userId];
+
+        if ($themeId !== null) {
+            $sql     .= ' AND t.id = ?';
+            $params[] = $themeId;
+        } elseif ($subjectId !== null) {
+            $sql     .= ' AND s.id = ?';
+            $params[] = $subjectId;
+        }
+
+        $sql .= ' ORDER BY s.name, t.name, c.name';
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public static function getAllForExport(int $userId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare(
+            'SELECT d.id, d.title, d.original_name, d.file_type, d.content,
+                    c.name AS chapter_name, t.name AS theme_name, s.name AS subject_name
+             FROM documents d
+             JOIN chapters c ON d.chapter_id = c.id
+             JOIN themes t   ON c.theme_id   = t.id
+             JOIN subjects s ON t.subject_id = s.id
+             WHERE s.user_id = ?
+             ORDER BY s.name, t.name, c.name, d.title'
+        );
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll();
+    }
+
+    public static function getAllBySubjectForExport(int $subjectId, int $userId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare(
+            'SELECT d.id, d.title, d.original_name, d.file_type, d.content,
+                    c.name AS chapter_name, t.name AS theme_name, s.name AS subject_name
+             FROM documents d
+             JOIN chapters c ON d.chapter_id = c.id
+             JOIN themes t   ON c.theme_id   = t.id
+             JOIN subjects s ON t.subject_id = s.id
+             WHERE s.id = ? AND s.user_id = ?
+             ORDER BY t.name, c.name, d.title'
+        );
+        $stmt->execute([$subjectId, $userId]);
+        return $stmt->fetchAll();
+    }
+
+    public static function getAllByThemeForExport(int $themeId, int $userId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare(
+            'SELECT d.id, d.title, d.original_name, d.file_type, d.content,
+                    c.name AS chapter_name, t.name AS theme_name, s.name AS subject_name
+             FROM documents d
+             JOIN chapters c ON d.chapter_id = c.id
+             JOIN themes t   ON c.theme_id   = t.id
+             JOIN subjects s ON t.subject_id = s.id
+             WHERE t.id = ? AND s.user_id = ?
+             ORDER BY c.name, d.title'
+        );
+        $stmt->execute([$themeId, $userId]);
+        return $stmt->fetchAll();
+    }
+
+    public static function getAllByChapterForExport(int $chapterId, int $userId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare(
+            'SELECT d.id, d.title, d.original_name, d.file_type, d.content,
+                    c.name AS chapter_name, t.name AS theme_name, s.name AS subject_name
+             FROM documents d
+             JOIN chapters c ON d.chapter_id = c.id
+             JOIN themes t   ON c.theme_id   = t.id
+             JOIN subjects s ON t.subject_id = s.id
+             WHERE c.id = ? AND s.user_id = ?
+             ORDER BY d.title'
+        );
+        $stmt->execute([$chapterId, $userId]);
+        return $stmt->fetchAll();
+    }
+
     private static function sanitizeNoteHtml(string $html): string
     {
         $safe = strip_tags($html, '<p><div><br><b><strong><i><em><u><s><strike><h1><h2><h3><ul><ol><li><span><sup><sub><hr><font>');

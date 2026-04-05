@@ -85,6 +85,7 @@ $router->get('/documents/serve',        [$courses, 'serveDocument']);
 $router->get('/documents/view',         [$courses, 'viewDocument']);
 $router->get('/documents/edit',         [$courses, 'showEditDocument']);
 $router->post('/documents/edit',        [$courses, 'updateDocument']);
+$router->get('/courses/export',         [$courses, 'exportCourses']);
 $router->get('/documents/note/print',   [$courses, 'printNote']);
 $router->get('/documents/note/new',     [$courses, 'showCreateNote']);
 $router->post('/documents/note/new',    [$courses, 'createNote']);
@@ -93,6 +94,7 @@ $router->post('/documents/note/edit',   [$courses, 'updateNote']);
 
 $grades = new GradesController();
 $router->get('/grades',         [$grades, 'showGrades']);
+$router->get('/grades/export',  [$grades, 'exportGrades']);
 $router->get('/grades/create',  [$grades, 'showCreateGrade']);
 $router->post('/grades/create', [$grades, 'createGrade']);
 $router->get('/grades/edit',    [$grades, 'showEditGrade']);

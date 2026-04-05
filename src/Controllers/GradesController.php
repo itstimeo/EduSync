@@ -123,6 +123,93 @@ class GradesController
         Session::redirect('/grades');
     }
 
+    public function exportGrades(): void
+    {
+        $this->requireAuth();
+        $userId = $this->userId();
+
+        $grouped = Grade::getBySubjectGrouped($userId);
+        $average = Grade::getWeightedAverage($userId);
+
+        if (empty($grouped)) {
+            Session::flash('error', 'No grades to export.');
+            Session::redirect('/grades');
+        }
+
+        $date       = date('d/m/Y');
+        $avgDisplay = $average !== null ? number_format($average, 2) . '/20' : '—';
+
+        $tableRows = '';
+        foreach ($grouped as $group) {
+            $color    = htmlspecialchars($group['subject_color'], ENT_QUOTES);
+            $subjName = htmlspecialchars($group['subject_name'], ENT_QUOTES);
+            $subjAvg  = $group['average'] !== null ? number_format($group['average'], 2) . '/20' : '—';
+
+            $tableRows .= '<tr style="background:#f5f5f7">'
+                . '<td colspan="4" style="padding:6px 10px 6px 14px;border-left:4px solid ' . $color . ';font-weight:700;font-size:10pt;border-bottom:1px solid #e5e5e5">' . $subjName . '</td>'
+                . '<td style="padding:6px 10px;text-align:right;color:#6366f1;font-weight:600;font-size:9pt;border-bottom:1px solid #e5e5e5">' . $subjAvg . '</td>'
+                . '</tr>';
+
+            foreach ($group['grades'] as $g) {
+                $norm    = number_format((float) $g['value'] / (float) $g['max_value'] * 20, 2);
+                $dateStr = $g['graded_at'] ? date('d/m/Y', strtotime($g['graded_at'])) : '';
+
+                $tableRows .= '<tr>'
+                    . '<td style="padding:5px 10px;border-bottom:1px solid #f0f0f0;font-size:9pt;font-weight:500">' . htmlspecialchars($g['name'], ENT_QUOTES) . '</td>'
+                    . '<td style="padding:5px 10px;border-bottom:1px solid #f0f0f0;font-size:9pt;text-align:center">' . $g['value'] . '/' . $g['max_value'] . '</td>'
+                    . '<td style="padding:5px 10px;border-bottom:1px solid #f0f0f0;font-size:9pt;text-align:center;font-weight:700;color:#6366f1">' . $norm . '/20</td>'
+                    . '<td style="padding:5px 10px;border-bottom:1px solid #f0f0f0;font-size:9pt;text-align:center;color:#888">&times;' . $g['coefficient'] . '</td>'
+                    . '<td style="padding:5px 10px;border-bottom:1px solid #f0f0f0;font-size:9pt;text-align:center;color:#888">' . $dateStr . '</td>'
+                    . '</tr>';
+
+                if (!empty($g['comment'])) {
+                    $tableRows .= '<tr><td colspan="5" style="padding:2px 10px 5px 22px;font-size:8pt;color:#888;font-style:italic;border-bottom:1px solid #f0f0f0">'
+                        . htmlspecialchars($g['comment'], ENT_QUOTES)
+                        . '</td></tr>';
+                }
+            }
+
+            $tableRows .= '<tr><td colspan="5" style="height:8px"></td></tr>';
+        }
+
+        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'
+              . '*{box-sizing:border-box;margin:0;padding:0}'
+              . 'body{font-family:DejaVu Sans,sans-serif;font-size:9.5pt;color:#111;padding:1cm 1.5cm}'
+              . 'table{width:100%;border-collapse:collapse}'
+              . '</style></head><body>'
+              . '<table style="margin-bottom:8px"><tr>'
+              . '<td style="font-size:18pt;font-weight:700;color:#6366f1">Grade Report</td>'
+              . '<td style="text-align:right;font-size:8.5pt;color:#888;vertical-align:bottom;padding-bottom:3px">EduSync &nbsp;&bull;&nbsp; ' . $date . '</td>'
+              . '</tr></table>'
+              . '<table style="margin-bottom:12px"><tr><td style="border-top:2px solid #6366f1;font-size:0">&nbsp;</td></tr></table>'
+              . '<table>'
+              . '<thead><tr style="background:#fafafa">'
+              . '<th style="padding:5px 10px;text-align:left;font-size:7.5pt;font-weight:600;color:#888;text-transform:uppercase;border-bottom:1px solid #e5e5e5">Grade</th>'
+              . '<th style="padding:5px 10px;text-align:center;font-size:7.5pt;font-weight:600;color:#888;text-transform:uppercase;border-bottom:1px solid #e5e5e5;width:13%">Value</th>'
+              . '<th style="padding:5px 10px;text-align:center;font-size:7.5pt;font-weight:600;color:#888;text-transform:uppercase;border-bottom:1px solid #e5e5e5;width:13%">/20</th>'
+              . '<th style="padding:5px 10px;text-align:center;font-size:7.5pt;font-weight:600;color:#888;text-transform:uppercase;border-bottom:1px solid #e5e5e5;width:10%">Coeff</th>'
+              . '<th style="padding:5px 10px;text-align:center;font-size:7.5pt;font-weight:600;color:#888;text-transform:uppercase;border-bottom:1px solid #e5e5e5;width:14%">Date</th>'
+              . '</tr></thead>'
+              . '<tbody>' . $tableRows . '</tbody>'
+              . '</table>'
+              . '<table style="margin-top:12px;width:auto">'
+              . '<tr>'
+              . '<td style="padding:8px 14px;border:2px solid #6366f1;font-size:9pt;color:#555;font-weight:600">Overall average</td>'
+              . '<td style="padding:8px 16px;border-top:2px solid #6366f1;border-right:2px solid #6366f1;border-bottom:2px solid #6366f1;font-size:14pt;font-weight:700;color:#6366f1">' . $avgDisplay . '</td>'
+              . '</tr>'
+              . '</table>'
+              . '</body></html>';
+
+        $options = new \Dompdf\Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new \Dompdf\Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream('grade_report_' . date('d-m-Y') . '.pdf', ['Attachment' => true]);
+        exit;
+    }
+
     // ================================================================
     // Helpers
     // ================================================================
