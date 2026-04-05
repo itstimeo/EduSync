@@ -37,6 +37,21 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 .cal-nav-btn{background:var(--bg-subtle);border:none;border-radius:6px;padding:.35rem .65rem;cursor:pointer;font-size:1rem;color:var(--text);text-decoration:none;line-height:1}
 .cal-nav-btn:hover{background:var(--border)}
 .cal-month{font-size:1rem;font-weight:700;color:var(--text)}
+.cal-picker-wrap{position:relative}
+.cal-picker-btn{font-size:.95rem;font-weight:700;color:var(--text);background:transparent;border:none;border-radius:6px;padding:.3rem .75rem;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:.4rem}
+.cal-picker-btn:hover{background:var(--border)}
+.cal-picker-btn svg{flex-shrink:0;color:var(--text-muted);transition:transform .18s}
+.cal-picker-btn.open svg{transform:rotate(180deg)}
+.cal-picker-drop{display:none;position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:200;padding:.75rem;min-width:220px}
+.cal-picker-drop.open{display:block}
+.cal-picker-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem}
+.cal-picker-year span{font-size:.9rem;font-weight:700;color:var(--text)}
+.cal-picker-year button{background:none;border:none;cursor:pointer;color:var(--text-muted);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.cal-picker-year button:hover{background:var(--bg-subtle);color:var(--text)}
+.cal-picker-months{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem}
+.cal-picker-month{padding:.4rem 0;text-align:center;font-size:.8rem;font-weight:500;border-radius:6px;cursor:pointer;color:var(--text);background:none;border:none;font-family:inherit}
+.cal-picker-month:hover{background:var(--purple-tint);color:#6366f1}
+.cal-picker-month.active{background:#6366f1;color:#fff;font-weight:700}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-dow{text-align:center;font-size:.72rem;font-weight:600;color:var(--text-subtle);padding:.3rem 0}
 .cal-cell{background:var(--surface);border:1px solid var(--border);border-radius:6px;min-height:80px;padding:.35rem .4rem;cursor:pointer;transition:background .1s;vertical-align:top}
@@ -90,7 +105,20 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 <div class="tab-panel" id="panel-calendar">
     <div class="cal-nav">
         <a href="/planning?month=<?= htmlspecialchars($prevMonth, ENT_QUOTES) ?>" class="cal-nav-btn">&#8249;</a>
-        <span class="cal-month"><?= $monthNames[$monthNum - 1] ?> <?= $yearNum ?></span>
+        <div class="cal-picker-wrap">
+            <button class="cal-picker-btn" id="cal-picker-btn" type="button">
+                <?= $monthNames[$monthNum - 1] ?> <?= $yearNum ?>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="cal-picker-drop" id="cal-picker-drop">
+                <div class="cal-picker-year">
+                    <button type="button" id="cal-year-prev">&#8249;</button>
+                    <span id="cal-year-label"><?= $yearNum ?></span>
+                    <button type="button" id="cal-year-next">&#8250;</button>
+                </div>
+                <div class="cal-picker-months" id="cal-picker-months"></div>
+            </div>
+        </div>
         <a href="/planning?month=<?= htmlspecialchars($nextMonth, ENT_QUOTES) ?>" class="cal-nav-btn">&#8250;</a>
     </div>
     <div class="cal-grid">
@@ -273,5 +301,52 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 
     closeBtn.addEventListener('click', function () { popup.style.display = 'none'; });
     popup.addEventListener('click', function (e) { if (e.target === popup) popup.style.display = 'none'; });
+
+    // ── Month/year picker dropdown ──
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var pickerBtn   = document.getElementById('cal-picker-btn');
+    var pickerDrop  = document.getElementById('cal-picker-drop');
+    var yearLabel   = document.getElementById('cal-year-label');
+    var monthsGrid  = document.getElementById('cal-picker-months');
+    var curYear     = <?= (int)$yearNum ?>;
+    var curMonth    = <?= (int)$monthNum ?>;
+    var pickerYear  = curYear;
+
+    function renderMonths() {
+        yearLabel.textContent = pickerYear;
+        monthsGrid.innerHTML = '';
+        MONTHS.forEach(function (name, i) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'cal-picker-month' + (pickerYear === curYear && i + 1 === curMonth ? ' active' : '');
+            btn.textContent = name.slice(0, 3);
+            btn.addEventListener('click', function () {
+                var m = i + 1;
+                location.href = '/planning?month=' + pickerYear + '-' + (m < 10 ? '0' + m : m);
+            });
+            monthsGrid.appendChild(btn);
+        });
+    }
+
+    pickerBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = pickerDrop.classList.toggle('open');
+        pickerBtn.classList.toggle('open', isOpen);
+        if (isOpen) { pickerYear = curYear; renderMonths(); }
+    });
+
+    document.getElementById('cal-year-prev').addEventListener('click', function (e) {
+        e.stopPropagation(); pickerYear--; renderMonths();
+    });
+    document.getElementById('cal-year-next').addEventListener('click', function (e) {
+        e.stopPropagation(); pickerYear++; renderMonths();
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!pickerDrop.contains(e.target) && e.target !== pickerBtn) {
+            pickerDrop.classList.remove('open');
+            pickerBtn.classList.remove('open');
+        }
+    });
 })();
 </script>
