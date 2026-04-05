@@ -137,6 +137,22 @@
     </div>
 </section>
 
+<!-- Logout -->
+<section class="profile-section">
+    <h2>Session</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+        <div>
+            <div style="font-size:.875rem;font-weight:600;color:var(--text);">Log out</div>
+            <div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">End your current session on this device.</div>
+        </div>
+        <button type="button" class="btn btn-secondary"
+                style="color:#ef4444;border-color:#fecaca;"
+                onclick="esConfirm('Log out of your account?', () => window.location='/logout')">
+            Log out
+        </button>
+    </div>
+</section>
+
 <!-- Popup: email change -->
 <div class="pp-overlay" id="popup-email">
     <div class="pp-box">

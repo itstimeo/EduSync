@@ -161,7 +161,6 @@
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                     <span class="nav-avatar-initials" style="display:none"><?= htmlspecialchars(mb_strtoupper(mb_substr($userName ?? '?', 0, 1))) ?></span>
                 </a>
-                <a href="/logout" style="margin-left:.25rem;font-size:.8rem;color:var(--text-subtle);text-decoration:none;">Log out</a>
             </span>
         </div>
         <div class="nav-mobile">
@@ -185,7 +184,6 @@
             </a>
             <div style="display:flex;align-items:center;gap:.75rem;">
                 <button id="theme-toggle-m" type="button" class="nav-link" aria-label="Toggle dark mode"></button>
-                <a href="/logout">Log out</a>
             </div>
         </div>
     </nav>
