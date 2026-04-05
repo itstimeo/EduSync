@@ -68,7 +68,10 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 
 <div class="page-hd">
     <h1>Grades</h1>
-    <a href="/grades/create" class="btn btn-primary">+ New grade</a>
+    <div style="display:flex;gap:.5rem">
+        <a href="/grades/export" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg> Export PDF</a>
+        <a href="/grades/create" class="btn btn-primary">+ New grade</a>
+    </div>
 </div>
 
 <div class="avg-banner">
