@@ -54,7 +54,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 .cal-picker-month.active{background:#6366f1;color:#fff;font-weight:700}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-dow{text-align:center;font-size:.72rem;font-weight:600;color:var(--text-subtle);padding:.3rem 0}
-.cal-cell{background:var(--surface);border:1px solid var(--border);border-radius:6px;min-height:80px;padding:.35rem .4rem;cursor:pointer;transition:background .1s;vertical-align:top}
+.cal-cell{background:var(--surface);border:1px solid var(--border);border-radius:6px;min-height:80px;padding:.35rem .4rem;cursor:pointer;transition:background .1s;min-width:0;overflow:hidden}
 .cal-cell:hover{background:var(--purple-tint)}
 .cal-cell.other-month{background:var(--bg-hover);opacity:.5;cursor:default}
 .cal-cell.other-month:hover{background:var(--bg-hover)}

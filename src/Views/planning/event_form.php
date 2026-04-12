@@ -166,8 +166,19 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
+            <?php if ($event): ?>
+                <button type="button" class="btn btn-secondary" style="color:#ef4444;border-color:#fecaca;margin-left:auto;"
+                        onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($event['title']), ENT_QUOTES) ?>»?', () => document.getElementById('delete-form').submit())">
+                    Delete
+                </button>
+            <?php endif; ?>
         </div>
     </form>
+    <?php if ($event): ?>
+        <form id="delete-form" method="post" action="/planning/delete" style="display:none;">
+            <input type="hidden" name="id" value="<?= (int)$event['id'] ?>">
+        </form>
+    <?php endif; ?>
 </div>
 
 <script>
