@@ -1,6 +1,6 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.8.0.
+Student management application built with PHP and MySQL — v1.8.1.
 
 ## Screenshots
 
