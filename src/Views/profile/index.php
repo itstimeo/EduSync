@@ -137,6 +137,59 @@
     </div>
 </section>
 
+<!-- Integrations -->
+<section class="profile-section">
+    <h2>Integrations</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <div>
+                <div style="font-size:.875rem;font-weight:600;color:var(--text);">Google Calendar</div>
+                <?php if ($gcalEmail): ?>
+                    <div style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;"><?= htmlspecialchars($gcalEmail) ?></div>
+                <?php else: ?>
+                    <div style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;">Events won't sync until connected.</div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <?php if ($gcalEmail): ?>
+            <form method="POST" action="/planning/google/disconnect" style="margin:0;" id="gcal-disconnect-form">
+                <button type="button"
+                        style="font-size:.8rem;font-weight:600;padding:.3rem .85rem;border-radius:99px;border:1.5px solid #bbf7d0;background:#f0fdf4;color:#16a34a;cursor:pointer;transition:opacity .15s;"
+                        onmouseenter="this.style.opacity='.75'" onmouseleave="this.style.opacity='1'"
+                        onclick="esConfirm('Disconnect Google Calendar?', () => document.getElementById('gcal-disconnect-form').submit())">
+                    ● Connected
+                </button>
+            </form>
+        <?php else: ?>
+            <button type="button"
+                    style="font-size:.8rem;font-weight:600;padding:.3rem .85rem;border-radius:99px;border:1.5px solid #fecaca;background:#fff1f2;color:#dc2626;cursor:pointer;transition:opacity .15s;"
+                    onmouseenter="this.style.opacity='.75'" onmouseleave="this.style.opacity='1'"
+                    onclick="document.getElementById('popup-gcal').classList.add('open')">
+                ● Disconnected
+            </button>
+        <?php endif; ?>
+    </div>
+</section>
+
+<!-- Popup: Google Calendar connect -->
+<div class="pp-overlay" id="popup-gcal">
+    <div class="pp-box">
+        <h3>Sync with Google Calendar</h3>
+        <p class="pp-hint">Your planning events will be automatically pushed to your Google Calendar when created, edited or deleted.</p>
+        <div class="pp-actions">
+            <button class="btn btn-secondary" onclick="closePopup('popup-gcal')">Cancel</button>
+            <a href="/planning/google/connect" class="btn btn-primary">Connect</a>
+        </div>
+    </div>
+</div>
+
 <!-- Logout -->
 <section class="profile-section">
     <h2>Session</h2>

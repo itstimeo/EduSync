@@ -12,6 +12,7 @@ use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
 use EduSync\Controllers\GradesController;
 use EduSync\Controllers\EventsController;
+use EduSync\Controllers\GoogleCalendarController;
 use EduSync\Controllers\ProfileController;
 use EduSync\Controllers\RevisionController;
 use EduSync\Services\AuthService;
@@ -111,6 +112,11 @@ $router->post('/planning/delete',  [$events, 'deleteEvent']);
 $router->get('/planning/settings',          [$events, 'showSettings']);
 $router->post('/planning/settings',         [$events, 'saveSettings']);
 $router->post('/planning/settings/add-type',[$events, 'addType']);
+
+$gcal = new GoogleCalendarController();
+$router->get('/planning/google/connect',   [$gcal, 'connect']);
+$router->get('/planning/google/callback',  [$gcal, 'callback']);
+$router->post('/planning/google/disconnect', [$gcal, 'disconnect']);
 
 $profile = new ProfileController();
 $router->get('/profile',               [$profile, 'show']);

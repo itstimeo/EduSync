@@ -105,4 +105,11 @@ class Event
         $stmt = $db->prepare('DELETE FROM events WHERE id = ? AND user_id = ?');
         $stmt->execute([$id, $userId]);
     }
+
+    public static function updateGcalId(int $id, int $userId, string $gcalId): void
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare('UPDATE events SET gcal_event_id = ? WHERE id = ? AND user_id = ?');
+        $stmt->execute([$gcalId, $id, $userId]);
+    }
 }
