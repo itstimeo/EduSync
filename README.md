@@ -1,6 +1,6 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.7.1.
+Student management application built with PHP and MySQL — v1.8.0.
 
 ## Screenshots
 
@@ -69,6 +69,9 @@ php -S localhost:8080 -t public
 | `MAIL_FROM_NAME`         | Sender name (e.g. `EduSync`)                  |
 | `REMEMBER_MAX_DAYS`      | Max lifetime of remember-me token (e.g. `60`) |
 | `REMEMBER_INACTIVE_DAYS` | Inactivity limit in days (e.g. `14`)          |
+| `GOOGLE_CLIENT_ID`       | Google OAuth2 client ID                       |
+| `GOOGLE_CLIENT_SECRET`   | Google OAuth2 client secret                   |
+| `GOOGLE_REDIRECT_URI`    | OAuth2 redirect URI (e.g. `http://localhost:8080/planning/google/callback`) |
 
 ## Gmail SMTP setup
 
@@ -76,6 +79,15 @@ php -S localhost:8080 -t public
 2. Enable 2-Step Verification
 3. Security → App passwords → create one for "EduSync"
 4. Copy the 16-character password into `MAIL_PASSWORD` in your `.env`
+
+## Google Calendar sync setup
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) → create a project
+2. Enable the **Google Calendar API** (APIs & Services → Library)
+3. Configure the OAuth consent screen (External, add your Gmail as a test user)
+4. Create OAuth2 credentials (Web application), add the redirect URI matching `GOOGLE_REDIRECT_URI`
+5. Copy the Client ID and Client Secret into your `.env`
+6. On the profile page, click **● Disconnected** → Connect → authorize with your Google account
 
 ## Project structure
 
@@ -85,7 +97,7 @@ src/
   Controllers/  HTTP request handlers
   Models/       Database models
   Views/        PHP templates
-  Services/     MailService, AuthService
+  Services/     MailService, AuthService, GoogleCalendarService
   Core/         Router, Database, Session, View
 config/         Application configuration (loads .env)
 database/

@@ -5,6 +5,7 @@ namespace EduSync\Controllers;
 use EduSync\Core\Database;
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Models\GoogleToken;
 use EduSync\Models\User;
 use EduSync\Models\VerificationCode;
 use EduSync\Services\MailService;
@@ -24,11 +25,14 @@ class ProfileController
         $userId = $this->guard();
         $user   = User::findById($userId);
 
+        $gcalToken = GoogleToken::getByUser($userId);
+
         View::render('profile/index', [
-            'title'    => 'Profile',
-            'flash'    => Session::getFlash(),
-            'userName' => Session::get('user_name', ''),
-            'user'     => $user,
+            'title'       => 'Profile',
+            'flash'       => Session::getFlash(),
+            'userName'    => Session::get('user_name', ''),
+            'user'        => $user,
+            'gcalEmail'   => $gcalToken['google_email'] ?? null,
         ], 'layouts/app');
     }
 
