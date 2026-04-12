@@ -6,6 +6,7 @@ use EduSync\Core\Session;
 use EduSync\Core\View;
 use EduSync\Models\Event;
 use EduSync\Models\EventTypeColor;
+use EduSync\Services\GoogleCalendarService;
 
 class EventsController
 {
@@ -85,7 +86,16 @@ class EventsController
             Session::redirect('/planning/create');
         }
 
-        Event::create($userId, $title, $type, $color, $startDate, $endDate, $description);
+        $id = Event::create($userId, $title, $type, $color, $startDate, $endDate, $description);
+        try {
+            if (GoogleCalendarService::isConnected($userId)) {
+                $newEvent = Event::getByIdAndUser($id, $userId);
+                if ($newEvent) {
+                    $gcalId = GoogleCalendarService::pushEvent($userId, $newEvent);
+                    if ($gcalId) Event::updateGcalId($id, $userId, $gcalId);
+                }
+            }
+        } catch (\Throwable $e) {}
         Session::flash('success', 'Event created.');
         Session::redirect('/planning');
     }
@@ -129,6 +139,15 @@ class EventsController
         }
 
         Event::update($id, $userId, $title, $type, $color, $startDate, $endDate, $description);
+        try {
+            if (GoogleCalendarService::isConnected($userId)) {
+                $updated = Event::getByIdAndUser($id, $userId);
+                if ($updated) {
+                    $gcalId = GoogleCalendarService::pushEvent($userId, $updated);
+                    if ($gcalId && !$event['gcal_event_id']) Event::updateGcalId($id, $userId, $gcalId);
+                }
+            }
+        } catch (\Throwable $e) {}
         Session::flash('success', 'Event updated.');
         Session::redirect('/planning');
     }
@@ -141,6 +160,11 @@ class EventsController
 
         $event = Event::getByIdAndUser($id, $userId);
         if ($event) {
+            try {
+                if (!empty($event['gcal_event_id']) && GoogleCalendarService::isConnected($userId)) {
+                    GoogleCalendarService::deleteEvent($userId, $event['gcal_event_id']);
+                }
+            } catch (\Throwable $e) {}
             Event::delete($id, $userId);
             Session::flash('success', 'Event deleted.');
         }

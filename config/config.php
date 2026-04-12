@@ -31,3 +31,8 @@ define('MAIL_PASSWORD', $_ENV['MAIL_PASSWORD'] ?? '');
 define('MAIL_FROM_ADDRESS', $_ENV['MAIL_FROM_ADDRESS'] ?? '');
 define('MAIL_FROM_NAME', $_ENV['MAIL_FROM_NAME'] ?? 'EduSync');
 define('MAIL_ENCRYPTION', $_ENV['MAIL_ENCRYPTION'] ?? 'tls');
+
+// Google Calendar
+define('GOOGLE_CLIENT_ID',     $_ENV['GOOGLE_CLIENT_ID']     ?? '');
+define('GOOGLE_CLIENT_SECRET', $_ENV['GOOGLE_CLIENT_SECRET'] ?? '');
+define('GOOGLE_REDIRECT_URI',  $_ENV['GOOGLE_REDIRECT_URI']  ?? '');

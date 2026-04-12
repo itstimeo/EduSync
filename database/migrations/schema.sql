@@ -128,15 +128,26 @@ CREATE TABLE IF NOT EXISTS event_type_colors (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS events (
-    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT UNSIGNED NOT NULL,
-    title       VARCHAR(255) NOT NULL,
-    type        VARCHAR(50)  NOT NULL,
-    color       VARCHAR(20)  NOT NULL DEFAULT '#6366f1',
-    start_date  DATE         NOT NULL,
-    end_date    DATE,
-    description TEXT,
-    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id        INT UNSIGNED NOT NULL,
+    title          VARCHAR(255) NOT NULL,
+    type           VARCHAR(50)  NOT NULL,
+    color          VARCHAR(20)  NOT NULL DEFAULT '#6366f1',
+    start_date     DATE         NOT NULL,
+    end_date       DATE,
+    description    TEXT,
+    gcal_event_id  VARCHAR(255),
+    created_at     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS google_tokens (
+    id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id          INT UNSIGNED NOT NULL UNIQUE,
+    access_token     TEXT         NOT NULL,
+    refresh_token    TEXT,
+    token_expires_at DATETIME     NOT NULL,
+    google_email     VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
