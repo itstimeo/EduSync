@@ -135,18 +135,18 @@ $presetsJson   = json_encode($presets);
 </style>
 
 <div class="rev-header">
-    <h1>Revision</h1>
+    <h1><?= __('revision.title') ?></h1>
     <div class="rev-header-actions">
-        <a href="/revision/settings" class="btn-icon btn-icon-settings" title="Settings"><?= $iconSettings ?></a>
-        <button class="btn-icon btn-icon-primary" onclick="toggleAddPanel()" title="Track new item"><?= $iconPlus ?></button>
+        <a href="/revision/settings" class="btn-icon btn-icon-settings" title="<?= __('common.settings') ?>"><?= $iconSettings ?></a>
+        <button class="btn-icon btn-icon-primary" onclick="toggleAddPanel()" title="<?= __('revision.track_new') ?>"><?= $iconPlus ?></button>
     </div>
 </div>
 
 <!-- Due today -->
 <div class="section">
-    <div class="section-title">Due today (<?= count($due) ?>)</div>
+    <div class="section-title"><?= sprintf(__('revision.due_today'), count($due)) ?></div>
     <?php if (empty($due)): ?>
-        <p class="empty">Nothing to revise today. 🎉</p>
+        <p class="empty"><?= __('revision.nothing_today') ?></p>
     <?php else: ?>
         <?php
         $today = date('Y-m-d');
@@ -155,11 +155,9 @@ $presetsJson   = json_encode($presets);
             $currentIndex = (int) ($r['interval_index'] ?? 0);
             $isReviewed   = ($r['reviewed_today'] ?? '') === $today;
             $totalSteps   = count($allSteps);
-            // When reviewed, interval_index was already advanced — show the step that was reviewed
             $displayIndex = $isReviewed ? max(0, $currentIndex - 1) : $currentIndex;
             $currentStep  = $allSteps[$displayIndex] ?? ['day' => '?', 'action' => ''];
             $stepLabel    = ($displayIndex + 1) . '/' . $totalSteps;
-            // Next step: when reviewed = intervals[currentIndex], when not = intervals[currentIndex+1]
             $nextIdx      = $isReviewed ? $currentIndex : ($currentIndex + 1);
             $isLast       = $nextIdx >= $totalSteps;
             $nextStep     = !$isLast ? ($allSteps[$nextIdx] ?? null) : null;
@@ -168,8 +166,7 @@ $presetsJson   = json_encode($presets);
             <div class="rev-card<?= $isReviewed ? ' rev-card-reviewed' : '' ?>">
                 <form method="POST" action="/revision/toggle" style="display:inline-flex;flex-shrink:0;align-items:center;">
                     <input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
-                    <button type="submit" class="rev-toggle<?= $isReviewed ? ' checked' : '' ?>"
-                            title="<?= $isReviewed ? 'Unmark as reviewed' : 'Mark as reviewed today' ?>">
+                    <button type="submit" class="rev-toggle<?= $isReviewed ? ' checked' : '' ?>">
                         <?php if ($isReviewed): ?><?= $iconCheckFill ?><?php endif; ?>
                     </button>
                 </form>
@@ -182,26 +179,26 @@ $presetsJson   = json_encode($presets);
                         <?php if (!empty($currentStep['action'])): ?>
                             &nbsp;<span style="color:#374151;font-weight:500;"><?= htmlspecialchars($currentStep['action'], ENT_QUOTES) ?></span>
                         <?php endif; ?>
-                        &nbsp;· Repetition <?= htmlspecialchars($stepLabel, ENT_QUOTES) ?>
+                        &nbsp;· <?= sprintf(__('revision.repetition'), $displayIndex + 1, $totalSteps) ?>
                         <?php if (!$isReviewed && strtotime($nextRevDate) < strtotime($today)): ?>
-                            &nbsp;· <span style="color:#dc2626;">overdue <?= date('d/m', strtotime($nextRevDate)) ?></span>
+                            &nbsp;· <span style="color:#dc2626;"><?= __('revision.overdue') ?> <?= date('d/m', strtotime($nextRevDate)) ?></span>
                         <?php endif; ?>
                     </div>
                     <?php if ($isReviewed && $nextStep): ?>
                         <div class="rev-card-next">
-                            Reviewed today — Next: <?= date('d/m/Y', strtotime($nextRevDate)) ?> (J+<?= (int)$nextStep['day'] ?>)
+                            <?= __('revision.reviewed_next') ?> <?= date('d/m/Y', strtotime($nextRevDate)) ?> (J+<?= (int)$nextStep['day'] ?>)
                         </div>
                     <?php elseif ($isReviewed && $isLast): ?>
-                        <div class="rev-card-next">Last step done — marked as mastered</div>
+                        <div class="rev-card-next"><?= __('revision.last_step') ?></div>
                     <?php endif; ?>
                 </div>
                 <div class="rev-card-actions">
-                    <button type="button" class="btn-icon btn-edit" title="Edit session"
+                    <button type="button" class="btn-icon btn-edit" title="<?= __('revision.edit_session') ?>"
                         onclick="openEditPanel(<?= (int)$r['id'] ?>, <?= htmlspecialchars(json_encode($r['start_date'] ?? $today), ENT_QUOTES) ?>, <?= htmlspecialchars($r['intervals'] ?? '[]', ENT_QUOTES) ?>)"><?= $iconEdit ?></button>
                     <form method="POST" action="/revision/delete" style="display:inline">
                         <input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
                         <button type="button" class="btn-icon btn-delete"
-                            onclick="esConfirm('Stop tracking this item?', () => this.closest('form').submit())"><?= $iconDel ?></button>
+                            onclick="esConfirm(MSG_STOP_TRACKING, () => this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>
@@ -211,9 +208,9 @@ $presetsJson   = json_encode($presets);
 
 <!-- Upcoming -->
 <div class="section">
-    <div class="section-title">Upcoming (<?= count($upcoming) ?>)</div>
+    <div class="section-title"><?= sprintf(__('revision.upcoming'), count($upcoming)) ?></div>
     <?php if (empty($upcoming)): ?>
-        <p class="empty">No upcoming revisions.</p>
+        <p class="empty"><?= __('revision.no_upcoming') ?></p>
     <?php else: ?>
         <div class="upcoming-list">
             <?php foreach ($upcoming as $r):
@@ -232,12 +229,12 @@ $presetsJson   = json_encode($presets);
                     <?php endif; ?>
                     <span style="font-size:.72rem;color:#9ca3af;"><?= htmlspecialchars($stepLabel, ENT_QUOTES) ?></span>
                     <span class="upcoming-date"><?= date('d/m/Y', strtotime($r['next_revision_date'])) ?></span>
-                    <button type="button" class="btn-icon btn-edit" title="Edit session"
+                    <button type="button" class="btn-icon btn-edit" title="<?= __('revision.edit_session') ?>"
                         onclick="openEditPanel(<?= (int)$r['id'] ?>, <?= htmlspecialchars(json_encode($r['start_date'] ?? date('Y-m-d')), ENT_QUOTES) ?>, <?= htmlspecialchars($r['intervals'] ?? '[]', ENT_QUOTES) ?>)"><?= $iconEdit ?></button>
                     <form method="POST" action="/revision/delete" style="margin:0">
                         <input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
                         <button type="button" class="btn-icon btn-delete"
-                            onclick="esConfirm('Stop tracking this item?', () => this.closest('form').submit())"><?= $iconDel ?></button>
+                            onclick="esConfirm(MSG_STOP_TRACKING, () => this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             <?php endforeach; ?>
@@ -247,26 +244,26 @@ $presetsJson   = json_encode($presets);
 
 <!-- Add item panel -->
 <div class="add-panel" id="add-panel">
-    <h2>Track a new item</h2>
+    <h2><?= __('revision.track_new') ?></h2>
     <form method="POST" action="/revision/add" id="add-form">
 
         <div class="form-row">
             <!-- Item type custom dropdown -->
             <div class="form-group" style="max-width:160px;">
-                <label>Item type</label>
+                <label><?= __('revision.item_type') ?></label>
                 <input type="hidden" name="item_type" id="item-type-value" value="chapter">
                 <div class="cs-wrap" id="cs-type-wrap">
                     <div class="cs-trigger" tabindex="0" id="cs-type-trigger">
                         <span class="cs-type-icon" id="cs-type-icon"><?= $iconChapter ?></span>
-                        <span class="cs-label" id="cs-type-label">Chapter</span>
+                        <span class="cs-label" id="cs-type-label"><?= __('revision.chapter') ?></span>
                         <span class="cs-arrow">▾</span>
                     </div>
                     <div class="cs-dropdown" id="cs-type-dropdown">
-                        <div class="cs-option selected" data-value="chapter" data-icon="<?= htmlspecialchars($iconChapter, ENT_QUOTES) ?>" data-label="Chapter">
-                            <span class="cs-type-icon"><?= $iconChapter ?></span> Chapter
+                        <div class="cs-option selected" data-value="chapter" data-icon="<?= htmlspecialchars($iconChapter, ENT_QUOTES) ?>" data-label="<?= htmlspecialchars(__('revision.chapter'), ENT_QUOTES) ?>">
+                            <span class="cs-type-icon"><?= $iconChapter ?></span> <?= __('revision.chapter') ?>
                         </div>
-                        <div class="cs-option" data-value="document" data-icon="<?= htmlspecialchars($iconDocument, ENT_QUOTES) ?>" data-label="Document">
-                            <span class="cs-type-icon"><?= $iconDocument ?></span> Document
+                        <div class="cs-option" data-value="document" data-icon="<?= htmlspecialchars($iconDocument, ENT_QUOTES) ?>" data-label="<?= htmlspecialchars(__('revision.document'), ENT_QUOTES) ?>">
+                            <span class="cs-type-icon"><?= $iconDocument ?></span> <?= __('revision.document') ?>
                         </div>
                     </div>
                 </div>
@@ -274,24 +271,24 @@ $presetsJson   = json_encode($presets);
 
             <!-- Item custom dropdown -->
             <div class="form-group">
-                <label>Item <span style="color:#ef4444">*</span></label>
+                <label><?= __('revision.item_label') ?> <span style="color:#ef4444">*</span></label>
                 <input type="hidden" name="item_id" id="item-id-value">
                 <div class="cs-wrap" id="cs-item-wrap">
                     <div class="cs-trigger" tabindex="0" id="cs-item-trigger">
                         <span class="cs-dot" id="cs-item-dot"></span>
-                        <span class="cs-label placeholder" id="cs-item-label">Select an item…</span>
+                        <span class="cs-label placeholder" id="cs-item-label"><?= __('revision.select_item') ?></span>
                         <span class="cs-arrow">▾</span>
                     </div>
                     <div class="cs-dropdown" id="cs-item-dropdown"></div>
                 </div>
-                <span id="add-item-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;">Please select an item.</span>
+                <span id="add-item-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;"><?= __('revision.select_item_err') ?></span>
             </div>
         </div>
 
         <!-- Start date (J0) -->
         <div class="form-row">
             <div class="form-group" style="max-width:220px;">
-                <label>Start date (J0) <span style="color:#ef4444">*</span></label>
+                <label><?= __('revision.start_date') ?> <span style="color:#ef4444">*</span></label>
                 <input type="hidden" name="start_date" id="add-start-date-value" value="<?= date('Y-m-d') ?>">
                 <div class="dp-wrap" id="add-dp">
                     <div class="dp-trigger" tabindex="0" id="add-dp-trigger">
@@ -301,20 +298,20 @@ $presetsJson   = json_encode($presets);
                     </div>
                     <div class="dp-calendar" id="add-dp-calendar"></div>
                 </div>
-                <span id="add-dp-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;">Please select a start date.</span>
-                <div class="hint">First revision = J0 + first interval days.</div>
+                <span id="add-dp-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;"><?= __('revision.start_date_err') ?></span>
+                <div class="hint"><?= __('revision.first_rev_hint') ?></div>
             </div>
         </div>
 
         <!-- Interval mode -->
         <div class="form-group" style="margin-bottom:1.25rem;">
-            <label>Interval schedule</label>
+            <label><?= __('revision.interval_sched') ?></label>
             <div class="seg-control">
-                <button type="button" class="seg-btn active" onclick="setSegMode('default', this)">Default</button>
+                <button type="button" class="seg-btn active" onclick="setSegMode('default', this)"><?= __('revision.default_sched') ?></button>
                 <?php if (!empty($presets)): ?>
-                <button type="button" class="seg-btn" onclick="setSegMode('preset', this)">Use a preset</button>
+                <button type="button" class="seg-btn" onclick="setSegMode('preset', this)"><?= __('revision.use_preset') ?></button>
                 <?php endif; ?>
-                <button type="button" class="seg-btn" onclick="setSegMode('custom', this)">Custom</button>
+                <button type="button" class="seg-btn" onclick="setSegMode('custom', this)"><?= __('revision.custom') ?></button>
             </div>
             <input type="hidden" name="interval_mode" id="interval-mode-value" value="default">
 
@@ -329,7 +326,7 @@ $presetsJson   = json_encode($presets);
                         — <?= htmlspecialchars($dSummary, ENT_QUOTES) ?>
                     </span>
                 <?php else: ?>
-                    <span style="font-size:.8rem;color:#9ca3af;">Built-in: J+1 → J+3 → J+7 → J+14 → J+30</span>
+                    <span style="font-size:.8rem;color:#9ca3af;"><?= __('revision.builtin_sched') ?></span>
                 <?php endif; ?>
             </div>
 
@@ -339,7 +336,7 @@ $presetsJson   = json_encode($presets);
                 <input type="hidden" name="preset_id" id="preset-id-value" value="">
                 <div class="cs-wrap" id="cs-preset-wrap" style="max-width:400px;">
                     <div class="cs-trigger" tabindex="0" id="cs-preset-trigger">
-                        <span class="cs-label placeholder" id="cs-preset-label">Select a preset…</span>
+                        <span class="cs-label placeholder" id="cs-preset-label"><?= __('revision.select_preset') ?></span>
                         <span class="cs-arrow">▾</span>
                     </div>
                     <div class="cs-dropdown" id="cs-preset-dropdown">
@@ -359,15 +356,15 @@ $presetsJson   = json_encode($presets);
 
             <!-- Custom intervals -->
             <div class="seg-panel" id="seg-custom">
-                <input type="text" name="custom_intervals" id="custom-intervals" placeholder="e.g. 1, 3, 7, 14, 30"
+                <input type="text" name="custom_intervals" id="custom-intervals" placeholder="<?= htmlspecialchars(__('revision.custom_placeholder'), ENT_QUOTES) ?>"
                     style="max-width:260px;padding:.5rem .75rem;border:1px solid #d1d5db;border-radius:6px;font-size:.875rem;">
-                <div class="hint">Days from today, comma-separated. Positive integers only.</div>
+                <div class="hint"><?= __('revision.custom_hint') ?></div>
             </div>
         </div>
 
         <div style="display:flex;gap:.75rem;align-items:center;">
-            <button type="submit" class="btn btn-primary btn-sm">Add to schedule</button>
-            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleAddPanel()">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><?= __('revision.add_to_schedule') ?></button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleAddPanel()"><?= __('common.cancel') ?></button>
         </div>
 
     </form>
@@ -375,36 +372,36 @@ $presetsJson   = json_encode($presets);
 
 <!-- Edit session panel -->
 <div class="add-panel" id="edit-panel">
-    <h2>Edit session</h2>
+    <h2><?= __('revision.edit_session') ?></h2>
     <form method="POST" action="/revision/edit" id="edit-form">
         <input type="hidden" name="id" id="edit-id">
 
         <div class="form-row">
             <div class="form-group" style="max-width:220px;">
-                <label>Start date (J0) <span style="color:#ef4444">*</span></label>
+                <label><?= __('revision.start_date') ?> <span style="color:#ef4444">*</span></label>
                 <input type="hidden" name="start_date" id="edit-start-date-value" value="">
                 <div class="dp-wrap" id="edit-dp">
                     <div class="dp-trigger" tabindex="0" id="edit-dp-trigger">
                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:#9ca3af"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        <span class="dp-label placeholder" id="edit-dp-label">Select a date…</span>
+                        <span class="dp-label placeholder" id="edit-dp-label"><?= __('revision.start_date') ?></span>
                         <span class="dp-arrow">▾</span>
                     </div>
                     <div class="dp-calendar" id="edit-dp-calendar"></div>
                 </div>
-                <span id="edit-dp-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;">Please select a start date.</span>
-                <div class="hint">Recalculates next revision from scratch (step 1).</div>
+                <span id="edit-dp-err" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.25rem;"><?= __('revision.start_date_err') ?></span>
+                <div class="hint"><?= __('revision.recalc_hint') ?></div>
             </div>
             <?php if (!empty($presets)): ?>
             <div class="form-group" style="max-width:260px;">
-                <label>Apply a preset</label>
+                <label><?= __('revision.apply_preset') ?></label>
                 <input type="hidden" name="preset_id" id="edit-preset-id" value="0">
                 <div class="cs-wrap" id="edit-preset-wrap">
                     <div class="cs-trigger" tabindex="0" id="edit-preset-trigger">
-                        <span class="cs-label placeholder" id="edit-preset-label">— keep custom steps —</span>
+                        <span class="cs-label placeholder" id="edit-preset-label"><?= __('revision.keep_custom') ?></span>
                         <span class="cs-arrow">▾</span>
                     </div>
                     <div class="cs-dropdown" id="edit-preset-dropdown">
-                        <div class="cs-option selected" data-value="0" data-steps="">— keep custom steps —</div>
+                        <div class="cs-option selected" data-value="0" data-steps=""><?= __('revision.keep_custom') ?></div>
                         <?php foreach ($presets as $ep):
                             $epSteps = json_decode($ep['intervals'], true) ?: [];
                             $epSum   = implode(' · ', array_map(fn($s) => 'J+' . $s['day'], $epSteps));
@@ -423,21 +420,21 @@ $presetsJson   = json_encode($presets);
         </div>
 
         <div class="form-group">
-            <label>Steps <span style="color:#ef4444">*</span></label>
+            <label><?= __('revision_settings.steps') ?> <span style="color:#ef4444">*</span></label>
             <input type="hidden" name="interval_mode" id="edit-interval-mode" value="steps">
             <div class="ep-step-header">
-                <span class="col-day">Day (J+)</span>
-                <span class="col-action">Action label (optional)</span>
+                <span class="col-day"><?= __('revision_settings.col_day') ?></span>
+                <span class="col-action"><?= __('revision_settings.col_action') ?></span>
             </div>
             <div class="ep-steps-editor" id="ep-steps-editor"></div>
             <button type="button" class="btn-icon btn-icon-plus" style="margin-top:.4rem"
-                    onclick="epAddStep()" title="Add step"><?= $iconPlus ?></button>
+                    onclick="epAddStep()" title="<?= __('common.add') ?>"><?= $iconPlus ?></button>
             <span id="ep-err-steps" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.4rem;display:block"></span>
         </div>
 
         <div style="display:flex;gap:.75rem;align-items:center;margin-top:1rem;">
-            <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
-            <button type="button" class="btn btn-ghost btn-sm" onclick="closeEditPanel()">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><?= __('revision.save_changes') ?></button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="closeEditPanel()"><?= __('common.cancel') ?></button>
         </div>
     </form>
 </div>
@@ -447,6 +444,14 @@ $presetsJson   = json_encode($presets);
 var DATA_CHAPTERS  = <?= $chaptersJson ?>;
 var DATA_DOCUMENTS = <?= $documentsJson ?>;
 var SVG_EP_CLOSE   = <?= json_encode($iconClose) ?>;
+var MSG_STOP_TRACKING   = <?= json_encode(__('revision.stop_tracking')) ?>;
+var MSG_SELECT_ITEM     = <?= json_encode(__('revision.select_item')) ?>;
+var MSG_SELECT_ITEM_ERR = <?= json_encode(__('revision.select_item_err')) ?>;
+var MSG_START_DATE_ERR  = <?= json_encode(__('revision.start_date_err')) ?>;
+var MSG_STEP_REQUIRED   = <?= json_encode(__('revision_settings.step_required')) ?>;
+var MSG_STEP_INVALID    = <?= json_encode(__('revision_settings.step_invalid')) ?>;
+var MSG_KEEP_CUSTOM     = <?= json_encode(__('revision.keep_custom')) ?>;
+var STEP_PLACEHOLDER    = <?= json_encode(__('revision_settings.step_placeholder')) ?>;
 
 // ─── Custom select helper ────────────────────────────────────────────
 function initCustomSelect(wrapId, triggerId, dropdownId, onSelect) {
@@ -491,7 +496,7 @@ function populateItemDropdown(type) {
     var idInput = document.getElementById('item-id-value');
 
     dd.innerHTML = '';
-    label.textContent = 'Select an item…';
+    label.textContent = MSG_SELECT_ITEM;
     label.classList.add('placeholder');
     dot.style.background = '#d1d5db';
     idInput.value = '';
@@ -551,8 +556,8 @@ function setSegMode(mode, btn) {
 }
 
 // ─── Custom date picker ───────────────────────────────────────────────
-var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-var DOWS   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+var MONTHS = <?= json_encode(array_values(__arr('months'))) ?>;
+var DOWS   = <?= json_encode(array_values(__arr('days_short'))) ?>;
 
 function createDatePicker(wrapperId, triggerId, calendarId, hiddenId, labelId) {
     var wrap    = document.getElementById(wrapperId);
@@ -630,7 +635,7 @@ function createDatePicker(wrapperId, triggerId, calendarId, hiddenId, labelId) {
         },
         getValue: function() { return hidden.value; },
         setDate: function(iso) {
-            if (!iso) { selected = null; hidden.value = ''; label.textContent = 'Select a date…'; label.classList.add('placeholder'); return; }
+            if (!iso) { selected = null; hidden.value = ''; label.textContent = MSG_SELECT_ITEM; label.classList.add('placeholder'); return; }
             selected = new Date(iso + 'T00:00:00');
             selected.setHours(0,0,0,0);
             viewYear  = selected.getFullYear();
@@ -682,7 +687,7 @@ function epAddStep(day, action) {
     row.innerHTML =
         '<span class="ep-step-index">' + (idx + 1) + '</span>' +
         '<input type="number" name="steps[' + idx + '][day]" min="0" placeholder="Day" value="' + (day !== undefined ? day : '') + '">' +
-        '<input type="text" name="steps[' + idx + '][action]" placeholder="e.g. Re-read notes" value="' + (action !== undefined ? escHtml(action) : '') + '">' +
+        '<input type="text" name="steps[' + idx + '][action]" placeholder="' + escHtml(STEP_PLACEHOLDER) + '" value="' + (action !== undefined ? escHtml(action) : '') + '">' +
         '<button type="button" class="btn-icon btn-delete" onclick="epRemoveStep(this)" title="Remove" style="width:26px;height:26px;">' + SVG_EP_CLOSE + '</button>';
     editor.appendChild(row);
     epReindex();
@@ -747,7 +752,7 @@ function resetEditPresetDropdown() {
     var modeEl = document.getElementById('edit-interval-mode');
     hidden.value = '0';
     modeEl.value = 'steps';
-    label.textContent = '— keep custom steps —';
+    label.textContent = MSG_KEEP_CUSTOM;
     label.classList.add('placeholder');
     wrap.querySelectorAll('.cs-option').forEach(function(o) {
         o.classList.toggle('selected', o.dataset.value === '0');
@@ -793,7 +798,7 @@ document.getElementById('add-form').addEventListener('submit', function(e) {
     var dateErrEl = document.getElementById('add-dp-err');
     var dateWrap = document.getElementById('add-dp');
     if (!dateVal) {
-        dateErrEl.textContent = 'Start date is required.';
+        dateErrEl.textContent = MSG_START_DATE_ERR;
         dateErrEl.style.display = 'block';
         dateWrap.classList.add('error');
         blocked = true;
@@ -810,7 +815,7 @@ document.getElementById('edit-form').addEventListener('submit', function(e) {
     var dateErrEl = document.getElementById('edit-dp-err');
     var wrap = document.getElementById('edit-dp');
     if (!dateVal) {
-        dateErrEl.textContent = 'Start date is required.';
+        dateErrEl.textContent = MSG_START_DATE_ERR;
         dateErrEl.style.display = 'block';
         wrap.classList.add('error');
         e.preventDefault();
@@ -828,7 +833,7 @@ document.getElementById('edit-form').addEventListener('submit', function(e) {
     }
     var rows = document.querySelectorAll('#ep-steps-editor .ep-step-row');
     if (rows.length === 0) {
-        errEl.textContent = 'Add at least one step.';
+        errEl.textContent = MSG_STEP_REQUIRED;
         errEl.style.display = 'block';
         e.preventDefault();
         return;
@@ -844,7 +849,7 @@ document.getElementById('edit-form').addEventListener('submit', function(e) {
         }
     });
     if (invalid) {
-        errEl.textContent = 'Each step must have a valid day (integer ≥ 0).';
+        errEl.textContent = MSG_STEP_INVALID;
         errEl.style.display = 'block';
         e.preventDefault();
     } else {

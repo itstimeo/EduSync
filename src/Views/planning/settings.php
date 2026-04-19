@@ -17,13 +17,13 @@
 </style>
 
 <div style="display:flex;align-items:center;gap:.75rem;max-width:500px;margin:0 auto 1.25rem;">
-    <a href="/planning" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning">Planning</a> › Settings</p>
+    <a href="/planning" class="btn-back" title="<?= __('common.back') ?>"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning"><?= __('nav.planning') ?></a> › <?= __('planning.settings') ?></p>
 </div>
 
 <div class="form-card">
-    <h1>Event types</h1>
-    <p class="subtitle">Manage your event types and their colors.</p>
+    <h1><?= __('planning.settings_title') ?></h1>
+    <p class="subtitle"><?= __('planning.settings_subtitle') ?></p>
 
     <form method="post" action="/planning/settings" id="settings-form">
         <?php foreach ($typeList as $row):
@@ -36,32 +36,32 @@
                        value="<?= htmlspecialchars($row['label'], ENT_QUOTES) ?>" maxlength="100" required>
                 <?php include __DIR__ . '/../courses/_color_picker.php'; ?>
                 <button type="submit" name="delete_type" value="<?= (int)$row['id'] ?>"
-                        class="btn-icon btn-delete" title="Delete">
+                        class="btn-icon btn-delete" title="<?= __('common.delete') ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16M10 3h4a1 1 0 011 1v3H9V4a1 1 0 011-1z"/></svg>
                 </button>
             </div>
         <?php endforeach; ?>
 
         <div class="form-actions">
-            <button type="submit" name="save_types" value="1" class="btn btn-primary">Save</button>
+            <button type="submit" name="save_types" value="1" class="btn btn-primary"><?= __('common.save') ?></button>
         </div>
     </form>
 </div>
 
 <div class="form-card">
-    <h2>Add a type <span style="color:#ef4444">*</span></h2>
+    <h2><?= __('planning.add_type') ?> <span style="color:#ef4444">*</span></h2>
     <form method="post" action="/planning/settings/add-type" novalidate id="add-type-form">
         <div class="add-row">
-            <input type="text" class="add-label-input" name="new_label" placeholder="Type name (e.g. Lab Work)"
+            <input type="text" class="add-label-input" name="new_label" placeholder="<?= htmlspecialchars(__('planning.type_placeholder'), ENT_QUOTES) ?>"
                    maxlength="50" id="new-label-input">
             <?php
                 $colorPickerName  = 'new_color';
                 $colorPickerValue = '#6366f1';
                 include __DIR__ . '/../courses/_color_picker.php';
             ?>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" class="btn btn-primary"><?= __('common.add') ?></button>
         </div>
-        <span id="err-new-label" style="display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem;display:none">Please enter a type name.</span>
+        <span id="err-new-label" style="display:none;font-size:.78rem;color:#ef4444;margin-top:.3rem;display:none"><?= __('planning.type_name_required') ?></span>
     </form>
 </div>
 
@@ -92,6 +92,9 @@
         };
     }
 
+    var MSG_TYPE_REQUIRED = <?= json_encode(__('planning.type_name_required')) ?>;
+    var MSG_DELETE_TYPE = <?= json_encode(__('planning.delete_type_confirm')) ?>;
+
     // Add type validation
     document.getElementById('add-type-form').addEventListener('submit', function (e) {
         var val = document.getElementById('new-label-input').value.trim();
@@ -112,7 +115,7 @@
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             var label = btn.closest('.type-row').querySelector('.type-label-input').value || 'this type';
-            esConfirm('Delete type «' + label + '»?', function () {
+            esConfirm(MSG_DELETE_TYPE.replace('%s', label), function () {
                 var hidden = document.createElement('input');
                 hidden.type = 'hidden';
                 hidden.name = 'delete_type';

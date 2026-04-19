@@ -18,37 +18,37 @@
 <div style="display:flex;align-items:center;gap:.75rem;max-width:460px;margin:0 auto 1.25rem;">
     <a href="/chapters?theme_id=<?= (int)$theme['id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
     <p class="breadcrumb" style="margin:0;max-width:none;">
-        <a href="/courses">Subjects</a> ›
+        <a href="/courses"><?= __('courses.subjects') ?></a> ›
         <a href="/themes?subject_id=<?= (int)$theme['subject_id'] ?>"><?= htmlspecialchars($theme['subject_name'], ENT_QUOTES) ?></a> ›
         <a href="/chapters?theme_id=<?= (int)$theme['id'] ?>"><?= htmlspecialchars($theme['name'], ENT_QUOTES) ?></a> ›
-        <?= $chapter ? 'Edit chapter' : 'New chapter' ?>
+        <?= $chapter ? __('courses.edit_chapter_title') : __('courses.new_chapter_title') ?>
     </p>
 </div>
 
 <div class="form-card">
-    <h1><?= $chapter ? 'Edit chapter' : 'New chapter' ?></h1>
+    <h1><?= $chapter ? __('courses.edit_chapter_title') : __('courses.new_chapter_title') ?></h1>
     <form method="post" action="<?= $chapter ? '/chapters/edit' : '/chapters/create' ?>" novalidate>
         <?php if ($chapter): ?>
             <input type="hidden" name="id" value="<?= (int)$chapter['id'] ?>">
         <?php endif; ?>
         <input type="hidden" name="theme_id" value="<?= (int)$theme['id'] ?>">
         <div class="field">
-            <label for="name">Name <span class="req">*</span></label>
+            <label for="name"><?= __('courses.chapter_name') ?> <span class="req">*</span></label>
             <input type="text" id="name" name="name" maxlength="150" autofocus
                    value="<?= htmlspecialchars($chapter['name'] ?? '', ENT_QUOTES) ?>">
-            <span class="field-err" id="err-name">Please enter a name.</span>
+            <span class="field-err" id="err-name"><?= __('courses.name_required') ?></span>
         </div>
         <div class="field">
-            <label>Color</label>
+            <label><?= __('common.color') ?></label>
             <?php
                 $colorPickerName  = 'color';
                 $colorPickerValue = $chapter['color'] ?? $theme['color'] ?? '#6366f1';
                 include __DIR__ . '/_color_picker.php';
             ?>
         </div>
-        <p class="req-note"><span class="req">*</span> Required</p>
+        <p class="req-note"><span class="req">*</span> <?= __('common.required') ?></p>
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary"><?= __('common.save') ?></button>
         </div>
     </form>
 </div>

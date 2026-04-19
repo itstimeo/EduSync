@@ -31,19 +31,19 @@ $iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 </style>
 
 <div class="page-hd">
-    <h1>My subjects</h1>
+    <h1><?= __('courses.title') ?></h1>
     <div class="hd-right">
         <div class="view-toggle">
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
-        <a href="/courses/export" class="btn btn-secondary"><?= $iconExp ?> Export all</a>
-        <a href="/courses/create" class="btn btn-primary">+ New subject</a>
+        <a href="/courses/export" class="btn btn-secondary"><?= $iconExp ?> <?= __('courses.export_all') ?></a>
+        <a href="/courses/create" class="btn btn-primary"><?= __('courses.new_subject') ?></a>
     </div>
 </div>
 
 <?php if (empty($subjects)): ?>
-    <p class="empty">No subjects yet. Create your first one!</p>
+    <p class="empty"><?= __('courses.no_subjects') ?></p>
 <?php else: ?>
     <div id="items">
         <?php foreach ($subjects as $s): ?>
@@ -58,7 +58,7 @@ $iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                     <form method="post" action="/courses/delete">
                         <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
                         <button type="button" class="btn-icon btn-delete" title="Delete"
-                                onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($s['name']), ENT_QUOTES) ?>» and all its content?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                onclick="esConfirm('<?= htmlspecialchars(sprintf(__('courses.delete_confirm'), addslashes($s['name'])), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>

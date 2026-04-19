@@ -29,7 +29,7 @@
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
     <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;"><a href="/courses">Subjects</a> › <a href="/themes?subject_id=<?= (int)$doc['subject_id'] ?>"><?= htmlspecialchars($doc['subject_name'], ENT_QUOTES) ?></a> › <a href="/chapters?theme_id=<?= (int)$doc['theme_id'] ?>"><?= htmlspecialchars($doc['theme_name'], ENT_QUOTES) ?></a> › <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>"><?= htmlspecialchars($doc['chapter_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($doc['title'], ENT_QUOTES) ?></p>
+    <p class="breadcrumb" style="margin:0;"><a href="/courses"><?= __('courses.subjects') ?></a> › <a href="/themes?subject_id=<?= (int)$doc['subject_id'] ?>"><?= htmlspecialchars($doc['subject_name'], ENT_QUOTES) ?></a> › <a href="/chapters?theme_id=<?= (int)$doc['theme_id'] ?>"><?= htmlspecialchars($doc['theme_name'], ENT_QUOTES) ?></a> › <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>"><?= htmlspecialchars($doc['chapter_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($doc['title'], ENT_QUOTES) ?></p>
 </div>
 
 <div class="doc-header">
@@ -43,17 +43,17 @@
         <?php $editUrl = $doc['file_type'] === 'text/html' ? '/documents/note/edit?id=' . (int)$doc['id'] : '/documents/edit?id=' . (int)$doc['id']; ?>
         <a href="<?= $editUrl ?>" class="btn btn-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6.5-6.5a2.121 2.121 0 013 3L12 14l-4 1 1-4z"/></svg>
-            Edit
+            <?= __('common.edit') ?>
         </a>
         <?php if ($doc['file_type'] === 'text/html'): ?>
         <a href="/documents/note/print?id=<?= (int)$doc['id'] ?>" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>
-            Download
+            <?= __('courses.download') ?>
         </a>
         <?php else: ?>
         <a href="/documents/download?id=<?= (int)$doc['id'] ?>" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg>
-            Download
+            <?= __('courses.download') ?>
         </a>
         <?php endif; ?>
     </div>

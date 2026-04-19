@@ -63,27 +63,27 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
 ?>
 
 <div style="display:flex;align-items:center;gap:.75rem;max-width:520px;margin:0 auto 1.25rem;">
-    <a href="/planning" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning">Planning</a> › <?= $event ? 'Edit' : 'New event' ?></p>
+    <a href="/planning" class="btn-back" title="<?= __('common.back') ?>"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/planning"><?= __('nav.planning') ?></a> › <?= $event ? __('planning.edit_event_title') : __('planning.new_event_title') ?></p>
 </div>
 
 <div class="form-card">
-    <h1><?= $event ? 'Edit event' : 'New event' ?></h1>
+    <h1><?= $event ? __('planning.edit_event_title') : __('planning.new_event_title') ?></h1>
     <form method="post" action="<?= $event ? '/planning/edit' : '/planning/create' ?>" id="event-form" novalidate>
         <?php if ($event): ?>
             <input type="hidden" name="id" value="<?= (int)$event['id'] ?>">
         <?php endif; ?>
 
         <div class="field">
-            <label for="title">Title <span class="req">*</span></label>
+            <label for="title"><?= __('planning.event_title') ?> <span class="req">*</span></label>
             <input type="text" id="title" name="title" maxlength="200" autofocus
                    value="<?= htmlspecialchars($event['title'] ?? '', ENT_QUOTES) ?>">
-            <span class="field-err" id="err-title">Please enter a title.</span>
+            <span class="field-err" id="err-title"><?= __('planning.title_required') ?></span>
         </div>
 
         <div class="row-2">
             <div class="field">
-                <label>Type <span class="req">*</span></label>
+                <label><?= __('planning.type') ?> <span class="req">*</span></label>
                 <input type="hidden" name="type" id="type-hidden" value="<?= htmlspecialchars($currentType, ENT_QUOTES) ?>">
                 <div class="cd-wrap" id="cd-type-wrap">
                     <div class="cd-btn" id="cd-type-btn" tabindex="0">
@@ -105,7 +105,7 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
                 </div>
             </div>
             <div class="field">
-                <label>Color</label>
+                <label><?= __('planning.color') ?></label>
                 <?php
                     $colorPickerName  = 'color';
                     $colorPickerValue = $currentColor;
@@ -116,7 +116,7 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
 
         <div class="row-2">
             <div class="field">
-                <label>Start date <span class="req">*</span></label>
+                <label><?= __('planning.start_date') ?> <span class="req">*</span></label>
                 <input type="hidden" name="start_date" id="dp-start-value" value="<?= htmlspecialchars($event['start_date'] ?? $prefillDate ?? '', ENT_QUOTES) ?>">
                 <div class="dp-wrap" id="dp-start-wrap">
                     <div class="dp-trigger" id="dp-start-trigger">
@@ -133,10 +133,10 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
                         <div class="dp-grid" id="dp-start-grid"></div>
                     </div>
                 </div>
-                <span class="field-err" id="err-start">Please select a start date.</span>
+                <span class="field-err" id="err-start"><?= __('planning.start_date_required') ?></span>
             </div>
             <div class="field">
-                <label>End date <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+                <label><?= __('planning.end_date') ?> <span style="font-weight:400;color:#9ca3af"><?= __('planning.end_date_opt') ?></span></label>
                 <input type="hidden" name="end_date" id="dp-end-value" value="<?= htmlspecialchars($event['end_date'] ?? '', ENT_QUOTES) ?>">
                 <div class="dp-wrap" id="dp-end-wrap">
                     <div class="dp-trigger" id="dp-end-trigger">
@@ -153,23 +153,23 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
                         <div class="dp-grid" id="dp-end-grid"></div>
                     </div>
                 </div>
-                <span class="field-err" id="err-end">End date must be on or after start date.</span>
+                <span class="field-err" id="err-end"><?= __('planning.end_date_invalid') ?></span>
             </div>
         </div>
 
         <div class="field">
-            <label for="description">Description <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+            <label for="description"><?= __('planning.description') ?> <span style="font-weight:400;color:#9ca3af"><?= __('planning.description_opt') ?></span></label>
             <textarea id="description" name="description" maxlength="1000"><?= htmlspecialchars($event['description'] ?? '', ENT_QUOTES) ?></textarea>
         </div>
 
-        <p class="req-note"><span class="req">*</span> Required</p>
+        <p class="req-note"><span class="req">*</span> <?= __('common.required') ?></p>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary"><?= __('planning.save') ?></button>
             <?php if ($event): ?>
                 <button type="button" class="btn btn-secondary" style="color:#ef4444;border-color:#fecaca;margin-left:auto;"
-                        onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($event['title']), ENT_QUOTES) ?>»?', () => document.getElementById('delete-form').submit())">
-                    Delete
+                        onclick="esConfirm('<?= htmlspecialchars(sprintf(__('planning.delete_confirm'), addslashes($event['title'])), ENT_QUOTES) ?>', () => document.getElementById('delete-form').submit())">
+                    <?= __('planning.delete') ?>
                 </button>
             <?php endif; ?>
         </div>
@@ -244,9 +244,8 @@ $currentColor = $event['color'] ?? ($typeColors[$currentType]['color'] ?? '#6366
     })();
 
     // ── Date picker factory ────────────────────────────────────
-    var months = ['January','February','March','April','May','June',
-                  'July','August','September','October','November','December'];
-    var dows   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+    var months = <?= json_encode(array_values(__arr('months'))) ?>;
+    var dows   = <?= json_encode(array_values(__arr('days_short'))) ?>;
     var today  = new Date(); today.setHours(0,0,0,0);
 
     function pad(n) { return n < 10 ? '0' + n : '' + n; }

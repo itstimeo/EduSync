@@ -1,4 +1,4 @@
-<?php $title = 'Login'; ?>
+<?php $title = __('auth.login.title'); ?>
 <style>
 .field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.25rem}
 .field-err.show{display:block}
@@ -30,19 +30,19 @@
 .remember-wrap.to-unchecked .ri-cross{transition:transform .32s cubic-bezier(.34,1.56,.64,1) .1s,opacity .15s ease .1s}
 .remember-wrap.to-unchecked .ri-cross line{transition:stroke-dashoffset .35s cubic-bezier(.4,0,.2,1) .18s}
 </style>
-<h1>Sign in to EduSync</h1>
+<h1><?= __('auth.login.title') ?></h1>
 <form method="POST" action="/login" novalidate>
-    <label for="email">Email address <span style="color:#ef4444">*</span></label>
+    <label for="email"><?= __('auth.login.email') ?> <span style="color:#ef4444">*</span></label>
     <input type="email" id="email" name="email" autofocus
            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-    <span class="field-err" id="err-email">Please enter your email address.</span>
+    <span class="field-err" id="err-email"><?= __('auth.login.email') ?></span>
 
-    <label for="password">Password <span style="color:#ef4444">*</span></label>
+    <label for="password"><?= __('auth.login.password') ?> <span style="color:#ef4444">*</span></label>
     <div class="pw-wrap">
         <input type="password" id="password" name="password">
         <button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('password',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
-    <span class="field-err" id="err-password">Please enter your password.</span>
+    <span class="field-err" id="err-password"><?= __('auth.login.password') ?></span>
 
     <label class="remember-wrap">
         <input type="checkbox" name="remember_me" value="1" id="remember_me">
@@ -51,13 +51,13 @@
                 <svg class="ri-cross" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 <svg class="ri-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" pathLength="23"/></svg>
             </span>
-            Remember me
+            <?= __('auth.login.remember') ?>
         </span>
     </label>
 
-    <button type="submit">Sign in</button>
+    <button type="submit"><?= __('auth.login.submit') ?></button>
 </form>
-<p class="link">No account? <a href="/register">Create one</a></p>
+<p class="link"><?= __('auth.login.no_account') ?> <a href="/register"><?= __('auth.login.register') ?></a></p>
 
 <script>
 document.getElementById('remember_me').addEventListener('change', function() {

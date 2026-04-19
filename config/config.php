@@ -36,3 +36,14 @@ define('MAIL_ENCRYPTION', $_ENV['MAIL_ENCRYPTION'] ?? 'tls');
 define('GOOGLE_CLIENT_ID',     $_ENV['GOOGLE_CLIENT_ID']     ?? '');
 define('GOOGLE_CLIENT_SECRET', $_ENV['GOOGLE_CLIENT_SECRET'] ?? '');
 define('GOOGLE_REDIRECT_URI',  $_ENV['GOOGLE_REDIRECT_URI']  ?? '');
+
+// Language helpers
+function __($key, array $params = []): string
+{
+    return \EduSync\Core\Lang::get($key, $params);
+}
+
+function __arr(string $key): array
+{
+    return \EduSync\Core\Lang::arr($key);
+}

@@ -2,8 +2,8 @@
 $iconEdit = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6.5-6.5a2.121 2.121 0 013 3L12 14l-4 1 1-4z"/></svg>';
 $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16M10 3h4a1 1 0 011 1v3H9V4a1 1 0 011-1z"/></svg>';
 
-$monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-$dowNames   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+$monthNames = array_values(__arr('months'));
+$dowNames   = array_values(__arr('days_short'));
 
 $yearNum    = (int) substr($firstDay, 0, 4);
 $monthNum   = (int) substr($firstDay, 5, 2);
@@ -89,16 +89,16 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 </style>
 
 <div class="page-hd">
-    <h1>Planning</h1>
+    <h1><?= __('planning.title') ?></h1>
     <div class="hd-right">
-        <a href="/planning/settings" class="btn-icon btn-edit" title="Settings" style="background:var(--border-soft);color:var(--text)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
-        <a href="/planning/create" class="btn btn-primary">+ New event</a>
+        <a href="/planning/settings" class="btn-icon btn-edit" title="<?= __('planning.settings') ?>" style="background:var(--border-soft);color:var(--text)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
+        <a href="/planning/create" class="btn btn-primary"><?= __('planning.new_event') ?></a>
     </div>
 </div>
 
 <div class="tabs">
-    <button class="tab-btn" id="tab-calendar" onclick="switchTab('calendar')">Calendar</button>
-    <button class="tab-btn" id="tab-list"     onclick="switchTab('list')">List</button>
+    <button class="tab-btn" id="tab-calendar" onclick="switchTab('calendar')"><?= __('planning.calendar') ?></button>
+    <button class="tab-btn" id="tab-list"     onclick="switchTab('list')"><?= __('planning.list') ?></button>
 </div>
 
 <!-- ── Calendar tab ─────────────────────────────────────────────── -->
@@ -153,7 +153,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
                     </div>
                 <?php endforeach; ?>
                 <?php if ($extraCount > 0): ?>
-                    <div class="cal-more">+<?= $extraCount ?> more</div>
+                    <div class="cal-more"><?= sprintf(__('planning.more'), $extraCount) ?></div>
                 <?php endif; ?>
             </div>
         <?php endfor; ?>
@@ -173,7 +173,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
 <!-- ── List tab ─────────────────────────────────────────────────── -->
 <div class="tab-panel" id="panel-list">
     <?php if (empty($upcoming)): ?>
-        <p class="empty">No events yet.</p>
+        <p class="empty"><?= __('planning.no_events') ?></p>
     <?php else: ?>
         <?php foreach ($upcoming as $e):
             $typeLabel = $typeColors[$e['type']]['label'] ?? ucfirst($e['type']);
@@ -201,7 +201,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
                     <form method="post" action="/planning/delete">
                         <input type="hidden" name="id" value="<?= (int)$e['id'] ?>">
                         <button type="button" class="btn-icon btn-delete" title="Delete"
-                                onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($e['title']), ENT_QUOTES) ?>»?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                onclick="esConfirm('<?= htmlspecialchars(sprintf(__('planning.delete_confirm'), addslashes($e['title'])), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>
@@ -234,14 +234,14 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
             <button id="day-popup-close" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1.1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;">✕</button>
         </div>
         <div id="day-popup-events"></div>
-        <a id="day-popup-add" href="#" style="display:flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.55rem;background:#6366f1;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:.875rem;">+ New event</a>
+        <a id="day-popup-add" href="#" style="display:flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.55rem;background:#6366f1;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:.875rem;"><?= __('planning.new_event') ?></a>
     </div>
 </div>
 
 <script>
 (function () {
     var dayMapData = <?= json_encode($dayMap, JSON_HEX_TAG) ?>;
-    var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var monthNames = <?= json_encode(array_values(__arr('months'))) ?>;
     var yearNum  = <?= (int)$yearNum ?>;
     var monthNum = <?= (int)$monthNum ?>;
 
@@ -259,7 +259,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
         addLink.href = createHref;
         var evs = dayMapData[dateStr] || [];
         if (evs.length === 0) {
-            eventsEl.innerHTML = '<p style="color:var(--text-subtle);font-size:.875rem;padding:.25rem 0 .5rem;">No events on this day.</p>';
+            eventsEl.innerHTML = '<p style="color:var(--text-subtle);font-size:.875rem;padding:.25rem 0 .5rem;"><?= __('planning.no_day_events') ?></p>';
         } else {
             eventsEl.innerHTML = evs.map(function (ev) {
                 return '<a href="/planning/edit?id=' + ev.id + '" style="display:flex;align-items:center;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--bg-subtle);text-decoration:none;">'
@@ -303,7 +303,7 @@ function hexBadgeBg(string $hex, float $alpha = 0.15): string {
     popup.addEventListener('click', function (e) { if (e.target === popup) popup.style.display = 'none'; });
 
     // ── Month/year picker dropdown ──
-    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var MONTHS = <?= json_encode(array_values(__arr('months'))) ?>;
     var pickerBtn   = document.getElementById('cal-picker-btn');
     var pickerDrop  = document.getElementById('cal-picker-drop');
     var yearLabel   = document.getElementById('cal-year-label');

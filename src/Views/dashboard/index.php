@@ -56,13 +56,13 @@
     <!-- Notes récentes -->
     <div class="card">
         <div class="card-header">
-            <h2>Recent grades</h2>
+            <h2><?= __('dashboard.recent_grades') ?></h2>
             <?php if (!empty($grades)): ?>
-                <a href="/grades" class="see-all">All grades ›</a>
+                <a href="/grades" class="see-all"><?= __('nav.grades') ?> ›</a>
             <?php endif; ?>
         </div>
         <?php if (empty($grades)): ?>
-            <p class="empty">No grades yet.</p>
+            <p class="empty"><?= __('dashboard.no_grades') ?></p>
         <?php else: ?>
             <div class="grade-list">
                 <?php foreach ($grades as $g): ?>
@@ -83,7 +83,7 @@
             </div>
             <?php if ($average !== null): ?>
                 <div class="average-row">
-                    <span class="label">Overall average</span>
+                    <span class="label"><?= __('dashboard.overall_average') ?></span>
                     <span class="value"><?= number_format($average, 2) ?>/20</span>
                 </div>
             <?php endif; ?>
@@ -93,13 +93,13 @@
     <!-- Événements de la semaine -->
     <div class="card">
         <div class="card-header">
-            <h2>This week's events</h2>
+            <h2><?= __('dashboard.this_week') ?></h2>
             <?php if (!empty($events)): ?>
-                <a href="/planning" class="see-all">All events ›</a>
+                <a href="/planning" class="see-all"><?= __('nav.planning') ?> ›</a>
             <?php endif; ?>
         </div>
         <?php if (empty($events)): ?>
-            <p class="empty">No events this week.</p>
+            <p class="empty"><?= __('dashboard.no_events') ?></p>
         <?php else: ?>
             <ul>
                 <?php foreach ($events as $e):
@@ -129,14 +129,14 @@
     <!-- Révisions du jour -->
     <div class="card">
         <div class="card-header">
-            <h2>Today's revisions</h2>
+            <h2><?= __('dashboard.todays_revisions') ?></h2>
             <a href="/revision" class="btn-see-all">
-                All Revisions
+                <?= __('nav.revision') ?>
                 <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
         <?php if (empty($revisions)): ?>
-            <p class="empty">Nothing to revise today.</p>
+            <p class="empty"><?= __('dashboard.nothing_to_revise') ?></p>
         <?php else: ?>
             <?php $dbToday = date('Y-m-d'); ?>
             <ul>
@@ -171,9 +171,9 @@
                             <a href="/revision" class="rev-item-link">
                                 <div class="rev-item-name<?= $isReviewed ? ' reviewed' : '' ?>"><?= $itemName ?></div>
                                 <?php if ($isReviewed && $nextStep): ?>
-                                    <div class="rev-item-next">Next: <?= date('d/m', strtotime($r['next_revision_date'])) ?> · J+<?= (int)$nextStep['day'] ?></div>
+                                    <div class="rev-item-next"><?= __('revision.reviewed_next') ?> <?= date('d/m', strtotime($r['next_revision_date'])) ?> · J+<?= (int)$nextStep['day'] ?></div>
                                 <?php elseif ($isReviewed && $isLast): ?>
-                                    <div class="rev-item-next">Last step done — mastered</div>
+                                    <div class="rev-item-next"><?= __('dashboard.last_step_mastered') ?></div>
                                 <?php endif; ?>
                             </a>
                             <!-- Badge -->

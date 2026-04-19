@@ -32,7 +32,7 @@ class RevisionController
         }
 
         View::render('revision/index', [
-            'title'       => 'Revision',
+            'title'       => __('nav.revision'),
             'flash'       => Session::getFlash(),
             'userName'    => Session::get('user_name', ''),
             'due'         => $due,
@@ -66,23 +66,23 @@ class RevisionController
         $customRaw = trim($_POST['custom_intervals'] ?? '');
 
         if (!in_array($itemType, ['chapter', 'document'], true) || $itemId <= 0) {
-            Session::flash('error', 'Please select a valid item.');
+            Session::flash('error', __('revision.invalid_item'));
             Session::redirect('/revision');
         }
 
         $intervals = $this->resolveIntervals($mode, $presetId, $customRaw, $userId);
         if ($intervals === null) {
-            Session::flash('error', 'Invalid intervals. Enter positive integers separated by commas (e.g. 1, 3, 7).');
+            Session::flash('error', __('revision.invalid_intervals'));
             Session::redirect('/revision');
         }
 
         try {
             RevisionSession::create($userId, $itemType, $itemId, $intervals, $startDate);
-            Session::flash('success', 'Item added to revision schedule.');
+            Session::flash('success', __('revision.item_added'));
         } catch (\PDOException $e) {
             $mysqlErrno = $e->errorInfo[1] ?? 0;
             if ($e->getCode() === '23000' && $mysqlErrno == 1062) {
-                Session::flash('error', 'This item is already being tracked.');
+                Session::flash('error', __('revision.already_tracked'));
             } else {
                 Session::flash('error', 'DB error [' . $e->getCode() . '/' . $mysqlErrno . ']: ' . $e->getMessage());
             }
@@ -109,7 +109,7 @@ class RevisionController
         $id     = (int) ($_POST['id'] ?? 0);
 
         RevisionSession::delete($id, $userId);
-        Session::flash('success', 'Revision session removed.');
+        Session::flash('success', __('revision.session_removed'));
         Session::redirect('/revision');
     }
 
@@ -137,14 +137,14 @@ class RevisionController
         }
 
         if ($startDate === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate)) {
-            Session::flash('error', 'Invalid start date.');
+            Session::flash('error', __('revision.invalid_date'));
             Session::redirect('/revision');
         }
 
         if ($mode === 'preset' && $presetId > 0) {
             $preset = RevisionPreset::getById($presetId, $userId);
             if (!$preset) {
-                Session::flash('error', 'Preset not found.');
+                Session::flash('error', __('revision.preset_not_found'));
                 Session::redirect('/revision');
             }
             $intervals = json_decode($preset['intervals'], true) ?: null;
@@ -153,12 +153,12 @@ class RevisionController
         }
 
         if ($intervals === null || count($intervals) === 0) {
-            Session::flash('error', 'Add at least one step with a valid day (integer ≥ 0).');
+            Session::flash('error', __('revision.invalid_steps'));
             Session::redirect('/revision');
         }
 
         RevisionSession::editSession($id, $userId, $startDate, $intervals);
-        Session::flash('success', 'Session updated.');
+        Session::flash('success', __('revision.session_updated'));
         Session::redirect('/revision');
     }
 
@@ -172,7 +172,7 @@ class RevisionController
         $userId = $this->userId();
 
         View::render('revision/settings', [
-            'title'    => 'Revision settings',
+            'title'    => __('revision_settings.title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'presets'  => RevisionPreset::getByUser($userId),
@@ -189,17 +189,17 @@ class RevisionController
         $rawSteps = $_POST['steps'] ?? [];
 
         if ($name === '') {
-            Session::flash('error', 'Preset name is required.');
+            Session::flash('error', __('revision_settings.name_required'));
             Session::redirect('/revision/settings');
         }
         if (strlen($name) > 100) {
-            Session::flash('error', 'Preset name is too long (max 100 characters).');
+            Session::flash('error', __('revision_settings.name_too_long'));
             Session::redirect('/revision/settings');
         }
 
         $intervals = RevisionPreset::parseSteps(is_array($rawSteps) ? $rawSteps : []);
         if ($intervals === null || count($intervals) === 0) {
-            Session::flash('error', 'Add at least one step with a valid day (positive integer).');
+            Session::flash('error', __('revision_settings.min_step'));
             Session::redirect('/revision/settings');
         }
 
@@ -208,14 +208,14 @@ class RevisionController
                 $existing = RevisionPreset::getById($presetId, $userId);
                 if ($existing) {
                     RevisionPreset::update($presetId, $userId, $name, $intervals);
-                    Session::flash('success', 'Preset updated.');
+                    Session::flash('success', __('revision_settings.preset_updated'));
                 }
             } else {
                 RevisionPreset::create($userId, $name, $intervals);
-                Session::flash('success', 'Preset created.');
+                Session::flash('success', __('revision_settings.preset_created'));
             }
         } catch (\PDOException $e) {
-            Session::flash('error', 'A preset with this name already exists.');
+            Session::flash('error', __('revision_settings.name_duplicate'));
         }
 
         Session::redirect('/revision/settings');
@@ -228,7 +228,7 @@ class RevisionController
         $presetId = (int) ($_POST['preset_id'] ?? 0);
 
         RevisionPreset::delete($presetId, $userId);
-        Session::flash('success', 'Preset deleted.');
+        Session::flash('success', __('revision_settings.preset_deleted'));
         Session::redirect('/revision/settings');
     }
 

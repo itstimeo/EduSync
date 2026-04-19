@@ -19,48 +19,48 @@
 <div style="display:flex;align-items:center;gap:.75rem;max-width:500px;margin:0 auto 1.25rem;">
     <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
     <p class="breadcrumb" style="margin:0;max-width:none;">
-        <a href="/courses">Subjects</a> ›
+        <a href="/courses"><?= __('courses.subjects') ?></a> ›
         <a href="/themes?subject_id=<?= (int)$doc['subject_id'] ?>"><?= htmlspecialchars($doc['subject_name'], ENT_QUOTES) ?></a> ›
         <a href="/chapters?theme_id=<?= (int)$doc['theme_id'] ?>"><?= htmlspecialchars($doc['theme_name'], ENT_QUOTES) ?></a> ›
         <a href="/documents?chapter_id=<?= (int)$doc['chapter_id'] ?>"><?= htmlspecialchars($doc['chapter_name'], ENT_QUOTES) ?></a> ›
-        Edit
+        <?= __('courses.edit_doc_title') ?>
     </p>
 </div>
 
 <div class="form-card">
-    <h1>Edit document</h1>
+    <h1><?= __('courses.edit_doc_title') ?></h1>
     <form method="post" action="/documents/edit" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= (int)$doc['id'] ?>">
         <div class="field">
-            <label for="title">Title <span style="color:#ef4444">*</span></label>
+            <label for="title"><?= __('courses.doc_title') ?> <span style="color:#ef4444">*</span></label>
             <input type="text" id="title" name="title" maxlength="255" required autofocus
                    value="<?= htmlspecialchars($doc['title'], ENT_QUOTES) ?>">
         </div>
         <div class="field">
-            <label for="description">Description <span style="font-weight:400;color:var(--text-subtle)">(optional)</span></label>
+            <label for="description"><?= __('common.description') ?> <span style="font-weight:400;color:var(--text-subtle)">(<?= __('common.optional') ?>)</span></label>
             <textarea id="description" name="description" maxlength="1000"><?= htmlspecialchars($doc['description'] ?? '', ENT_QUOTES) ?></textarea>
         </div>
         <div class="field">
-            <label>Replace file <span style="font-weight:400;color:var(--text-subtle)">(optional)</span></label>
+            <label><?= __('courses.replace_file') ?> <span style="font-weight:400;color:var(--text-subtle)">(<?= __('common.optional') ?>)</span></label>
             <?php if (!empty($doc['original_name'])): ?>
                 <div class="current-file">
-                    <span>Current:</span>
+                    <span><?= __('courses.current_file') ?></span>
                     <strong><?= htmlspecialchars($doc['original_name'], ENT_QUOTES) ?></strong>
                 </div><br>
             <?php endif; ?>
             <div class="file-row">
                 <label for="file" class="file-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                    Choose file
+                    <?= __('courses.choose_file') ?>
                 </label>
-                <span class="file-name-lbl" id="fn">No file chosen</span>
+                <span class="file-name-lbl" id="fn"><?= __('courses.no_file_chosen') ?></span>
             </div>
             <input type="file" id="file" name="file" style="display:none"
-                   onchange="document.getElementById('fn').textContent=this.files[0]?this.files[0].name:'No file chosen'">
-            <p class="field-hint">Leave empty to keep current file — max 50 MB</p>
+                   onchange="document.getElementById('fn').textContent=this.files[0]?this.files[0].name:'<?= __('courses.no_file_chosen') ?>'">
+            <p class="field-hint"><?= __('courses.keep_file_hint') ?></p>
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary"><?= __('common.save') ?></button>
         </div>
     </form>
 </div>

@@ -4,6 +4,27 @@ define('ROOT_PATH', dirname(__DIR__));
 
 require_once ROOT_PATH . '/config/config.php';
 
+// Language init — must happen before any output
+$lang = $_COOKIE['lang'] ?? 'en';
+if (!in_array($lang, ['en', 'fr'], true)) {
+    $lang = 'en';
+}
+
+$reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+if ($reqPath === '/lang') {
+    $newLang = trim($_GET['code'] ?? '');
+    if (in_array($newLang, ['en', 'fr'], true)) {
+        setcookie('lang', $newLang, time() + 31536000, '/', '', false, false);
+    }
+    $referer = $_SERVER['HTTP_REFERER'] ?? '/dashboard';
+    $parsed  = parse_url($referer);
+    $safe    = empty($parsed['host']) || $parsed['host'] === ($_SERVER['HTTP_HOST'] ?? '');
+    header('Location: ' . ($safe ? $referer : '/dashboard'));
+    exit;
+}
+
+\EduSync\Core\Lang::init($lang);
+
 use EduSync\Core\Router;
 use EduSync\Core\Session;
 use EduSync\Core\View;
