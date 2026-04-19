@@ -17,8 +17,11 @@ $_ldCurFlag = $_ldFlags[$_ldCurrent] ?? $_ldFlags['en'];
         <svg class="lang-dd-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
     </button>
     <div class="lang-dd-menu">
+        <?php
+            $_ldRedirect = urlencode($_SERVER['REQUEST_URI'] ?? '/dashboard');
+        ?>
         <?php foreach ($_ldItems as $_ldCode => $_ldItem): ?>
-            <a href="/lang?code=<?= $_ldCode ?>" class="lang-dd-option<?= $_ldCurrent === $_ldCode ? ' active' : '' ?>">
+            <a href="/lang?code=<?= $_ldCode ?>&redirect_to=<?= $_ldRedirect ?>" class="lang-dd-option<?= $_ldCurrent === $_ldCode ? ' active' : '' ?>">
                 <span class="lang-flag"><?= $_ldFlags[$_ldCode] ?></span>
                 <span><?= $_ldItem['name'] ?></span>
             </a>

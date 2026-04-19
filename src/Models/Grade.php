@@ -6,48 +6,55 @@ use EduSync\Core\Database;
 
 class Grade
 {
-    public static function getRecentByUser(int $userId, int $limit = 5): array
+    public static function getRecentByUser(int $userId, int $limit = 5, ?int $yearId = null): array
     {
-        $db   = Database::getInstance();
-        $stmt = $db->prepare(
+        $db     = Database::getInstance();
+        $yearSql = $yearId !== null ? 'AND s.academic_year_id = ?' : '';
+        $params  = $yearId !== null ? [$userId, $yearId] : [$userId];
+        $stmt    = $db->prepare(
             'SELECT g.*, s.name AS subject_name, s.color AS subject_color
              FROM grades g
              JOIN subjects s ON g.subject_id = s.id
-             WHERE g.user_id = ?
+             WHERE g.user_id = ? ' . $yearSql . '
              ORDER BY g.created_at DESC
              LIMIT ' . (int) $limit
         );
-        $stmt->execute([$userId]);
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 
-    public static function getWeightedAverage(int $userId): ?float
+    public static function getWeightedAverage(int $userId, ?int $yearId = null): ?float
     {
-        $db   = Database::getInstance();
-        $stmt = $db->prepare(
+        $db      = Database::getInstance();
+        $yearSql = $yearId !== null ? 'AND s.academic_year_id = ?' : '';
+        $params  = $yearId !== null ? [$userId, $yearId] : [$userId];
+        $stmt    = $db->prepare(
             'SELECT AVG(subject_avg) AS average FROM (
                 SELECT SUM(g.value / g.max_value * 20 * g.coefficient) / SUM(g.coefficient) AS subject_avg
                 FROM grades g
-                WHERE g.user_id = ?
+                JOIN subjects s ON g.subject_id = s.id
+                WHERE g.user_id = ? ' . $yearSql . '
                 GROUP BY g.subject_id
             ) AS sub'
         );
-        $stmt->execute([$userId]);
+        $stmt->execute($params);
         $row = $stmt->fetch();
         return isset($row['average']) && $row['average'] !== null ? (float) $row['average'] : null;
     }
 
-    public static function getAllByUser(int $userId): array
+    public static function getAllByUser(int $userId, ?int $yearId = null): array
     {
-        $db   = Database::getInstance();
-        $stmt = $db->prepare(
+        $db      = Database::getInstance();
+        $yearSql = $yearId !== null ? 'AND s.academic_year_id = ?' : '';
+        $params  = $yearId !== null ? [$userId, $yearId] : [$userId];
+        $stmt    = $db->prepare(
             'SELECT g.*, s.name AS subject_name, s.color AS subject_color
              FROM grades g
              JOIN subjects s ON g.subject_id = s.id
-             WHERE g.user_id = ?
+             WHERE g.user_id = ? ' . $yearSql . '
              ORDER BY g.graded_at DESC, g.created_at DESC'
         );
-        $stmt->execute([$userId]);
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 
@@ -99,9 +106,9 @@ class Grade
         $stmt->execute([$id, $userId]);
     }
 
-    public static function getBySubjectGrouped(int $userId): array
+    public static function getBySubjectGrouped(int $userId, ?int $yearId = null): array
     {
-        $grades = self::getAllByUser($userId);
+        $grades = self::getAllByUser($userId, $yearId);
         $grouped = [];
         foreach ($grades as $g) {
             $sid = $g['subject_id'];

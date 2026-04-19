@@ -52,16 +52,31 @@ CREATE TABLE IF NOT EXISTS remember_tokens (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─────────────────────────────────────────
+-- Academic years
+-- ─────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS academic_years (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT UNSIGNED NOT NULL,
+    name       VARCHAR(100) NOT NULL,
+    is_active  TINYINT(1)   NOT NULL DEFAULT 0,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ─────────────────────────────────────────
 -- Courses
 -- ─────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS subjects (
-    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id    INT UNSIGNED NOT NULL,
-    name       VARCHAR(255) NOT NULL,
-    color      VARCHAR(20)  NOT NULL DEFAULT '#6366f1',
-    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id          INT UNSIGNED NOT NULL,
+    academic_year_id INT UNSIGNED NOT NULL,
+    name             VARCHAR(255) NOT NULL,
+    color            VARCHAR(20)  NOT NULL DEFAULT '#6366f1',
+    created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id)          REFERENCES users(id)          ON DELETE CASCADE,
+    FOREIGN KEY (academic_year_id) REFERENCES academic_years(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS themes (

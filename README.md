@@ -1,6 +1,6 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.9.1.
+Student management application built with PHP and MySQL — v2.0.0.
 
 ## Screenshots
 
@@ -29,8 +29,9 @@ Student management application built with PHP and MySQL — v1.9.1.
 - **Grades** — Per-subject grade tracking with coefficients, weighted average, custom subject dropdown with color badges, custom date picker, optional comment; statistics tab with custom SVG line chart (cumulative weighted averages, overall average, dark/light mode live)
 - **Planning** — Monthly calendar + event list, CRUD events, custom event types (add/rename/recolor/delete), dashboard week view, Google Calendar one-way sync (OAuth2)
 - **Revision** — Spaced repetition (J+1/3/7/14/30 or custom intervals), link chapters or documents, preset management, today's widget on dashboard
+- **Academic years** — Organize all content by school year; active year selector and year management (create, rename, delete) on the profile page; ZIP export per year (full folder hierarchy + grade report PDF); force-delete with password confirmation for years with data
 - **Export** — Grade report PDF (Dompdf, grouped by subject with averages); courses ZIP at any hierarchy level (subjects/themes/chapters), HTML notes converted to PDF
-- **Profile** — Edit name, upload/crop/delete profile photo (canvas cropper, original preserved), email change with dual-code verification, password change, Google Calendar connection
+- **Profile** — Edit name, upload/crop/delete profile photo (canvas cropper, original preserved), email change with dual-code verification, password change, Google Calendar connection, academic year management
 - **Multi-language** — EN/FR interface, language selector with flag dropdown on profile page and auth pages
 
 ## Requirements
