@@ -4,6 +4,7 @@ namespace EduSync\Controllers;
 
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Models\AcademicYear;
 use EduSync\Models\Grade;
 use EduSync\Models\Subject;
 
@@ -13,14 +14,17 @@ class GradesController
     {
         $this->requireAuth();
         $userId = $this->userId();
+        $year   = $this->requireYear($userId);
+        $yearId = (int)$year['id'];
 
         View::render('grades/index', [
-            'title'    => __('nav.grades'),
-            'flash'    => Session::getFlash(),
-            'userName' => Session::get('user_name', ''),
-            'grouped'  => Grade::getBySubjectGrouped($userId),
-            'all'      => Grade::getAllByUser($userId),
-            'average'  => Grade::getWeightedAverage($userId),
+            'title'      => __('nav.grades'),
+            'flash'      => Session::getFlash(),
+            'userName'   => Session::get('user_name', ''),
+            'grouped'    => Grade::getBySubjectGrouped($userId, $yearId),
+            'all'        => Grade::getAllByUser($userId, $yearId),
+            'average'    => Grade::getWeightedAverage($userId, $yearId),
+            'activeYear' => $year,
         ], 'layouts/app');
     }
 
@@ -28,13 +32,14 @@ class GradesController
     {
         $this->requireAuth();
         $userId = $this->userId();
+        $year   = $this->requireYear($userId);
 
         View::render('grades/grade_form', [
             'title'    => __('grades.new_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'grade'    => null,
-            'subjects' => Subject::getAllByUser($userId),
+            'subjects' => Subject::getAllByUserAndYear($userId, (int)$year['id']),
         ], 'layouts/app');
     }
 
@@ -71,12 +76,13 @@ class GradesController
             Session::redirect('/grades');
         }
 
+        $year = $this->requireYear($userId);
         View::render('grades/grade_form', [
             'title'    => __('grades.edit_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'grade'    => $grade,
-            'subjects' => Subject::getAllByUser($userId),
+            'subjects' => Subject::getAllByUserAndYear($userId, (int)$year['id']),
         ], 'layouts/app');
     }
 
@@ -128,8 +134,10 @@ class GradesController
         $this->requireAuth();
         $userId = $this->userId();
 
-        $grouped = Grade::getBySubjectGrouped($userId);
-        $average = Grade::getWeightedAverage($userId);
+        $year    = $this->requireYear($userId);
+        $yearId  = (int)$year['id'];
+        $grouped = Grade::getBySubjectGrouped($userId, $yearId);
+        $average = Grade::getWeightedAverage($userId, $yearId);
 
         if (empty($grouped)) {
             Session::flash('error', __('courses.no_grades_export'));
@@ -254,5 +262,15 @@ class GradesController
     private function userId(): int
     {
         return (int) Session::get('user_id');
+    }
+
+    private function requireYear(int $userId): array
+    {
+        $year = AcademicYear::getActiveForUser($userId);
+        if (!$year) {
+            Session::flash('error', __('academic_year.required'));
+            Session::redirect('/academic-years?setup=1');
+        }
+        return $year;
     }
 }

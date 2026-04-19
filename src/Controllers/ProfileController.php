@@ -5,6 +5,7 @@ namespace EduSync\Controllers;
 use EduSync\Core\Database;
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Models\AcademicYear;
 use EduSync\Models\GoogleToken;
 use EduSync\Models\User;
 use EduSync\Models\VerificationCode;
@@ -26,13 +27,22 @@ class ProfileController
         $user   = User::findById($userId);
 
         $gcalToken = GoogleToken::getByUser($userId);
+        $years     = AcademicYear::getByUser($userId);
+
+        $yearsContents = [];
+        foreach ($years as $y) {
+            $yearsContents[(int)$y['id']] = AcademicYear::getContentsSummary((int)$y['id'], $userId);
+        }
 
         View::render('profile/index', [
-            'title'       => __('profile.title'),
-            'flash'       => Session::getFlash(),
-            'userName'    => Session::get('user_name', ''),
-            'user'        => $user,
-            'gcalEmail'   => $gcalToken['google_email'] ?? null,
+            'title'         => __('profile.title'),
+            'flash'         => Session::getFlash(),
+            'userName'      => Session::get('user_name', ''),
+            'user'          => $user,
+            'gcalEmail'     => $gcalToken['google_email'] ?? null,
+            'years'         => $years,
+            'activeYear'    => AcademicYear::getActiveForUser($userId),
+            'yearsContents' => $yearsContents,
         ], 'layouts/app');
     }
 
