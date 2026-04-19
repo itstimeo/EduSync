@@ -5,6 +5,7 @@ $iconDel       = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
 $iconEdit      = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6.5-6.5a2.121 2.121 0 013 3L12 14l-4 1 1-4z"/></svg>';
 $iconCheckFill = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
 $iconClose     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
+$iconArrow     = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12"/></svg>';
 $iconChapter   = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>';
 $iconDocument  = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>';
 
@@ -37,6 +38,8 @@ $presetsJson   = json_encode($presets);
     .badge-interval { background: var(--purple-tint-2); color: #6d28d9; }
     .badge-type { background: var(--bg-subtle); color: var(--text-muted); }
 
+    .btn-advance { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; border: 1px solid #fca5a5; background: transparent; color: #dc2626; cursor: pointer; vertical-align: middle; padding: 0; flex-shrink: 0; }
+    .btn-advance:hover { background: #fee2e2; }
     .upcoming-list { background: var(--surface); border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.07); overflow: hidden; }
     .upcoming-row { display: flex; align-items: center; gap: .75rem; padding: .7rem 1.25rem; border-bottom: 1px solid var(--bg-subtle); font-size: .875rem; }
     .upcoming-row:last-child { border-bottom: none; }
@@ -185,8 +188,16 @@ $presetsJson   = json_encode($presets);
                         <?php endif; ?>
                     </div>
                     <?php if ($isReviewed && $nextStep): ?>
-                        <div class="rev-card-next">
-                            <?= __('revision.reviewed_next') ?> <?= date('d/m/Y', strtotime($nextRevDate)) ?> (J+<?= (int)$nextStep['day'] ?>)
+                        <div class="rev-card-next" style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+                            <?php if (strtotime($nextRevDate) < strtotime($today)): ?>
+                                <span style="color:#dc2626;"><?= __('revision.overdue') ?> <?= date('d/m', strtotime($nextRevDate)) ?> (J+<?= (int)$nextStep['day'] ?>)</span>
+                                <form method="POST" action="/revision/done" style="display:inline-flex;align-items:center;">
+                                    <input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
+                                    <button type="submit" class="btn-advance" title="<?= htmlspecialchars(__('revision.next_overdue'), ENT_QUOTES) ?>"><?= $iconArrow ?></button>
+                                </form>
+                            <?php else: ?>
+                                <?= __('revision.reviewed_next') ?> <?= date('d/m/Y', strtotime($nextRevDate)) ?> (J+<?= (int)$nextStep['day'] ?>)
+                            <?php endif; ?>
                         </div>
                     <?php elseif ($isReviewed && $isLast): ?>
                         <div class="rev-card-next"><?= __('revision.last_step') ?></div>
