@@ -1,4 +1,4 @@
-<?php $title = 'Register'; ?>
+<?php $title = __('auth.register.title'); ?>
 <style>
 .field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.25rem}
 .field-err.show{display:block}
@@ -8,40 +8,40 @@
 .pw-toggle{position:absolute;right:.5rem;background:none;border:none;cursor:pointer;color:var(--text-subtle);padding:.2rem;display:flex;align-items:center;line-height:1}
 .pw-toggle:hover{color:var(--text)}
 </style>
-<h1>Create your account</h1>
+<h1><?= __('auth.register.title') ?></h1>
 <form method="POST" action="/register" novalidate>
-    <label for="first_name">First name <span style="color:#ef4444">*</span></label>
+    <label for="first_name"><?= __('auth.register.first_name') ?> <span style="color:#ef4444">*</span></label>
     <input type="text" id="first_name" name="first_name" autofocus
            value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>">
-    <span class="field-err" id="err-first_name">Please enter your first name.</span>
+    <span class="field-err" id="err-first_name"><?= __('auth.register.first_name') ?></span>
 
-    <label for="last_name">Last name <span style="color:#ef4444">*</span></label>
+    <label for="last_name"><?= __('auth.register.last_name') ?> <span style="color:#ef4444">*</span></label>
     <input type="text" id="last_name" name="last_name"
            value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>">
-    <span class="field-err" id="err-last_name">Please enter your last name.</span>
+    <span class="field-err" id="err-last_name"><?= __('auth.register.last_name') ?></span>
 
-    <label for="email">Email address <span style="color:#ef4444">*</span></label>
+    <label for="email"><?= __('auth.register.email') ?> <span style="color:#ef4444">*</span></label>
     <input type="email" id="email" name="email"
            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-    <span class="field-err" id="err-email">Please enter a valid email address.</span>
+    <span class="field-err" id="err-email"><?= __('auth.register.email') ?></span>
 
-    <label for="password">Password <span style="color:#ef4444">*</span> <small>(min. 8 characters)</small></label>
+    <label for="password"><?= __('auth.register.password') ?> <span style="color:#ef4444">*</span> <small><?= __('profile.pw_hint') ?></small></label>
     <div class="pw-wrap">
         <input type="password" id="password" name="password">
         <button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('password',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
-    <span class="field-err" id="err-password">Password must be at least 8 characters.</span>
+    <span class="field-err" id="err-password"><?= __('revision_settings.step_invalid') ?></span>
 
-    <label for="confirm">Confirm password <span style="color:#ef4444">*</span></label>
+    <label for="confirm"><?= __('auth.register.confirm') ?> <span style="color:#ef4444">*</span></label>
     <div class="pw-wrap">
         <input type="password" id="confirm" name="confirm">
         <button type="button" class="pw-toggle" aria-label="Show confirm password" onclick="togglePw('confirm',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
-    <span class="field-err" id="err-confirm">Passwords do not match.</span>
+    <span class="field-err" id="err-confirm"><?= __('auth.errors.passwords_no_match') ?></span>
 
-    <button type="submit">Create account</button>
+    <button type="submit"><?= __('auth.register.submit') ?></button>
 </form>
-<p class="link">Already have an account? <a href="/login">Sign in</a></p>
+<p class="link"><?= __('auth.register.has_account') ?> <a href="/login"><?= __('auth.register.login') ?></a></p>
 
 <script>
 var EYE = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';

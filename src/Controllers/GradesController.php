@@ -15,7 +15,7 @@ class GradesController
         $userId = $this->userId();
 
         View::render('grades/index', [
-            'title'    => 'Grades',
+            'title'    => __('nav.grades'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'grouped'  => Grade::getBySubjectGrouped($userId),
@@ -30,7 +30,7 @@ class GradesController
         $userId = $this->userId();
 
         View::render('grades/grade_form', [
-            'title'    => 'New grade',
+            'title'    => __('grades.new_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'grade'    => null,
@@ -51,12 +51,12 @@ class GradesController
 
         $subject = Subject::getByIdAndUser($subjectId, $userId);
         if (!$subject) {
-            Session::flash('error', 'Invalid subject.');
+            Session::flash('error', __('grades.invalid_subject'));
             Session::redirect('/grades/create');
         }
 
         Grade::create($userId, $subjectId, $name, $value, $maxValue, $coefficient, $gradedAt, $comment);
-        Session::flash('success', 'Grade added.');
+        Session::flash('success', __('grades.grade_added'));
         Session::redirect('/grades');
     }
 
@@ -72,7 +72,7 @@ class GradesController
         }
 
         View::render('grades/grade_form', [
-            'title'    => 'Edit grade',
+            'title'    => __('grades.edit_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'grade'    => $grade,
@@ -99,12 +99,12 @@ class GradesController
 
         $subject = Subject::getByIdAndUser($subjectId, $userId);
         if (!$subject) {
-            Session::flash('error', 'Invalid subject.');
+            Session::flash('error', __('grades.invalid_subject'));
             Session::redirect('/grades/edit?id=' . $id);
         }
 
         Grade::update($id, $userId, $subjectId, $name, $value, $maxValue, $coefficient, $gradedAt, $comment);
-        Session::flash('success', 'Grade updated.');
+        Session::flash('success', __('grades.grade_updated'));
         Session::redirect('/grades');
     }
 
@@ -117,7 +117,7 @@ class GradesController
         $grade = Grade::getByIdAndUser($id, $userId);
         if ($grade) {
             Grade::delete($id, $userId);
-            Session::flash('success', 'Grade deleted.');
+            Session::flash('success', __('grades.grade_deleted'));
         }
 
         Session::redirect('/grades');
@@ -132,7 +132,7 @@ class GradesController
         $average = Grade::getWeightedAverage($userId);
 
         if (empty($grouped)) {
-            Session::flash('error', 'No grades to export.');
+            Session::flash('error', __('courses.no_grades_export'));
             Session::redirect('/grades');
         }
 
@@ -226,19 +226,19 @@ class GradesController
 
         $error = null;
         if ($name === '') {
-            $error = 'Grade name is required.';
+            $error = __('grades.name_required');
         } elseif (strlen($name) > 200) {
-            $error = 'Grade name is too long (max 200 characters).';
+            $error = __('grades.name_too_long');
         } elseif ($subjectId <= 0) {
-            $error = 'Please select a subject.';
+            $error = __('grades.subject_required');
         } elseif ($value < 0) {
-            $error = 'Grade value cannot be negative.';
+            $error = __('grades.value_negative');
         } elseif ($maxValue <= 0) {
-            $error = 'Max value must be greater than 0.';
+            $error = __('grades.max_value_zero');
         } elseif ($value > $maxValue) {
-            $error = 'Grade value cannot exceed max value.';
+            $error = __('grades.value_exceeds_max');
         } elseif ($coefficient <= 0) {
-            $error = 'Coefficient must be greater than 0.';
+            $error = __('grades.coefficient_zero');
         }
 
         return [$subjectId, $name, $value, $maxValue, $coefficient, $gradedAt, $comment, $error];

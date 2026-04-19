@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= \EduSync\Core\Lang::current() ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,6 +75,19 @@
         /* ── Theme toggle ── */
         #theme-toggle, #theme-toggle-m { width: 38px; height: 38px; padding: 0; justify-content: center; background: var(--surface); border: 2px outset rgba(0,0,0,.2); border-radius: 99px; }
         html.dark #theme-toggle, html.dark #theme-toggle-m { border: 2px outset rgba(255,255,255,.15); }
+        /* ── Lang dropdown ── */
+        .lang-dropdown{position:relative;display:inline-block;flex-shrink:0}
+        .lang-dd-btn{display:flex;align-items:center;gap:.35rem;padding:.28rem .55rem .28rem .45rem;border-radius:8px;border:1px solid var(--border-soft);background:var(--surface);color:var(--text);cursor:pointer;font-size:.78rem;font-weight:600;font-family:inherit;transition:background .15s}
+        .lang-dd-btn:hover{background:var(--bg-subtle)}
+        .lang-flag{display:inline-flex;align-items:center;flex-shrink:0}
+        .lang-dd-code{font-size:.78rem;font-weight:600;color:var(--text-muted)}
+        .lang-dd-chevron{transition:transform .2s;color:var(--text-subtle);flex-shrink:0}
+        .lang-dropdown.open .lang-dd-chevron{transform:rotate(180deg)}
+        .lang-dd-menu{display:none;position:absolute;top:calc(100% + 5px);right:0;background:var(--surface);border:1px solid var(--border-soft);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);min-width:140px;overflow:hidden;z-index:1000}
+        .lang-dropdown.open .lang-dd-menu{display:block}
+        .lang-dd-option{display:flex;align-items:center;gap:.55rem;padding:.55rem .85rem;font-size:.85rem;color:var(--text);text-decoration:none;font-weight:500;transition:background .12s}
+        .lang-dd-option:hover{background:var(--bg-subtle)}
+        .lang-dd-option.active{color:#6366f1;font-weight:700;background:var(--purple-tint)}
         /* ── Mobile nav ── */
         .nav-mobile { display: none; align-items: center; gap: .4rem; }
         .nav-hamburger { background: none; border: none; border-radius: 99px; width: 38px; height: 38px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); padding: 0; flex-shrink: 0; transition: color .15s, background .15s; }
@@ -120,8 +133,8 @@
     ?>
     <header>
         <div class="nav-left">
-            <a href="/courses" class="nav-link<?= $coursesActive ? ' active' : '' ?>">Courses</a>
-            <a href="/grades"  class="nav-link<?= str_starts_with($uri, '/grades') ? ' active' : '' ?>">Grades</a>
+            <a href="/courses" class="nav-link<?= $coursesActive ? ' active' : '' ?>"><?= __('nav.courses') ?></a>
+            <a href="/grades"  class="nav-link<?= str_starts_with($uri, '/grades') ? ' active' : '' ?>"><?= __('nav.grades') ?></a>
         </div>
         <div class="nav-center">
             <a href="/dashboard" style="display:flex;align-items:center;gap:.5rem;">
@@ -152,11 +165,11 @@
             </a>
         </div>
         <div class="nav-right">
-            <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
-            <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
+            <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>"><?= __('nav.planning') ?></a>
+            <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>"><?= __('nav.revision') ?></a>
             <span class="user">
                 <button id="theme-toggle" class="nav-link" type="button" aria-label="Toggle dark mode"></button>
-                <a href="/profile" class="nav-avatar-link" title="Profile">
+                <a href="/profile" class="nav-avatar-link" title="<?= __('nav.profile') ?>">
                     <img src="/profile/photo" class="nav-avatar-img" alt=""
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                     <span class="nav-avatar-initials" style="display:none"><?= htmlspecialchars(mb_strtoupper(mb_substr($userName ?? '?', 0, 1))) ?></span>
@@ -172,12 +185,12 @@
         </div>
     </header>
     <nav class="mobile-menu" id="mobile-menu">
-        <a href="/courses"  class="nav-link<?= $coursesActive ? ' active' : '' ?>">Courses</a>
-        <a href="/grades"   class="nav-link<?= str_starts_with($uri, '/grades')   ? ' active' : '' ?>">Grades</a>
-        <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>">Planning</a>
-        <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>">Revision</a>
+        <a href="/courses"  class="nav-link<?= $coursesActive ? ' active' : '' ?>"><?= __('nav.courses') ?></a>
+        <a href="/grades"   class="nav-link<?= str_starts_with($uri, '/grades')   ? ' active' : '' ?>"><?= __('nav.grades') ?></a>
+        <a href="/planning" class="nav-link<?= str_starts_with($uri, '/planning') ? ' active' : '' ?>"><?= __('nav.planning') ?></a>
+        <a href="/revision" class="nav-link<?= str_starts_with($uri, '/revision') ? ' active' : '' ?>"><?= __('nav.revision') ?></a>
         <div class="mobile-menu-user">
-            <a href="/profile" class="nav-avatar-link" title="Profile" style="flex-shrink:0;">
+            <a href="/profile" class="nav-avatar-link" title="<?= __('nav.profile') ?>" style="flex-shrink:0;">
                 <img src="/profile/photo" class="nav-avatar-img" alt=""
                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                 <span class="nav-avatar-initials" style="display:none"><?= htmlspecialchars(mb_strtoupper(mb_substr($userName ?? '?', 0, 1))) ?></span>
@@ -195,14 +208,14 @@
         <?php endif; ?>
         <?= $content ?>
     </div>
-    <footer>© 2026 EduSync · v1.8.1</footer>
+    <footer>© 2026 EduSync · v1.9.0</footer>
     <!-- Confirm modal -->
     <div id="es-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
         <div class="modal-box" style="border-radius:12px;padding:1.5rem 1.75rem;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);">
             <p id="es-modal-msg" style="margin-bottom:1.5rem;font-size:.95rem;line-height:1.5;"></p>
             <div style="display:flex;gap:.75rem;justify-content:flex-end;">
-                <button id="es-modal-cancel" class="modal-cancel-btn" style="padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.875rem;font-weight:500;">Cancel</button>
-                <button id="es-modal-confirm" style="padding:.5rem 1.1rem;border:none;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer;font-size:.875rem;font-weight:600;">Delete</button>
+                <button id="es-modal-cancel" class="modal-cancel-btn" style="padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.875rem;font-weight:500;"><?= __('modal.cancel') ?></button>
+                <button id="es-modal-confirm" style="padding:.5rem 1.1rem;border:none;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer;font-size:.875rem;font-weight:600;"><?= __('modal.delete') ?></button>
             </div>
         </div>
     </div>

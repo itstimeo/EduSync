@@ -62,11 +62,11 @@
 
 <div style="display:flex;align-items:center;gap:.75rem;max-width:520px;margin:0 auto 1.25rem;">
     <a href="/grades" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/grades">Grades</a> › <?= $grade ? 'Edit' : 'New grade' ?></p>
+    <p class="breadcrumb" style="margin:0;max-width:none;"><a href="/grades"><?= __('grades.title') ?></a> › <?= $grade ? __('grades.edit_title') : __('grades.new_title') ?></p>
 </div>
 
 <div class="form-card">
-    <h1><?= $grade ? 'Edit grade' : 'New grade' ?></h1>
+    <h1><?= $grade ? __('grades.edit_title') : __('grades.new_title') ?></h1>
     <form method="post" action="<?= $grade ? '/grades/edit' : '/grades/create' ?>" id="grade-form" novalidate>
         <?php if ($grade): ?>
             <input type="hidden" name="id" value="<?= (int)$grade['id'] ?>">
@@ -86,12 +86,12 @@
         ?>
 
         <div class="field">
-            <label>Subject <span class="req">*</span></label>
+            <label><?= __('grades.subject') ?> <span class="req">*</span></label>
             <input type="hidden" name="subject_id" id="cs-value" value="<?= $selectedSubjectId ?: '' ?>">
             <div class="cs-wrap" id="cs-wrap">
                 <div class="cs-trigger" tabindex="0" id="cs-trigger" role="combobox" aria-expanded="false">
                     <span class="cs-dot" id="cs-dot" style="<?= $selectedSubjectColor ? 'background:' . htmlspecialchars($selectedSubjectColor, ENT_QUOTES) : '' ?>"></span>
-                    <span class="cs-label<?= $selectedSubjectName ? '' : ' placeholder' ?>" id="cs-label"><?= $selectedSubjectName ? htmlspecialchars($selectedSubjectName, ENT_QUOTES) : '— select —' ?></span>
+                    <span class="cs-label<?= $selectedSubjectName ? '' : ' placeholder' ?>" id="cs-label"><?= $selectedSubjectName ? htmlspecialchars($selectedSubjectName, ENT_QUOTES) : htmlspecialchars(__('grades.select_subj'), ENT_QUOTES) ?></span>
                     <span class="cs-arrow">▾</span>
                 </div>
                 <div class="cs-dropdown" id="cs-dropdown" role="listbox">
@@ -107,40 +107,40 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-            <span class="field-err" id="err-subject">Please select a subject.</span>
+            <span class="field-err" id="err-subject"><?= __('grades.subject_required') ?></span>
         </div>
 
         <div class="field">
-            <label for="name">Name <span class="req">*</span></label>
+            <label for="name"><?= __('grades.grade_name') ?> <span class="req">*</span></label>
             <input type="text" id="name" name="name" maxlength="200" autofocus
                    value="<?= htmlspecialchars($grade['name'] ?? '', ENT_QUOTES) ?>">
-            <span class="field-err" id="err-name">Please enter a name.</span>
+            <span class="field-err" id="err-name"><?= __('grades.name_required') ?></span>
         </div>
 
         <div class="row-2">
             <div class="field">
-                <label for="value">Grade <span class="req">*</span></label>
+                <label for="value"><?= __('grades.value') ?> <span class="req">*</span></label>
                 <input type="number" id="value" name="value" step="0.01" min="0"
                        value="<?= htmlspecialchars($grade['value'] ?? '', ENT_QUOTES) ?>">
-                <span class="field-err" id="err-value">Please enter a grade.</span>
+                <span class="field-err" id="err-value"><?= __('grades.value_negative') ?></span>
             </div>
             <div class="field">
-                <label for="max_value">Out of <span class="req">*</span></label>
+                <label for="max_value"><?= __('grades.out_of') ?> <span class="req">*</span></label>
                 <input type="number" id="max_value" name="max_value" step="0.01" min="0.01"
                        value="<?= htmlspecialchars($grade['max_value'] ?? '20', ENT_QUOTES) ?>">
-                <span class="field-err" id="err-max_value">Please enter a max value.</span>
+                <span class="field-err" id="err-max_value"><?= __('grades.max_value_zero') ?></span>
             </div>
         </div>
 
         <div class="row-2">
             <div class="field">
-                <label for="coefficient">Coefficient <span class="req">*</span></label>
+                <label for="coefficient"><?= __('grades.coefficient') ?> <span class="req">*</span></label>
                 <input type="number" id="coefficient" name="coefficient" step="0.1" min="0.1"
                        value="<?= htmlspecialchars($grade['coefficient'] ?? '1', ENT_QUOTES) ?>">
-                <span class="field-err" id="err-coefficient">Please enter a coefficient.</span>
+                <span class="field-err" id="err-coefficient"><?= __('grades.coefficient_zero') ?></span>
             </div>
             <div class="field">
-                <label>Date</label>
+                <label><?= __('common.date') ?></label>
                 <input type="hidden" name="graded_at" id="dp-value" value="<?= htmlspecialchars($grade['graded_at'] ?? '', ENT_QUOTES) ?>">
                 <div class="dp-wrap" id="dp-wrap">
                     <div class="dp-trigger" id="dp-trigger">
@@ -163,14 +163,14 @@
         </div>
 
         <div class="field">
-            <label for="comment">Comment</label>
+            <label for="comment"><?= __('grades.comment') ?></label>
             <textarea id="comment" name="comment" maxlength="1000"><?= htmlspecialchars($grade['comment'] ?? '', ENT_QUOTES) ?></textarea>
         </div>
 
-        <p class="req-note"><span class="req">*</span> Required</p>
+        <p class="req-note"><span class="req">*</span> <?= __('common.required') ?></p>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary"><?= __('common.save') ?></button>
         </div>
     </form>
 </div>
@@ -219,9 +219,8 @@
     var dpLabel   = document.getElementById('dp-month-label');
     var dpGrid    = document.getElementById('dp-grid');
 
-    var months = ['January','February','March','April','May','June',
-                  'July','August','September','October','November','December'];
-    var dows   = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+    var months = <?= json_encode(array_values(__arr('months'))) ?>;
+    var dows   = <?= json_encode(array_values(__arr('days_short'))) ?>;
     var today  = new Date(); today.setHours(0,0,0,0);
     var selected = null, viewYear, viewMonth;
 

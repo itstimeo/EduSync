@@ -21,7 +21,7 @@ class CoursesController
         $userId = $this->userId();
 
         View::render('courses/subjects', [
-            'title'    => 'Courses',
+            'title'    => __('nav.courses'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subjects' => Subject::getAllByUser($userId),
@@ -33,7 +33,7 @@ class CoursesController
         $this->requireAuth();
 
         View::render('courses/subject_form', [
-            'title'    => 'New subject',
+            'title'    => __('courses.new_subject_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subject'  => null,
@@ -49,7 +49,7 @@ class CoursesController
         $color = trim($_POST['color'] ?? '#6366f1');
 
         if ($name === '') {
-            Session::flash('error', 'Subject name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/courses/create');
         }
 
@@ -58,7 +58,7 @@ class CoursesController
         }
 
         Subject::create($userId, $name, $color);
-        Session::flash('success', 'Subject created.');
+        Session::flash('success', __('courses.subject_created'));
         Session::redirect('/courses');
     }
 
@@ -74,7 +74,7 @@ class CoursesController
         }
 
         View::render('courses/subject_form', [
-            'title'    => 'Edit subject',
+            'title'    => __('courses.edit_subject_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subject'  => $subject,
@@ -96,7 +96,7 @@ class CoursesController
         $color = trim($_POST['color'] ?? '#6366f1');
 
         if ($name === '') {
-            Session::flash('error', 'Subject name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/courses/edit?id=' . $id);
         }
 
@@ -105,7 +105,7 @@ class CoursesController
         }
 
         Subject::update($id, $userId, $name, $color);
-        Session::flash('success', 'Subject updated.');
+        Session::flash('success', __('courses.subject_updated'));
         Session::redirect('/courses');
     }
 
@@ -118,7 +118,7 @@ class CoursesController
         $subject = Subject::getByIdAndUser($id, $userId);
         if ($subject) {
             Subject::delete($id, $userId);
-            Session::flash('success', 'Subject deleted.');
+            Session::flash('success', __('courses.subject_deleted'));
         }
 
         Session::redirect('/courses');
@@ -140,7 +140,7 @@ class CoursesController
         }
 
         View::render('courses/themes', [
-            'title'    => htmlspecialchars($subject['name']) . ' — Themes',
+            'title'    => htmlspecialchars($subject['name']) . ' — ' . __('courses.themes'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subject'  => $subject,
@@ -160,7 +160,7 @@ class CoursesController
         }
 
         View::render('courses/theme_form', [
-            'title'    => 'New theme',
+            'title'    => __('courses.new_theme_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subject'  => $subject,
@@ -182,7 +182,7 @@ class CoursesController
         $name  = trim($_POST['name']  ?? '');
         $color = trim($_POST['color'] ?? '#6366f1');
         if ($name === '') {
-            Session::flash('error', 'Theme name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/themes/create?subject_id=' . $subjectId);
         }
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
@@ -190,7 +190,7 @@ class CoursesController
         }
 
         Theme::create($subjectId, $name, $color);
-        Session::flash('success', 'Theme created.');
+        Session::flash('success', __('courses.theme_created'));
         Session::redirect('/themes?subject_id=' . $subjectId);
     }
 
@@ -208,7 +208,7 @@ class CoursesController
         $subject = Subject::getByIdAndUser($theme['subject_id'], $userId);
 
         View::render('courses/theme_form', [
-            'title'    => 'Edit theme',
+            'title'    => __('courses.edit_theme_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'subject'  => $subject,
@@ -230,7 +230,7 @@ class CoursesController
         $name  = trim($_POST['name']  ?? '');
         $color = trim($_POST['color'] ?? '#6366f1');
         if ($name === '') {
-            Session::flash('error', 'Theme name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/themes/edit?id=' . $id);
         }
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
@@ -238,7 +238,7 @@ class CoursesController
         }
 
         Theme::update($id, $name, $color);
-        Session::flash('success', 'Theme updated.');
+        Session::flash('success', __('courses.theme_updated'));
         Session::redirect('/themes?subject_id=' . $theme['subject_id']);
     }
 
@@ -252,7 +252,7 @@ class CoursesController
         $theme = Theme::getByIdForUser($id, $userId);
         if ($theme) {
             Theme::delete($id);
-            Session::flash('success', 'Theme deleted.');
+            Session::flash('success', __('courses.theme_deleted'));
         }
 
         Session::redirect('/themes?subject_id=' . $subjectId);
@@ -274,7 +274,7 @@ class CoursesController
         }
 
         View::render('courses/chapters', [
-            'title'    => htmlspecialchars($theme['name']) . ' — Chapters',
+            'title'    => htmlspecialchars($theme['name']) . ' — ' . __('courses.chapters'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'theme'    => $theme,
@@ -294,7 +294,7 @@ class CoursesController
         }
 
         View::render('courses/chapter_form', [
-            'title'    => 'New chapter',
+            'title'    => __('courses.new_chapter_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'theme'    => $theme,
@@ -316,7 +316,7 @@ class CoursesController
         $name  = trim($_POST['name']  ?? '');
         $color = trim($_POST['color'] ?? '#6366f1');
         if ($name === '') {
-            Session::flash('error', 'Chapter name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/chapters/create?theme_id=' . $themeId);
         }
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
@@ -324,7 +324,7 @@ class CoursesController
         }
 
         Chapter::create($themeId, $name, $color);
-        Session::flash('success', 'Chapter created.');
+        Session::flash('success', __('courses.chapter_created'));
         Session::redirect('/chapters?theme_id=' . $themeId);
     }
 
@@ -340,7 +340,7 @@ class CoursesController
         }
 
         View::render('courses/chapter_form', [
-            'title'    => 'Edit chapter',
+            'title'    => __('courses.edit_chapter_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'theme'    => ['id' => $chapter['theme_id'], 'name' => $chapter['theme_name'], 'subject_id' => $chapter['subject_id'], 'subject_name' => $chapter['subject_name']],
@@ -362,7 +362,7 @@ class CoursesController
         $name  = trim($_POST['name']  ?? '');
         $color = trim($_POST['color'] ?? '#6366f1');
         if ($name === '') {
-            Session::flash('error', 'Chapter name is required.');
+            Session::flash('error', __('courses.name_required'));
             Session::redirect('/chapters/edit?id=' . $id);
         }
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
@@ -370,7 +370,7 @@ class CoursesController
         }
 
         Chapter::update($id, $name, $color);
-        Session::flash('success', 'Chapter updated.');
+        Session::flash('success', __('courses.chapter_updated'));
         Session::redirect('/chapters?theme_id=' . $chapter['theme_id']);
     }
 
@@ -384,7 +384,7 @@ class CoursesController
         $chapter = Chapter::getByIdForUser($id, $userId);
         if ($chapter) {
             Chapter::delete($id);
-            Session::flash('success', 'Chapter deleted.');
+            Session::flash('success', __('courses.chapter_deleted'));
         }
 
         Session::redirect('/chapters?theme_id=' . $themeId);
@@ -406,7 +406,7 @@ class CoursesController
         }
 
         View::render('courses/documents', [
-            'title'     => htmlspecialchars($chapter['name']) . ' — Documents',
+            'title'     => htmlspecialchars($chapter['name']) . ' — ' . __('courses.documents'),
             'flash'     => Session::getFlash(),
             'userName'  => Session::get('user_name', ''),
             'chapter'   => $chapter,
@@ -426,7 +426,7 @@ class CoursesController
         }
 
         View::render('courses/document_form', [
-            'title'    => 'Upload document',
+            'title'    => __('courses.upload_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'chapter'  => $chapter,
@@ -451,7 +451,7 @@ class CoursesController
             return $u === 'g' ? $n << 30 : ($u === 'm' ? $n << 20 : ($u === 'k' ? $n << 10 : $n));
         })(ini_get('post_max_size'));
         if ($contentLength > 0 && $postMaxBytes > 0 && $contentLength > $postMaxBytes) {
-            Session::flash('error', 'File is too large. Maximum allowed is 50 MB.');
+            Session::flash('error', __('courses.file_too_large'));
             Session::redirect('/documents/upload?chapter_id=' . $chapterId);
         }
 
@@ -459,18 +459,18 @@ class CoursesController
         $description = trim($_POST['description'] ?? '');
 
         if ($title === '') {
-            Session::flash('error', 'Title is required.');
+            Session::flash('error', __('courses.title_required'));
             Session::redirect('/documents/upload?chapter_id=' . $chapterId);
         }
 
         if (empty($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
-            Session::flash('error', 'Please select a file.');
+            Session::flash('error', __('courses.file_required'));
             Session::redirect('/documents/upload?chapter_id=' . $chapterId);
         }
 
         try {
             Document::upload($chapterId, $title, $description, $_FILES['file']);
-            Session::flash('success', 'Document uploaded.');
+            Session::flash('success', __('courses.doc_uploaded'));
         } catch (\RuntimeException $e) {
             Session::flash('error', $e->getMessage());
         }
@@ -488,7 +488,7 @@ class CoursesController
         $doc = Document::getMetaByIdForUser($id, $userId);
         if ($doc) {
             Document::delete($id);
-            Session::flash('success', 'Document deleted.');
+            Session::flash('success', __('courses.doc_deleted'));
         }
 
         Session::redirect('/documents?chapter_id=' . $chapterId);
@@ -530,7 +530,7 @@ class CoursesController
         }
 
         View::render('courses/note_editor', [
-            'title'    => 'New note',
+            'title'    => __('courses.new_note_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'chapter'  => $chapter,
@@ -554,12 +554,12 @@ class CoursesController
         $content     = $_POST['content']           ?? '';
 
         if ($noteTitle === '') {
-            Session::flash('error', 'Title is required.');
+            Session::flash('error', __('courses.title_required'));
             Session::redirect('/documents/note/new?chapter_id=' . $chapterId);
         }
 
         Document::createNote($chapterId, $noteTitle, $description, $content);
-        Session::flash('success', 'Note created.');
+        Session::flash('success', __('courses.note_created'));
         Session::redirect('/documents?chapter_id=' . $chapterId);
     }
 
@@ -575,7 +575,7 @@ class CoursesController
         }
 
         View::render('courses/note_editor', [
-            'title'    => 'Edit note',
+            'title'    => __('courses.edit_note_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'chapter'  => [
@@ -656,12 +656,12 @@ class CoursesController
         $content     = $_POST['content']           ?? '';
 
         if ($noteTitle === '') {
-            Session::flash('error', 'Title is required.');
+            Session::flash('error', __('courses.title_required'));
             Session::redirect('/documents/note/edit?id=' . $id);
         }
 
         Document::updateNote($id, $noteTitle, $description, $content);
-        Session::flash('success', 'Note saved.');
+        Session::flash('success', __('courses.note_saved'));
         Session::redirect('/documents/view?id=' . $id);
     }
 
@@ -715,7 +715,7 @@ class CoursesController
         }
 
         View::render('courses/document_edit', [
-            'title'    => 'Edit document',
+            'title'    => __('courses.edit_doc_title'),
             'flash'    => Session::getFlash(),
             'userName' => Session::get('user_name', ''),
             'doc'      => $doc,
@@ -737,7 +737,7 @@ class CoursesController
         $description = trim($_POST['description'] ?? '');
 
         if ($title === '') {
-            Session::flash('error', 'Title is required.');
+            Session::flash('error', __('courses.title_required'));
             Session::redirect('/documents/edit?id=' . $id);
         }
 
@@ -747,7 +747,7 @@ class CoursesController
 
         try {
             Document::update($id, $title, $description, $file);
-            Session::flash('success', 'Document updated.');
+            Session::flash('success', __('courses.doc_updated'));
         } catch (\RuntimeException $e) {
             Session::flash('error', $e->getMessage());
             Session::redirect('/documents/edit?id=' . $id);
@@ -786,7 +786,7 @@ class CoursesController
         }
 
         if (empty($docs)) {
-            Session::flash('error', 'No documents to export.');
+            Session::flash('error', __('courses.no_docs_to_export'));
             Session::redirect('/courses');
         }
 

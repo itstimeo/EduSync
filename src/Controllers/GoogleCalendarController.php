@@ -28,24 +28,24 @@ class GoogleCalendarController
         $code  = trim($_GET['code']  ?? '');
 
         if ($state === '' || $state !== Session::get('gcal_oauth_state')) {
-            Session::flash('error', 'Invalid OAuth state. Please try again.');
+            Session::flash('error', __('profile.gcal_oauth_invalid'));
             Session::redirect('/profile');
         }
         Session::remove('gcal_oauth_state');
 
         if (isset($_GET['error'])) {
-            Session::flash('error', 'Google Calendar access denied.');
+            Session::flash('error', __('profile.gcal_access_denied'));
             Session::redirect('/profile');
         }
 
         if ($code === '') {
-            Session::flash('error', 'Missing authorization code.');
+            Session::flash('error', __('profile.gcal_missing_code'));
             Session::redirect('/profile');
         }
 
         try {
             GoogleCalendarService::handleCallback($code, $userId);
-            Session::flash('success', 'Google Calendar connected.');
+            Session::flash('success', __('profile.gcal_connected'));
         } catch (\Throwable $e) {
             Session::flash('error', 'Could not connect Google Calendar: ' . $e->getMessage());
         }
@@ -59,7 +59,7 @@ class GoogleCalendarController
         $userId = $this->userId();
 
         GoogleToken::delete($userId);
-        Session::flash('success', 'Google Calendar disconnected.');
+        Session::flash('success', __('profile.gcal_disconnected'));
         Session::redirect('/profile');
     }
 

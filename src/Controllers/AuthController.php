@@ -23,7 +23,7 @@ class AuthController
         $password = $_POST['password'] ?? '';
 
         if ($email === '' || $password === '') {
-            Session::flash('error', 'Email and password are required.');
+            Session::flash('error', __('auth.errors.email_password_required'));
             Session::redirect('/login');
         }
 
@@ -56,12 +56,12 @@ class AuthController
         $lastName  = trim($_POST['last_name'] ?? '');
 
         if ($email === '' || $password === '' || $firstName === '' || $lastName === '') {
-            Session::flash('error', 'All fields are required.');
+            Session::flash('error', __('auth.errors.all_fields_required'));
             Session::redirect('/register');
         }
 
         if ($password !== $confirm) {
-            Session::flash('error', 'Passwords do not match.');
+            Session::flash('error', __('auth.errors.passwords_no_match'));
             Session::redirect('/register');
         }
 
@@ -95,7 +95,7 @@ class AuthController
         $code = trim($_POST['code'] ?? '');
 
         if ($code === '') {
-            Session::flash('error', 'Verification code is required.');
+            Session::flash('error', __('auth.errors.code_required'));
             Session::redirect('/verify-email');
         }
 
@@ -140,7 +140,7 @@ class AuthController
         $code = trim($_POST['code'] ?? '');
 
         if ($code === '') {
-            Session::flash('error', 'Verification code is required.');
+            Session::flash('error', __('auth.errors.code_required'));
             Session::redirect('/verify-ip');
         }
 

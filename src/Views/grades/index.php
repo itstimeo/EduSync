@@ -67,30 +67,30 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 </style>
 
 <div class="page-hd">
-    <h1>Grades</h1>
+    <h1><?= __('grades.title') ?></h1>
     <div style="display:flex;gap:.5rem">
-        <a href="/grades/export" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg> Export PDF</a>
-        <a href="/grades/create" class="btn btn-primary">+ New grade</a>
+        <a href="/grades/export" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v11m0 0l-3.5-3.5M12 15l3.5-3.5"/></svg> <?= __('grades.export_pdf') ?></a>
+        <a href="/grades/create" class="btn btn-primary"><?= __('grades.new_grade') ?></a>
     </div>
 </div>
 
 <div class="avg-banner">
-    <span class="label">Overall average</span>
+    <span class="label"><?= __('grades.overall_average') ?></span>
     <span class="value">
         <?= $average !== null ? number_format($average, 2) . '/20' : '—' ?>
     </span>
 </div>
 
 <div class="tabs">
-    <button class="tab-btn" id="tab-subject" onclick="switchTab('subject')">By subject</button>
-    <button class="tab-btn" id="tab-chrono"  onclick="switchTab('chrono')">Chronological</button>
-    <button class="tab-btn" id="tab-stats"   onclick="switchTab('stats')">Statistics</button>
+    <button class="tab-btn" id="tab-subject" onclick="switchTab('subject')"><?= __('grades.by_subject') ?></button>
+    <button class="tab-btn" id="tab-chrono"  onclick="switchTab('chrono')"><?= __('grades.chronological') ?></button>
+    <button class="tab-btn" id="tab-stats"   onclick="switchTab('stats')"><?= __('grades.statistics') ?></button>
 </div>
 
 <!-- Tab: By subject -->
 <div class="tab-panel" id="panel-subject">
     <?php if (empty($grouped)): ?>
-        <p class="empty">No grades yet.</p>
+        <p class="empty"><?= __('grades.no_grades') ?></p>
     <?php else: ?>
         <?php foreach ($grouped as $group): ?>
             <div class="subject-block">
@@ -98,7 +98,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                     <span class="subject-strip" style="background:<?= htmlspecialchars($group['subject_color'], ENT_QUOTES) ?>"></span>
                     <span class="subject-name"><?= htmlspecialchars($group['subject_name'], ENT_QUOTES) ?></span>
                     <span class="subject-avg">
-                        Avg: <strong><?= $group['average'] !== null ? number_format($group['average'], 2) . '/20' : '—' ?></strong>
+                        <?= __('grades.avg') ?> <strong><?= $group['average'] !== null ? number_format($group['average'], 2) . '/20' : '—' ?></strong>
                     </span>
                 </div>
                 <?php foreach ($group['grades'] as $g): ?>
@@ -117,7 +117,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                             <form method="post" action="/grades/delete">
                                 <input type="hidden" name="id" value="<?= (int)$g['id'] ?>">
                                 <button type="button" class="btn-icon btn-delete" title="Delete"
-                                        onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($g['name']), ENT_QUOTES) ?>»?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                        onclick="esConfirm('<?= htmlspecialchars(__('grades.delete_confirm'), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                             </form>
                         </div>
                     </div>
@@ -130,7 +130,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 <!-- Tab: Chronological -->
 <div class="tab-panel" id="panel-chrono">
     <?php if (empty($all)): ?>
-        <p class="empty">No grades yet.</p>
+        <p class="empty"><?= __('grades.no_grades') ?></p>
     <?php else: ?>
         <?php foreach ($all as $g): ?>
             <div class="chrono-row">
@@ -154,7 +154,7 @@ $iconDel  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                     <form method="post" action="/grades/delete">
                         <input type="hidden" name="id" value="<?= (int)$g['id'] ?>">
                         <button type="button" class="btn-icon btn-delete" title="Delete"
-                                onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($g['name']), ENT_QUOTES) ?>»?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                onclick="esConfirm('<?= htmlspecialchars(__('grades.delete_confirm'), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>
@@ -206,7 +206,7 @@ if (!empty($allGradesForAvg)) {
         $avgData[] = ['x' => $g['graded_at'], 'y' => round(array_sum($subjAvgs) / count($subjAvgs), 2), 'name' => $g['name']];
     }
     $lineDatasets[] = [
-        'label'       => 'Overall average',
+        'label'       => __('grades.overall_average'),
         'data'        => $avgData,
         'borderColor' => '',
         'borderWidth' => 2.5,
@@ -217,7 +217,7 @@ if (!empty($allGradesForAvg)) {
 }
 ?>
     <?php if (empty($grouped)): ?>
-        <p class="empty">No grades yet.</p>
+        <p class="empty"><?= __('grades.no_grades') ?></p>
     <?php else: ?>
         <div class="sf-pills">
             <?php foreach ($grouped as $group): ?>
@@ -227,18 +227,18 @@ if (!empty($allGradesForAvg)) {
             </button>
             <?php endforeach; ?>
             <?php if (!empty($allGradesForAvg)): ?>
-            <button class="sf-pill active" id="pill-overall" data-subject="Overall average" data-color="">
+            <button class="sf-pill active" id="pill-overall" data-subject="<?= htmlspecialchars(__('grades.overall_average'), ENT_QUOTES) ?>" data-color="">
                 <span class="sf-dot" id="dot-overall"></span>
-                Overall average
+                <?= __('grades.overall_average') ?>
             </button>
             <?php endif; ?>
         </div>
         <div class="chart-wrap">
-            <div class="chart-label">Average progression</div>
+            <div class="chart-label"><?= __('grades.avg_progression') ?></div>
             <?php if (!empty($lineDatasets)): ?>
                 <div class="chart-canvas-wrap"><div id="chart-line" style="width:100%;height:100%;position:relative"></div></div>
             <?php else: ?>
-                <p class="chart-empty">Add dates to your grades to see trends.</p>
+                <p class="chart-empty"><?= __('grades.add_dates_hint') ?></p>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -279,7 +279,8 @@ if (!empty($allGradesForAvg)) {
             }
             html += '<button class="pg-btn" onclick="chronoGoTo(' + (cur+1) + ')"' + (cur===total-1?' disabled':'') + '>›</button>';
             pg.innerHTML = html;
-            document.getElementById('chrono-pg-info').textContent = 'Page ' + (cur+1) + ' of ' + total;
+            var _pgTpl = <?= json_encode(__('grades.page_of')) ?>;
+            document.getElementById('chrono-pg-info').textContent = _pgTpl.replace('%d', cur+1).replace('%d', total);
         }
 
         window.chronoGoTo = function(p) {
@@ -326,7 +327,7 @@ if (!empty($allGradesForAvg)) {
     <?php if (!empty($lineDatasets)): ?>
     (function () {
         var NS     = 'http://www.w3.org/2000/svg';
-        var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var MONTHS = <?= json_encode(array_values(__arr('months_short'))) ?>;
 
         // Layout (margins fixed, W/H computed at render time)
         var ML=56, MR=20, MT=18, MB=46;

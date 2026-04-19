@@ -51,32 +51,32 @@
 
 <!-- Informations -->
 <section class="profile-section">
-    <h2>Informations</h2>
+    <h2><?= __('profile.informations') ?></h2>
 
     <form method="POST" action="/profile/info" novalidate id="form-info">
         <div class="name-fields">
             <div class="pf-group">
-                <label for="first_name">First name *</label>
+                <label for="first_name"><?= __('profile.first_name') ?> *</label>
                 <input type="text" id="first_name" name="first_name"
                        value="<?= htmlspecialchars($user['first_name']) ?>" autocomplete="off">
                 <div class="pf-inline-error" id="err-first-name"></div>
             </div>
             <div class="pf-group">
-                <label for="last_name">Last name *</label>
+                <label for="last_name"><?= __('profile.last_name') ?> *</label>
                 <input type="text" id="last_name" name="last_name"
                        value="<?= htmlspecialchars($user['last_name']) ?>" autocomplete="off">
                 <div class="pf-inline-error" id="err-last-name"></div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary"><?= __('common.save') ?></button>
     </form>
 
-    <div class="photo-divider">Profile photo</div>
+    <div class="photo-divider"><?= __('profile.photo') ?></div>
     <div class="photo-editor">
         <!-- Current avatar preview -->
         <div id="avatar-preview">
             <?php if ($user['has_photo']): ?>
-                <img src="/profile/photo" alt="Profile photo" class="avatar-circle">
+                <img src="/profile/photo" alt="<?= __('profile.photo') ?>" class="avatar-circle">
             <?php else: ?>
                 <div class="avatar-initials-lg">
                     <?= htmlspecialchars(mb_strtoupper(mb_substr($user['first_name'], 0, 1))) ?>
@@ -87,23 +87,23 @@
         <div class="crop-area">
             <!-- Upload prompt (shown only when no photo) -->
             <div id="upload-prompt" style="<?= $user['has_photo'] ? 'display:none' : '' ?>">
-                <label for="photo-file-input" class="btn btn-secondary">Upload a photo</label>
-                <div style="font-size:.8rem;color:var(--text-subtle);margin-top:.5rem;">JPEG, PNG or WebP — max 10 MB</div>
+                <label for="photo-file-input" class="btn btn-secondary"><?= __('profile.upload_photo') ?></label>
+                <div style="font-size:.8rem;color:var(--text-subtle);margin-top:.5rem;"><?= __('profile.photo_hint') ?></div>
             </div>
 
             <!-- Crop section (shown only when source image is available) -->
             <div id="crop-section" style="<?= $user['has_photo'] ? '' : 'display:none' ?>">
                 <div id="cropper-wrap"></div>
                 <div class="crop-actions">
-                    <label for="photo-file-input" class="btn btn-secondary">Change image</label>
-                    <button type="button" class="btn btn-primary" id="btn-save-photo">Save photo</button>
+                    <label for="photo-file-input" class="btn btn-secondary"><?= __('profile.change_image') ?></label>
+                    <button type="button" class="btn btn-primary" id="btn-save-photo"><?= __('profile.save_photo') ?></button>
                     <?php if ($user['has_photo']): ?>
                         <form method="POST" action="/profile/photo/delete" style="margin:0;">
                             <button type="button"
                                     class="btn-icon btn-delete"
                                     style="width:auto;padding:0 .75rem;height:32px;font-size:.8rem;border-radius:6px;"
-                                    onclick="esConfirm('Delete your profile photo?', () => this.closest('form').submit())">
-                                Delete photo
+                                    id="btn-delete-photo">
+                                <?= __('profile.delete_photo') ?>
                             </button>
                         </form>
                     <?php endif; ?>
@@ -118,28 +118,37 @@
 
 <!-- Security -->
 <section class="profile-section">
-    <h2>Security</h2>
+    <h2><?= __('profile.security') ?></h2>
     <div class="security-list">
         <div class="security-item">
             <div class="security-item-info">
-                <span class="security-item-label">Email address</span>
+                <span class="security-item-label"><?= __('profile.email_address') ?></span>
                 <span class="security-item-value" id="current-email-display"><?= htmlspecialchars($user['email']) ?></span>
             </div>
-            <button type="button" class="btn btn-secondary" id="btn-open-email">Change</button>
+            <button type="button" class="btn btn-secondary" id="btn-open-email"><?= __('profile.change') ?></button>
         </div>
         <div class="security-item">
             <div class="security-item-info">
-                <span class="security-item-label">Password</span>
+                <span class="security-item-label"><?= __('profile.password') ?></span>
                 <span class="security-item-value">••••••••</span>
             </div>
-            <button type="button" class="btn btn-secondary" id="btn-open-password">Change</button>
+            <button type="button" class="btn btn-secondary" id="btn-open-password"><?= __('profile.change') ?></button>
         </div>
+    </div>
+</section>
+
+<!-- Language -->
+<section class="profile-section">
+    <h2><?= __('profile.language') ?></h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+        <div style="font-size:.875rem;color:var(--text-muted);"><?= __('profile.language_desc') ?></div>
+        <?php include __DIR__ . '/../layouts/_lang_dropdown.php'; ?>
     </div>
 </section>
 
 <!-- Integrations -->
 <section class="profile-section">
-    <h2>Integrations</h2>
+    <h2><?= __('profile.integrations') ?></h2>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:.75rem;">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
@@ -153,7 +162,7 @@
                 <?php if ($gcalEmail): ?>
                     <div style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;"><?= htmlspecialchars($gcalEmail) ?></div>
                 <?php else: ?>
-                    <div style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;">Events won't sync until connected.</div>
+                    <div style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;"><?= __('profile.gcal_not_connected') ?></div>
                 <?php endif; ?>
             </div>
         </div>
@@ -163,8 +172,8 @@
                 <button type="button"
                         style="font-size:.8rem;font-weight:600;padding:.3rem .85rem;border-radius:99px;border:1.5px solid #bbf7d0;background:#f0fdf4;color:#16a34a;cursor:pointer;transition:opacity .15s;"
                         onmouseenter="this.style.opacity='.75'" onmouseleave="this.style.opacity='1'"
-                        onclick="esConfirm('Disconnect Google Calendar?', () => document.getElementById('gcal-disconnect-form').submit())">
-                    ● Connected
+                        id="btn-gcal-disconnect">
+                    <?= __('profile.connected') ?>
                 </button>
             </form>
         <?php else: ?>
@@ -172,7 +181,7 @@
                     style="font-size:.8rem;font-weight:600;padding:.3rem .85rem;border-radius:99px;border:1.5px solid #fecaca;background:#fff1f2;color:#dc2626;cursor:pointer;transition:opacity .15s;"
                     onmouseenter="this.style.opacity='.75'" onmouseleave="this.style.opacity='1'"
                     onclick="document.getElementById('popup-gcal').classList.add('open')">
-                ● Disconnected
+                <?= __('profile.disconnected') ?>
             </button>
         <?php endif; ?>
     </div>
@@ -181,27 +190,27 @@
 <!-- Popup: Google Calendar connect -->
 <div class="pp-overlay" id="popup-gcal">
     <div class="pp-box">
-        <h3>Sync with Google Calendar</h3>
-        <p class="pp-hint">Your planning events will be automatically pushed to your Google Calendar when created, edited or deleted.</p>
+        <h3><?= __('profile.gcal_title') ?></h3>
+        <p class="pp-hint"><?= __('profile.gcal_desc') ?></p>
         <div class="pp-actions">
-            <button class="btn btn-secondary" onclick="closePopup('popup-gcal')">Cancel</button>
-            <a href="/planning/google/connect" class="btn btn-primary">Connect</a>
+            <button class="btn btn-secondary" onclick="closePopup('popup-gcal')"><?= __('common.cancel') ?></button>
+            <a href="/planning/google/connect" class="btn btn-primary"><?= __('profile.connect') ?></a>
         </div>
     </div>
 </div>
 
 <!-- Logout -->
 <section class="profile-section">
-    <h2>Session</h2>
+    <h2><?= __('profile.session') ?></h2>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
         <div>
-            <div style="font-size:.875rem;font-weight:600;color:var(--text);">Log out</div>
-            <div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">End your current session on this device.</div>
+            <div style="font-size:.875rem;font-weight:600;color:var(--text);"><?= __('profile.logout') ?></div>
+            <div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;"><?= __('profile.logout_desc') ?></div>
         </div>
         <button type="button" class="btn btn-secondary"
                 style="color:#ef4444;border-color:#fecaca;"
-                onclick="esConfirm('Log out of your account?', () => window.location='/logout')">
-            Log out
+                id="btn-logout">
+            <?= __('profile.logout') ?>
         </button>
     </div>
 </section>
@@ -209,38 +218,38 @@
 <!-- Popup: email change -->
 <div class="pp-overlay" id="popup-email">
     <div class="pp-box">
-        <h3>Change email address</h3>
+        <h3><?= __('profile.email_popup_title') ?></h3>
         <div class="pp-step active" id="email-step-1">
             <div class="pf-group">
-                <label>Current email *</label>
+                <label><?= __('profile.current_email') ?> *</label>
                 <input type="email" id="email-current" autocomplete="off">
                 <div class="pf-inline-error" id="err-email-current"></div>
             </div>
             <div class="pf-group">
-                <label>New email *</label>
+                <label><?= __('profile.new_email') ?> *</label>
                 <input type="email" id="email-new" autocomplete="off">
                 <div class="pf-inline-error" id="err-email-new"></div>
             </div>
             <div class="pp-actions">
-                <button class="btn btn-secondary" onclick="closePopup('popup-email')">Cancel</button>
-                <button class="btn btn-primary" id="btn-email-send">Send codes</button>
+                <button class="btn btn-secondary" onclick="closePopup('popup-email')"><?= __('common.cancel') ?></button>
+                <button class="btn btn-primary" id="btn-email-send"><?= __('profile.send_codes') ?></button>
             </div>
         </div>
         <div class="pp-step" id="email-step-2">
-            <p class="pp-hint">Codes have been sent to both addresses. Enter them below.</p>
+            <p class="pp-hint"><?= __('profile.codes_sent') ?></p>
             <div class="pf-group">
-                <label>Code sent to current email *</label>
+                <label><?= __('profile.code_old_email') ?> *</label>
                 <input type="text" id="email-code-old" maxlength="6" placeholder="000000" autocomplete="off">
                 <div class="pf-inline-error" id="err-code-old"></div>
             </div>
             <div class="pf-group">
-                <label>Code sent to new email *</label>
+                <label><?= __('profile.code_new_email') ?> *</label>
                 <input type="text" id="email-code-new" maxlength="6" placeholder="000000" autocomplete="off">
                 <div class="pf-inline-error" id="err-code-new"></div>
             </div>
             <div class="pp-actions">
-                <button class="btn btn-secondary" onclick="closePopup('popup-email')">Cancel</button>
-                <button class="btn btn-primary" id="btn-email-verify">Confirm</button>
+                <button class="btn btn-secondary" onclick="closePopup('popup-email')"><?= __('common.cancel') ?></button>
+                <button class="btn btn-primary" id="btn-email-verify"><?= __('profile.confirm') ?></button>
             </div>
         </div>
     </div>
@@ -249,31 +258,49 @@
 <!-- Popup: password change -->
 <div class="pp-overlay" id="popup-password">
     <div class="pp-box">
-        <h3>Change password</h3>
+        <h3><?= __('profile.pw_popup_title') ?></h3>
         <div class="pf-group">
-            <label>Current password *</label>
+            <label><?= __('profile.current_password') ?> *</label>
             <input type="password" id="pw-current">
             <div class="pf-inline-error" id="err-pw-current"></div>
         </div>
         <div class="pf-group">
-            <label>New password * <span style="font-weight:400;color:var(--text-subtle)">(min. 8 characters)</span></label>
+            <label><?= __('profile.new_password') ?> * <span style="font-weight:400;color:var(--text-subtle)"><?= __('profile.pw_hint') ?></span></label>
             <input type="password" id="pw-new">
             <div class="pf-inline-error" id="err-pw-new"></div>
         </div>
         <div class="pf-group">
-            <label>Confirm new password *</label>
+            <label><?= __('profile.confirm_new_pw') ?> *</label>
             <input type="password" id="pw-confirm">
             <div class="pf-inline-error" id="err-pw-confirm"></div>
         </div>
         <div class="pp-actions">
-            <button class="btn btn-secondary" onclick="closePopup('popup-password')">Cancel</button>
-            <button class="btn btn-primary" id="btn-pw-save">Save</button>
+            <button class="btn btn-secondary" onclick="closePopup('popup-password')"><?= __('common.cancel') ?></button>
+            <button class="btn btn-primary" id="btn-pw-save"><?= __('common.save') ?></button>
         </div>
     </div>
 </div>
 
 <script>
 (function () {
+    var LANG = {
+        required:        <?= json_encode(__('common.required')) ?>,
+        error:           <?= json_encode(__('common.error')) ?>,
+        pwTooShort:      <?= json_encode(__('profile.pw_too_short')) ?>,
+        pwNoMatch:       <?= json_encode(__('profile.pw_no_match')) ?>,
+        saving:          <?= json_encode(__('profile.saving')) ?>,
+        sending:         <?= json_encode(__('profile.sending')) ?>,
+        verifying:       <?= json_encode(__('profile.verifying')) ?>,
+        confirm:         <?= json_encode(__('profile.confirm')) ?>,
+        save:            <?= json_encode(__('common.save')) ?>,
+        sendCodes:       <?= json_encode(__('profile.send_codes')) ?>,
+        savePhoto:       <?= json_encode(__('profile.save_photo')) ?>,
+        passwordUpdated: <?= json_encode(__('profile.password_updated')) ?>,
+        deletePhotoConfirm: <?= json_encode(__('profile.delete_photo_confirm')) ?>,
+        gcalDisconnectConfirm: <?= json_encode(__('profile.gcal_disconnect_confirm')) ?>,
+        logoutConfirm:   <?= json_encode(__('profile.logout_confirm')) ?>
+    };
+
     // ── Shared helpers ──────────────────────────────────────────
     window.closePopup = function (id) {
         document.getElementById(id).classList.remove('open');
@@ -294,10 +321,31 @@
     document.getElementById('form-info').addEventListener('submit', function (e) {
         var ok = true;
         [['first_name', 'err-first-name'], ['last_name', 'err-last-name']].forEach(function (p) {
-            if (!document.getElementById(p[0]).value.trim()) { setErr(p[1], 'Required.'); ok = false; }
+            if (!document.getElementById(p[0]).value.trim()) { setErr(p[1], LANG.required); ok = false; }
             else setErr(p[1], '');
         });
         if (!ok) e.preventDefault();
+    });
+
+    // ── Confirm buttons ─────────────────────────────────────────
+    var btnDeletePhoto = document.getElementById('btn-delete-photo');
+    if (btnDeletePhoto) {
+        btnDeletePhoto.addEventListener('click', function () {
+            esConfirm(LANG.deletePhotoConfirm, function () {
+                btnDeletePhoto.closest('form').submit();
+            });
+        });
+    }
+    var btnGcalDisconnect = document.getElementById('btn-gcal-disconnect');
+    if (btnGcalDisconnect) {
+        btnGcalDisconnect.addEventListener('click', function () {
+            esConfirm(LANG.gcalDisconnectConfirm, function () {
+                document.getElementById('gcal-disconnect-form').submit();
+            });
+        });
+    }
+    document.getElementById('btn-logout').addEventListener('click', function () {
+        esConfirm(LANG.logoutConfirm, function () { window.location = '/logout'; });
     });
 
     // ── Custom crop component ───────────────────────────────────
@@ -529,7 +577,7 @@
         var btn = this;
         localStorage.setItem(cropKey, JSON.stringify(cropper.getSaveData()));
         var canvas = cropper.getCroppedCanvas(256);
-        btn.textContent = 'Saving…';
+        btn.textContent = LANG.saving;
         btn.disabled = true;
         canvas.toBlob(function (blob) {
             var fd = new FormData();
@@ -541,9 +589,9 @@
                     if (data.ok) {
                         location.reload();
                     } else {
-                        document.getElementById('photo-error').textContent = data.error || 'Error.';
+                        document.getElementById('photo-error').textContent = data.error || LANG.error;
                         document.getElementById('photo-error').style.display = 'block';
-                        btn.textContent = 'Save photo';
+                        btn.textContent = LANG.savePhoto;
                         btn.disabled = false;
                     }
                 });
@@ -566,20 +614,20 @@
         setErr('err-email-current', ''); setErr('err-email-new', '');
         var cur = document.getElementById('email-current').value.trim();
         var nw  = document.getElementById('email-new').value.trim();
-        if (!cur) { setErr('err-email-current', 'Required.'); return; }
-        if (!nw)  { setErr('err-email-new', 'Required.'); return; }
-        btn.textContent = 'Sending…'; btn.disabled = true;
+        if (!cur) { setErr('err-email-current', LANG.required); return; }
+        if (!nw)  { setErr('err-email-new', LANG.required); return; }
+        btn.textContent = LANG.sending; btn.disabled = true;
         var fd = new FormData(); fd.append('current_email', cur); fd.append('new_email', nw);
         fetch('/profile/email/request', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                btn.textContent = 'Send codes'; btn.disabled = false;
+                btn.textContent = LANG.sendCodes; btn.disabled = false;
                 if (data.ok) {
                     document.getElementById('email-step-1').classList.remove('active');
                     document.getElementById('email-step-2').classList.add('active');
                 } else {
                     var isCurrentErr = data.error && data.error.toLowerCase().indexOf('current') !== -1;
-                    setErr(isCurrentErr ? 'err-email-current' : 'err-email-new', data.error || 'Error.');
+                    setErr(isCurrentErr ? 'err-email-current' : 'err-email-new', data.error || LANG.error);
                 }
             });
     });
@@ -589,18 +637,18 @@
         setErr('err-code-old', ''); setErr('err-code-new', '');
         var co = document.getElementById('email-code-old').value.trim();
         var cn = document.getElementById('email-code-new').value.trim();
-        if (!co) { setErr('err-code-old', 'Required.'); return; }
-        if (!cn) { setErr('err-code-new', 'Required.'); return; }
-        btn.textContent = 'Verifying…'; btn.disabled = true;
+        if (!co) { setErr('err-code-old', LANG.required); return; }
+        if (!cn) { setErr('err-code-new', LANG.required); return; }
+        btn.textContent = LANG.verifying; btn.disabled = true;
         var fd = new FormData(); fd.append('code_old', co); fd.append('code_new', cn);
         fetch('/profile/email/verify', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                btn.textContent = 'Confirm'; btn.disabled = false;
+                btn.textContent = LANG.confirm; btn.disabled = false;
                 if (data.ok) { closePopup('popup-email'); location.reload(); }
                 else {
                     var isOldErr = data.error && data.error.toLowerCase().indexOf('current') !== -1;
-                    setErr(isOldErr ? 'err-code-old' : 'err-code-new', data.error || 'Error.');
+                    setErr(isOldErr ? 'err-code-old' : 'err-code-new', data.error || LANG.error);
                 }
             });
     });
@@ -619,11 +667,11 @@
         var nw   = document.getElementById('pw-new').value;
         var conf = document.getElementById('pw-confirm').value;
         var ok   = true;
-        if (!cur)           { setErr('err-pw-current', 'Required.'); ok = false; }
-        if (nw.length < 8)  { setErr('err-pw-new', 'At least 8 characters.'); ok = false; }
-        if (nw !== conf)    { setErr('err-pw-confirm', 'Passwords do not match.'); ok = false; }
+        if (!cur)           { setErr('err-pw-current', LANG.required); ok = false; }
+        if (nw.length < 8)  { setErr('err-pw-new', LANG.pwTooShort); ok = false; }
+        if (nw !== conf)    { setErr('err-pw-confirm', LANG.pwNoMatch); ok = false; }
         if (!ok) return;
-        btn.textContent = 'Saving…'; btn.disabled = true;
+        btn.textContent = LANG.saving; btn.disabled = true;
         var fd = new FormData();
         fd.append('current_password', cur);
         fd.append('new_password', nw);
@@ -631,15 +679,15 @@
         fetch('/profile/password', { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                btn.textContent = 'Save'; btn.disabled = false;
+                btn.textContent = LANG.save; btn.disabled = false;
                 if (data.ok) {
                     closePopup('popup-password');
                     var wrap = document.querySelector('.wrapper');
                     var flash = document.createElement('div');
                     flash.className = 'flash success';
-                    flash.textContent = 'Password updated successfully.';
+                    flash.textContent = LANG.passwordUpdated;
                     wrap.insertBefore(flash, wrap.firstChild);
-                } else { setErr('err-pw-current', data.error || 'Error.'); }
+                } else { setErr('err-pw-current', data.error || LANG.error); }
             });
     });
 })();
