@@ -372,6 +372,7 @@ return [
         'repetition'      => 'Repetition %d/%d',
         'overdue'         => 'overdue',
         'reviewed_next'   => 'Reviewed today — Next:',
+        'next_overdue'    => 'Next step is also overdue — click to advance',
         'last_step'       => 'Last step done — marked as mastered',
         'stop_tracking'   => 'Stop tracking this item?',
         'track_new'       => 'Track a new item',

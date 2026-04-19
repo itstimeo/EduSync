@@ -89,18 +89,19 @@ class RevisionSession
         }
 
         $isChecked = ($session['reviewed_today'] === date('Y-m-d'));
+        $intervals = json_decode($session['intervals'], true) ?: self::DEFAULT_INTERVALS;
 
         if ($isChecked) {
-            // Uncheck: revert interval by one step, put back as due today
+            // Uncheck: revert to previous step, restore original due date from start_date
             $prevIndex = max(0, (int)$session['interval_index'] - 1);
+            $days      = (int)($intervals[$prevIndex]['day'] ?? 1);
             $db->prepare(
-                'UPDATE revision_sessions SET interval_index = ?, next_revision_date = CURDATE(), reviewed_today = NULL WHERE id = ? AND user_id = ?'
-            )->execute([$prevIndex, $id, $userId]);
+                'UPDATE revision_sessions SET interval_index = ?, next_revision_date = DATE_ADD(start_date, INTERVAL ? DAY), reviewed_today = NULL WHERE id = ? AND user_id = ?'
+            )->execute([$prevIndex, $days, $id, $userId]);
             return false;
         }
 
-        // Check: advance interval
-        $intervals = json_decode($session['intervals'], true) ?: self::DEFAULT_INTERVALS;
+        // Check: advance interval, next date computed from start_date (absolute intervals)
         $nextIndex = (int)$session['interval_index'] + 1;
 
         if ($nextIndex >= count($intervals)) {
@@ -109,7 +110,7 @@ class RevisionSession
         } else {
             $days = (int)($intervals[$nextIndex]['day'] ?? 1);
             $db->prepare(
-                'UPDATE revision_sessions SET interval_index = ?, next_revision_date = DATE_ADD(CURDATE(), INTERVAL ? DAY), reviewed_today = CURDATE() WHERE id = ? AND user_id = ?'
+                'UPDATE revision_sessions SET interval_index = ?, next_revision_date = DATE_ADD(start_date, INTERVAL ? DAY), reviewed_today = CURDATE() WHERE id = ? AND user_id = ?'
             )->execute([$nextIndex, $days, $id, $userId]);
         }
         return true;
@@ -148,7 +149,7 @@ class RevisionSession
             $days = (int) ($intervals[$nextIndex]['day'] ?? 1);
             $db->prepare(
                 'UPDATE revision_sessions
-                 SET interval_index = ?, next_revision_date = DATE_ADD(CURDATE(), INTERVAL ? DAY)
+                 SET interval_index = ?, next_revision_date = DATE_ADD(start_date, INTERVAL ? DAY), reviewed_today = NULL
                  WHERE id = ? AND user_id = ?'
             )->execute([$nextIndex, $days, $id, $userId]);
         }

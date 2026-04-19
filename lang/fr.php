@@ -372,6 +372,7 @@ return [
         'repetition'      => 'Répétition %d/%d',
         'overdue'         => 'en retard',
         'reviewed_next'   => 'Révisé aujourd\'hui — Prochain :',
+        'next_overdue'    => 'L\'étape suivante est aussi en retard — cliquer pour avancer',
         'last_step'       => 'Dernière étape validée — maîtrisé',
         'stop_tracking'   => 'Arrêter le suivi de cet élément ?',
         'track_new'       => 'Suivre un nouvel élément',
