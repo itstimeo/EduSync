@@ -27,6 +27,28 @@
     .pcrop-handle-sw { bottom:-6px; left:-6px; cursor:sw-resize; }
     .pcrop-handle-se { bottom:-6px; right:-6px; cursor:se-resize; }
     .crop-actions { display: flex; gap: .6rem; margin-top: .75rem; flex-wrap: wrap; align-items: center; }
+    /* Academic year dropdown */
+    .ay-dropdown{position:relative;display:inline-block;flex-shrink:0}
+    .ay-dd-btn{display:flex;align-items:center;gap:.35rem;padding:.38rem .65rem .38rem .55rem;border-radius:8px;border:1px solid var(--border-soft);background:var(--surface);color:var(--text);cursor:pointer;font-size:.875rem;font-weight:500;font-family:inherit;transition:background .15s;max-width:220px}
+    .ay-dd-btn:hover{background:var(--bg-subtle)}
+    .ay-dd-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ay-dd-chevron{transition:transform .2s;color:var(--text-subtle);flex-shrink:0}
+    .ay-dropdown.open .ay-dd-chevron{transform:rotate(180deg)}
+    .ay-dd-menu{display:none;position:absolute;top:calc(100% + 5px);left:0;background:var(--surface);border:1px solid var(--border-soft);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);min-width:180px;overflow:hidden;z-index:1000}
+    .ay-dropdown.open .ay-dd-menu{display:block}
+    .ay-dd-option{display:flex;align-items:center;gap:.5rem;padding:.55rem .85rem;font-size:.875rem;color:var(--text);text-decoration:none;font-weight:500;transition:background .12s}
+    .ay-dd-option:hover{background:var(--bg-subtle)}
+    .ay-dd-option.active{color:#6366f1;font-weight:700;background:var(--purple-tint)}
+    /* Academic year popup list */
+    .ay-popup-list{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.25rem}
+    .ay-popup-row{display:flex;align-items:center;gap:.5rem}
+    .ay-popup-rename{display:flex;align-items:center;gap:.4rem;flex:1;min-width:0}
+    .ay-popup-rename input[type="text"]{flex:1;min-width:0;padding:.38rem .6rem;font-size:.825rem;border:1px solid var(--border-soft);border-radius:6px;background:var(--input-bg);color:var(--text);outline:none}
+    .ay-popup-rename input[type="text"]:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+    .ay-popup-badge{font-size:.68rem;font-weight:700;padding:.1rem .45rem;border-radius:99px;background:#6366f1;color:#fff;flex-shrink:0;white-space:nowrap}
+    .ay-popup-name-label{font-size:.875rem;font-weight:500;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ay-popup-divider{height:1px;background:var(--border);margin:.85rem 0 .75rem}
+    .btn-sm{padding:.3rem .7rem;font-size:.8rem}
     /* Security */
     .security-list { display: flex; flex-direction: column; gap: .75rem; }
     .security-item { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; border: 1px solid var(--border); border-radius: 8px; gap: 1rem; }
@@ -136,6 +158,168 @@
         </div>
     </div>
 </section>
+
+<!-- Academic year -->
+<section class="profile-section">
+    <h2><?= __('profile.academic_year') ?></h2>
+    <div style="font-size:.875rem;color:var(--text-muted);margin-bottom:1rem;"><?= __('profile.academic_year_desc') ?></div>
+    <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+        <?php if (empty($years)): ?>
+            <span style="font-size:.875rem;color:var(--text-subtle);"><?= __('profile.academic_year_none') ?></span>
+        <?php else: ?>
+        <span style="font-size:.8rem;font-weight:600;color:var(--text-muted);white-space:nowrap;"><?= __('academic_year.active') ?> :</span>
+        <!-- Custom year dropdown -->
+        <div class="ay-dropdown" id="ay-dropdown">
+            <button type="button" class="ay-dd-btn" id="ay-dd-btn">
+                <span class="ay-dd-name"><?= htmlspecialchars($activeYear['name'] ?? __('academic_year.no_year'), ENT_QUOTES) ?></span>
+                <svg class="ay-dd-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="ay-dd-menu" id="ay-dd-menu">
+                <?php foreach ($years as $y):
+                    $isAct = $activeYear && (int)$y['id'] === (int)$activeYear['id'];
+                ?>
+                <a href="/academic-years/switch?id=<?= (int)$y['id'] ?>&redirect_to=/profile"
+                   class="ay-dd-option<?= $isAct ? ' active' : '' ?>">
+                    <?php if ($isAct): ?>
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="#6366f1" style="flex-shrink:0"><circle cx="12" cy="12" r="6"/></svg>
+                    <?php else: ?>
+                        <span style="width:9px;flex-shrink:0;display:inline-block;"></span>
+                    <?php endif; ?>
+                    <?= htmlspecialchars($y['name'], ENT_QUOTES) ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('popup-ay').classList.add('open')">
+            <?= __('profile.academic_year_manage') ?>
+        </button>
+    </div>
+</section>
+
+<!-- Popup: manage academic years -->
+<div class="pp-overlay" id="popup-ay">
+    <div class="pp-box" style="max-width:480px;width:95%;">
+        <h3><?= __('profile.academic_year') ?></h3>
+
+        <?php if (!empty($years)): ?>
+        <div class="ay-popup-list">
+            <?php foreach ($years as $y):
+                $isAct = $activeYear && (int)$y['id'] === (int)$activeYear['id'];
+                $c     = $yearsContents[(int)$y['id']] ?? ['subjects'=>0,'themes'=>0,'chapters'=>0,'documents'=>0,'grades'=>0];
+                $hasData = array_sum($c) > 0;
+            ?>
+            <div class="ay-popup-row">
+                <span class="ay-popup-name-label"><?= htmlspecialchars($y['name'], ENT_QUOTES) ?></span>
+                <?php if ($isAct): ?>
+                    <span class="ay-popup-badge"><?= __('academic_year.active') ?></span>
+                <?php endif; ?>
+                <div style="margin-left:auto;display:flex;gap:.35rem;flex-shrink:0;">
+                    <!-- Rename button -->
+                    <button type="button" class="btn-icon btn-edit"
+                        onclick="openAyRename(<?= (int)$y['id'] ?>, '<?= htmlspecialchars(addslashes($y['name']), ENT_QUOTES) ?>')"
+                        title="<?= htmlspecialchars(__('common.edit'), ENT_QUOTES) ?>">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                    <!-- Export button -->
+                    <a href="/academic-years/export?id=<?= (int)$y['id'] ?>"
+                       class="btn-icon btn-download"
+                       title="<?= htmlspecialchars(__('academic_year.download_zip'), ENT_QUOTES) ?>">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </a>
+                    <?php if (!$isAct): ?>
+                    <!-- Delete button -->
+                    <button type="button" class="btn-icon btn-delete"
+                        onclick="openAyDelete(<?= (int)$y['id'] ?>, '<?= htmlspecialchars(addslashes($y['name']), ENT_QUOTES) ?>', <?= $hasData ? 'true' : 'false' ?>, <?= htmlspecialchars(json_encode($c), ENT_QUOTES) ?>)"
+                        title="<?= htmlspecialchars(__('common.delete'), ENT_QUOTES) ?>">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M4 7h16M10 3h4a1 1 0 011 1v3H9V4a1 1 0 011-1z"/></svg>
+                    </button>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="ay-popup-divider"></div>
+        <?php endif; ?>
+
+        <!-- Create new year -->
+        <form method="POST" action="/academic-years/create" novalidate id="form-ay-popup-create">
+            <input type="hidden" name="redirect_to" value="/profile">
+            <label style="display:block;font-size:.8rem;font-weight:600;color:var(--text-muted);margin-bottom:.3rem;">
+                <?= __('academic_year.new_name') ?> <span style="color:#ef4444">*</span>
+            </label>
+            <div style="display:flex;gap:.5rem;align-items:center;">
+                <input type="text" name="name" id="ay-popup-name"
+                       placeholder="<?= htmlspecialchars(__('academic_year.name_placeholder'), ENT_QUOTES) ?>"
+                       style="flex:1;padding:.48rem .75rem;font-size:.875rem;border:1px solid var(--border-soft);border-radius:6px;background:var(--input-bg);color:var(--text);outline:none;">
+                <button type="submit" class="btn btn-primary"><?= __('common.create') ?></button>
+            </div>
+            <div id="ay-popup-name-err" style="font-size:.75rem;color:#ef4444;margin-top:.3rem;display:none;"></div>
+        </form>
+
+        <div class="pp-actions" style="margin-top:1.25rem;">
+            <button class="btn btn-secondary" onclick="closePopup('popup-ay')"><?= __('common.cancel') ?></button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup: rename year -->
+<div class="pp-overlay" id="popup-ay-rename">
+    <div class="pp-box" style="max-width:400px;width:95%;">
+        <h3><?= __('academic_year.rename_title') ?></h3>
+        <form method="POST" action="/academic-years/rename" novalidate id="form-ay-rename">
+            <input type="hidden" name="id" id="ay-rename-id">
+            <input type="hidden" name="redirect_to" value="/profile">
+            <label style="display:block;font-size:.8rem;font-weight:600;color:var(--text-muted);margin-bottom:.3rem;">
+                <?= __('academic_year.new_name') ?> <span style="color:#ef4444">*</span>
+            </label>
+            <input type="text" name="name" id="ay-rename-input"
+                   style="width:100%;padding:.5rem .75rem;font-size:.875rem;border:1px solid var(--border-soft);border-radius:6px;background:var(--input-bg);color:var(--text);outline:none;">
+            <div id="ay-rename-err" style="font-size:.75rem;color:#ef4444;margin-top:.3rem;display:none;"></div>
+            <div class="pp-actions" style="margin-top:1rem;">
+                <button type="button" class="btn btn-secondary" onclick="closePopup('popup-ay-rename')"><?= __('common.cancel') ?></button>
+                <button type="submit" class="btn btn-primary"><?= __('common.rename') ?></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Popup: delete year with data -->
+<div class="pp-overlay" id="popup-ay-delete">
+    <div class="pp-box" style="max-width:420px;width:95%;">
+        <h3 id="ay-del-title"></h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1rem;" id="ay-del-warning"></p>
+        <!-- Contents summary -->
+        <div id="ay-del-contents" style="background:var(--bg-subtle);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.825rem;display:flex;flex-direction:column;gap:.3rem;"></div>
+        <!-- Download ZIP -->
+        <a id="ay-del-zip-btn" href="#" class="btn btn-secondary" style="margin-bottom:1.25rem;width:100%;justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <?= __('academic_year.download_zip') ?>
+        </a>
+        <!-- Password confirmation -->
+        <div id="ay-del-pw-section">
+            <label style="display:block;font-size:.8rem;font-weight:600;color:var(--text-muted);margin-bottom:.3rem;">
+                <?= __('academic_year.confirm_password') ?> <span style="color:#ef4444">*</span>
+            </label>
+            <input type="password" id="ay-del-pw" autocomplete="current-password"
+                   style="width:100%;padding:.5rem .75rem;font-size:.875rem;border:1px solid var(--border-soft);border-radius:6px;background:var(--input-bg);color:var(--text);outline:none;">
+            <div id="ay-del-pw-err" style="font-size:.75rem;color:#ef4444;margin-top:.3rem;display:none;"></div>
+        </div>
+        <div class="pp-actions" style="margin-top:1rem;">
+            <button type="button" class="btn btn-secondary" onclick="closePopup('popup-ay-delete');document.getElementById('ay-del-pw').value='';"><?= __('common.cancel') ?></button>
+            <button type="button" class="btn btn-primary" id="ay-del-submit"
+                    style="background:#ef4444;border-color:#ef4444;">
+                <?= __('academic_year.force_delete') ?>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden form for simple delete (no data) -->
+<form method="POST" action="/academic-years/delete" id="form-ay-simple-delete" style="display:none;">
+    <input type="hidden" name="id" id="ay-simple-delete-id">
+    <input type="hidden" name="redirect_to" value="/profile">
+</form>
 
 <!-- Language -->
 <section class="profile-section">
@@ -316,6 +500,190 @@
         var inp = el.previousElementSibling;
         if (inp && inp.tagName === 'INPUT') inp.classList.toggle('inp-error', !!msg);
     }
+
+    // ── Academic year dropdown ──────────────────────────────────
+    (function () {
+        var dd  = document.getElementById('ay-dropdown');
+        var btn = document.getElementById('ay-dd-btn');
+        var menu = document.getElementById('ay-dd-menu');
+        if (!dd || !btn || !menu) return;
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dd.classList.toggle('open');
+        });
+        document.addEventListener('click', function (e) {
+            if (!dd.contains(e.target)) dd.classList.remove('open');
+        });
+    })();
+
+    // ── Academic year popup: create form validation ─────────────
+    (function () {
+        var form = document.getElementById('form-ay-popup-create');
+        var inp  = document.getElementById('ay-popup-name');
+        var err  = document.getElementById('ay-popup-name-err');
+        if (!form) return;
+        form.addEventListener('submit', function (e) {
+            var v = inp.value.trim();
+            if (!v) {
+                e.preventDefault();
+                inp.style.borderColor = '#f87171';
+                err.textContent = LANG.required;
+                err.style.display = 'block';
+            } else if (v.length > 100) {
+                e.preventDefault();
+                inp.style.borderColor = '#f87171';
+                err.textContent = <?= json_encode(__('academic_year.name_too_long')) ?>;
+                err.style.display = 'block';
+            } else {
+                inp.style.borderColor = '';
+                err.style.display = 'none';
+            }
+        });
+        inp.addEventListener('input', function () {
+            var v = inp.value.trim();
+            if (!v) return;
+            if (v.length > 100) {
+                inp.style.borderColor = '#f87171';
+                err.textContent = <?= json_encode(__('academic_year.name_too_long')) ?>;
+                err.style.display = 'block';
+            } else {
+                inp.style.borderColor = '';
+                err.style.display = 'none';
+            }
+        });
+    })();
+
+    // ── Academic year: open rename popup ────────────────────────
+    window.openAyRename = function (id, name) {
+        document.getElementById('ay-rename-id').value    = id;
+        document.getElementById('ay-rename-input').value = name;
+        document.getElementById('ay-rename-err').style.display = 'none';
+        document.getElementById('ay-rename-input').style.borderColor = '';
+        closePopup('popup-ay');
+        document.getElementById('popup-ay-rename').classList.add('open');
+    };
+
+    // Rename form validation
+    (function () {
+        var form = document.getElementById('form-ay-rename');
+        var inp  = document.getElementById('ay-rename-input');
+        var err  = document.getElementById('ay-rename-err');
+        if (!form) return;
+        form.addEventListener('submit', function (e) {
+            var v = inp.value.trim();
+            if (!v) {
+                e.preventDefault();
+                inp.style.borderColor = '#f87171';
+                err.textContent = LANG.required;
+                err.style.display = 'block';
+            } else if (v.length > 100) {
+                e.preventDefault();
+                inp.style.borderColor = '#f87171';
+                err.textContent = <?= json_encode(__('academic_year.name_too_long')) ?>;
+                err.style.display = 'block';
+            }
+        });
+        inp.addEventListener('input', function () {
+            var v = inp.value.trim();
+            if (!v) return;
+            if (v.length > 100) {
+                inp.style.borderColor = '#f87171';
+                err.textContent = <?= json_encode(__('academic_year.name_too_long')) ?>;
+                err.style.display = 'block';
+            } else {
+                inp.style.borderColor = '';
+                err.style.display = 'none';
+            }
+        });
+    })();
+
+    // ── Academic year: open delete popup ────────────────────────
+    var LANG_AY = {
+        subjectsCount:  <?= json_encode(__('academic_year.subjects_count'))  ?>,
+        themesCount:    <?= json_encode(__('academic_year.themes_count'))    ?>,
+        chaptersCount:  <?= json_encode(__('academic_year.chapters_count'))  ?>,
+        documentsCount: <?= json_encode(__('academic_year.documents_count')) ?>,
+        gradesCount:    <?= json_encode(__('academic_year.grades_count'))    ?>,
+        deleteTitle:    <?= json_encode(__('academic_year.delete_data_title'))  ?>,
+        deleteWarning:  <?= json_encode(__('academic_year.delete_data_warning')) ?>,
+        deleteConfirm:  <?= json_encode(__('academic_year.delete_confirm'))  ?>,
+        wrongPassword:  <?= json_encode(__('academic_year.wrong_password'))  ?>,
+        deleting:       <?= json_encode(__('academic_year.deleting'))        ?>,
+        forceDelete:    <?= json_encode(__('academic_year.force_delete'))    ?>,
+        required:       <?= json_encode(__('common.required'))               ?>
+    };
+
+    window.openAyDelete = function (id, name, hasData, contents) {
+        if (!hasData) {
+            // Simple confirm + form submit
+            esConfirm(LANG_AY.deleteConfirm, function () {
+                document.getElementById('ay-simple-delete-id').value = id;
+                document.getElementById('form-ay-simple-delete').submit();
+            });
+            return;
+        }
+
+        // Populate delete popup
+        document.getElementById('ay-del-title').textContent   = LANG_AY.deleteTitle;
+        document.getElementById('ay-del-warning').textContent = LANG_AY.deleteWarning;
+        document.getElementById('ay-del-zip-btn').href        = '/academic-years/export?id=' + id;
+        document.getElementById('ay-del-pw').value            = '';
+        document.getElementById('ay-del-pw-err').style.display = 'none';
+        document.getElementById('ay-del-submit').dataset.id   = id;
+        document.getElementById('ay-del-submit').textContent  = LANG_AY.forceDelete;
+
+        // Contents summary
+        var box  = document.getElementById('ay-del-contents');
+        box.innerHTML = '';
+        var rows = [
+            [contents.subjects,  LANG_AY.subjectsCount],
+            [contents.themes,    LANG_AY.themesCount],
+            [contents.chapters,  LANG_AY.chaptersCount],
+            [contents.documents, LANG_AY.documentsCount],
+            [contents.grades,    LANG_AY.gradesCount]
+        ];
+        rows.forEach(function (r) {
+            if (r[0] > 0) {
+                var el = document.createElement('div');
+                el.textContent = r[1].replace('%d', r[0]);
+                el.style.color = 'var(--text-muted)';
+                box.appendChild(el);
+            }
+        });
+
+        closePopup('popup-ay');
+        document.getElementById('popup-ay-delete').classList.add('open');
+    };
+
+    // Force delete submit
+    document.getElementById('ay-del-submit').addEventListener('click', function () {
+        var btn = this;
+        var pw  = document.getElementById('ay-del-pw').value;
+        var err = document.getElementById('ay-del-pw-err');
+        if (!pw) {
+            err.textContent = LANG_AY.required;
+            err.style.display = 'block';
+            return;
+        }
+        err.style.display = 'none';
+        btn.textContent = LANG_AY.deleting;
+        btn.disabled    = true;
+        var fd = new FormData();
+        fd.append('id', btn.dataset.id);
+        fd.append('password', pw);
+        fetch('/academic-years/force-delete', { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.ok) {
+                    location.reload();
+                } else {
+                    err.textContent     = data.error || LANG.error;
+                    err.style.display   = 'block';
+                    btn.textContent     = LANG_AY.forceDelete;
+                    btn.disabled        = false;
+                }
+            });
+    });
 
     // ── Name form validation ────────────────────────────────────
     document.getElementById('form-info').addEventListener('submit', function (e) {

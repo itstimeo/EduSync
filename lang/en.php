@@ -38,6 +38,8 @@ return [
         'new'          => 'New',
         'no_items'     => 'Nothing here yet.',
         'error'        => 'Error.',
+        'rename'       => 'Rename',
+        'create'       => 'Create',
     ],
 
     // ── Auth ──────────────────────────────────────────────────────────
@@ -354,6 +356,12 @@ return [
         'sending'         => 'Sending…',
         'verifying'       => 'Verifying…',
 
+        // Academic year section
+        'academic_year'      => 'Academic year',
+        'academic_year_desc' => 'Choose the active year for courses and grades.',
+        'academic_year_none' => 'No academic year created yet.',
+        'academic_year_manage' => 'Manage years',
+
         // Google Calendar flash
         'gcal_connected'       => 'Google Calendar connected.',
         'gcal_disconnected'    => 'Google Calendar disconnected.',
@@ -446,6 +454,43 @@ return [
 
         // Confirm
         'delete_confirm'  => 'Delete preset "%s"? Existing sessions are not affected.',
+    ],
+
+    // ── Academic year ─────────────────────────────────────────────────
+    'academic_year' => [
+        'title'            => 'Academic years',
+        'new'              => 'New academic year',
+        'name_placeholder' => 'e.g. 2024-2025, L1 Law, Terminale…',
+        'rename_placeholder'=> 'New name…',
+        'active'           => 'Active',
+        'set_active'       => 'Set as active',
+        'setup_hint'       => 'Please create an academic year to get started.',
+        'none'             => 'No academic years yet.',
+        'required'         => 'Please create an academic year first.',
+        'has_subjects'     => 'This year has subjects attached and cannot be deleted.',
+        'name_required'    => 'Please enter a name.',
+        'name_too_long'    => 'Name is too long (max 100 characters).',
+        'created'          => 'Academic year created.',
+        'renamed'          => 'Academic year renamed.',
+        'deleted'          => 'Academic year deleted.',
+        'switched'         => 'Active year changed.',
+        'delete_confirm'   => 'Delete this academic year?',
+        'manage'           => 'Manage years',
+        'no_year'          => 'No active year',
+        'rename_title'     => 'Rename year',
+        'new_name'         => 'New name',
+        'delete_data_title'  => 'This year contains data',
+        'delete_data_warning'=> 'Download your data before deleting. This action is irreversible.',
+        'subjects_count'   => '%d subject(s)',
+        'themes_count'     => '%d theme(s)',
+        'chapters_count'   => '%d chapter(s)',
+        'documents_count'  => '%d document(s)',
+        'grades_count'     => '%d grade(s)',
+        'download_zip'     => 'Download ZIP',
+        'confirm_password' => 'Type your password to confirm deletion',
+        'wrong_password'   => 'Incorrect password.',
+        'force_delete'     => 'Delete permanently',
+        'deleting'         => 'Deleting…',
     ],
 
     // ── Date/time arrays ─────────────────────────────────────────────

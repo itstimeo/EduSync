@@ -4,6 +4,7 @@ namespace EduSync\Controllers;
 
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Models\AcademicYear;
 use EduSync\Models\Chapter;
 use EduSync\Models\Document;
 use EduSync\Models\Subject;
@@ -19,12 +20,14 @@ class CoursesController
     {
         $this->requireAuth();
         $userId = $this->userId();
+        $year   = $this->requireYear($userId);
 
         View::render('courses/subjects', [
-            'title'    => __('nav.courses'),
-            'flash'    => Session::getFlash(),
-            'userName' => Session::get('user_name', ''),
-            'subjects' => Subject::getAllByUser($userId),
+            'title'      => __('nav.courses'),
+            'flash'      => Session::getFlash(),
+            'userName'   => Session::get('user_name', ''),
+            'subjects'   => Subject::getAllByUserAndYear($userId, (int)$year['id']),
+            'activeYear' => $year,
         ], 'layouts/app');
     }
 
@@ -57,7 +60,8 @@ class CoursesController
             $color = '#6366f1';
         }
 
-        Subject::create($userId, $name, $color);
+        $year = $this->requireYear($userId);
+        Subject::create($userId, $name, $color, (int)$year['id']);
         Session::flash('success', __('courses.subject_created'));
         Session::redirect('/courses');
     }
@@ -785,11 +789,6 @@ class CoursesController
             $zipName = 'Courses.zip';
         }
 
-        if (empty($docs)) {
-            Session::flash('error', __('courses.no_docs_to_export'));
-            Session::redirect('/courses');
-        }
-
         $tmpFile = tempnam(sys_get_temp_dir(), 'es_zip_');
         $zip     = new \ZipArchive();
         if ($zip->open($tmpFile, \ZipArchive::OVERWRITE) !== true) {
@@ -798,7 +797,9 @@ class CoursesController
         }
 
         // Create complete folder structure (including subjects/themes/chapters with no documents)
-        if (!$chapterId) {
+        if ($chapterId) {
+            $zip->addEmptyDir($this->safeName($chapter['name']));
+        } else {
             foreach (Document::getChaptersHierarchyForExport($userId, $subjectId, $themeId) as $row) {
                 $parts = [];
                 if (!$subjectId && !$themeId && $row['subject_name'] !== null) {
@@ -908,5 +909,15 @@ class CoursesController
     private function userId(): int
     {
         return (int) Session::get('user_id');
+    }
+
+    private function requireYear(int $userId): array
+    {
+        $year = AcademicYear::getActiveForUser($userId);
+        if (!$year) {
+            Session::flash('error', __('academic_year.required'));
+            Session::redirect('/academic-years?setup=1');
+        }
+        return $year;
     }
 }

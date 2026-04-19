@@ -16,6 +16,16 @@ class Subject
         return $stmt->fetchAll();
     }
 
+    public static function getAllByUserAndYear(int $userId, int $yearId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare(
+            'SELECT * FROM subjects WHERE user_id = ? AND academic_year_id = ? ORDER BY name ASC'
+        );
+        $stmt->execute([$userId, $yearId]);
+        return $stmt->fetchAll();
+    }
+
     public static function getByIdAndUser(int $id, int $userId): array|false
     {
         $db   = Database::getInstance();
@@ -26,13 +36,13 @@ class Subject
         return $stmt->fetch();
     }
 
-    public static function create(int $userId, string $name, string $color): int
+    public static function create(int $userId, string $name, string $color, int $yearId): int
     {
         $db   = Database::getInstance();
         $stmt = $db->prepare(
-            'INSERT INTO subjects (user_id, name, color) VALUES (?, ?, ?)'
+            'INSERT INTO subjects (user_id, name, color, academic_year_id) VALUES (?, ?, ?, ?)'
         );
-        $stmt->execute([$userId, $name, $color]);
+        $stmt->execute([$userId, $name, $color, $yearId]);
         return (int) $db->lastInsertId();
     }
 

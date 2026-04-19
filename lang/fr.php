@@ -38,6 +38,8 @@ return [
         'new'          => 'Nouveau',
         'no_items'     => 'Rien ici pour l\'instant.',
         'error'        => 'Erreur.',
+        'rename'       => 'Renommer',
+        'create'       => 'Créer',
     ],
 
     // ── Auth ──────────────────────────────────────────────────────────
@@ -354,6 +356,12 @@ return [
         'sending'         => 'Envoi en cours…',
         'verifying'       => 'Vérification…',
 
+        // Academic year section
+        'academic_year'      => 'Année scolaire',
+        'academic_year_desc' => 'Choisissez l\'année active pour les cours et les notes.',
+        'academic_year_none' => 'Aucune année scolaire créée pour l\'instant.',
+        'academic_year_manage' => 'Gérer les années',
+
         // Google Calendar flash
         'gcal_connected'       => 'Google Agenda connecté.',
         'gcal_disconnected'    => 'Google Agenda déconnecté.',
@@ -446,6 +454,43 @@ return [
 
         // Confirm
         'delete_confirm'  => 'Supprimer le préréglage «%s» ? Les sessions existantes ne sont pas affectées.',
+    ],
+
+    // ── Academic year ─────────────────────────────────────────────────
+    'academic_year' => [
+        'title'            => 'Années scolaires',
+        'new'              => 'Nouvelle année scolaire',
+        'name_placeholder' => 'ex. 2024-2025, L1 Droit, Terminale…',
+        'rename_placeholder'=> 'Nouveau nom…',
+        'active'           => 'Active',
+        'set_active'       => 'Définir comme active',
+        'setup_hint'       => 'Créez une année scolaire pour commencer à utiliser EduSync.',
+        'none'             => 'Aucune année scolaire pour l\'instant.',
+        'required'         => 'Veuillez d\'abord créer une année scolaire.',
+        'has_subjects'     => 'Cette année contient des matières et ne peut pas être supprimée.',
+        'name_required'    => 'Veuillez saisir un nom.',
+        'name_too_long'    => 'Le nom est trop long (max 100 caractères).',
+        'created'          => 'Année scolaire créée.',
+        'renamed'          => 'Année scolaire renommée.',
+        'deleted'          => 'Année scolaire supprimée.',
+        'switched'         => 'Année active changée.',
+        'delete_confirm'   => 'Supprimer cette année scolaire ?',
+        'manage'           => 'Gérer les années',
+        'no_year'          => 'Aucune année active',
+        'rename_title'     => 'Renommer l\'année',
+        'new_name'         => 'Nouveau nom',
+        'delete_data_title'  => 'Cette année contient des données',
+        'delete_data_warning'=> 'Téléchargez vos données avant de supprimer. Cette action est irréversible.',
+        'subjects_count'   => '%d matière(s)',
+        'themes_count'     => '%d thème(s)',
+        'chapters_count'   => '%d chapitre(s)',
+        'documents_count'  => '%d document(s)',
+        'grades_count'     => '%d note(s)',
+        'download_zip'     => 'Télécharger le ZIP',
+        'confirm_password' => 'Saisissez votre mot de passe pour confirmer la suppression',
+        'wrong_password'   => 'Mot de passe incorrect.',
+        'force_delete'     => 'Supprimer définitivement',
+        'deleting'         => 'Suppression…',
     ],
 
     // ── Date/time arrays ─────────────────────────────────────────────

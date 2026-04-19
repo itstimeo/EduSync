@@ -16,6 +16,11 @@ if ($reqPath === '/lang') {
     if (in_array($newLang, ['en', 'fr'], true)) {
         setcookie('lang', $newLang, time() + 31536000, '/', '', false, false);
     }
+    $redirectTo = trim($_GET['redirect_to'] ?? '');
+    if ($redirectTo && str_starts_with($redirectTo, '/') && !str_starts_with($redirectTo, '//')) {
+        header('Location: ' . $redirectTo);
+        exit;
+    }
     $referer = $_SERVER['HTTP_REFERER'] ?? '/dashboard';
     $parsed  = parse_url($referer);
     $safe    = empty($parsed['host']) || $parsed['host'] === ($_SERVER['HTTP_HOST'] ?? '');
@@ -28,6 +33,7 @@ if ($reqPath === '/lang') {
 use EduSync\Core\Router;
 use EduSync\Core\Session;
 use EduSync\Core\View;
+use EduSync\Controllers\AcademicYearController;
 use EduSync\Controllers\AuthController;
 use EduSync\Controllers\CoursesController;
 use EduSync\Controllers\DashboardController;
@@ -149,6 +155,15 @@ $router->get('/profile/photo/source',  [$profile, 'servePhotoSource']);
 $router->post('/profile/email/request',[$profile, 'requestEmailChange']);
 $router->post('/profile/email/verify', [$profile, 'verifyEmailChange']);
 $router->post('/profile/password',     [$profile, 'updatePassword']);
+
+$academicYear = new AcademicYearController();
+$router->get('/academic-years',         [$academicYear, 'show']);
+$router->post('/academic-years/create', [$academicYear, 'create']);
+$router->get('/academic-years/switch',  [$academicYear, 'switch']);
+$router->post('/academic-years/rename', [$academicYear, 'rename']);
+$router->post('/academic-years/delete', [$academicYear, 'delete']);
+$router->get('/academic-years/export',        [$academicYear, 'exportZip']);
+$router->post('/academic-years/force-delete', [$academicYear, 'forceDelete']);
 
 $revision = new RevisionController();
 $router->get('/revision',                       [$revision, 'show']);
