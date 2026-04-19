@@ -28,7 +28,7 @@ class ProfileController
         $gcalToken = GoogleToken::getByUser($userId);
 
         View::render('profile/index', [
-            'title'       => 'Profile',
+            'title'       => __('profile.title'),
             'flash'       => Session::getFlash(),
             'userName'    => Session::get('user_name', ''),
             'user'        => $user,
@@ -43,13 +43,13 @@ class ProfileController
         $lastName  = trim($_POST['last_name'] ?? '');
 
         if ($firstName === '' || $lastName === '') {
-            Session::flash('error', 'First name and last name are required.');
+            Session::flash('error', __('profile.name_required'));
             Session::redirect('/profile');
         }
 
         User::updateInfo($userId, $firstName, $lastName);
         Session::set('user_name', $firstName);
-        Session::flash('success', 'Profile updated.');
+        Session::flash('success', __('profile.profile_updated'));
         Session::redirect('/profile');
     }
 
@@ -91,7 +91,7 @@ class ProfileController
     {
         $userId = $this->guard();
         User::deletePhoto($userId);
-        Session::flash('success', 'Photo deleted.');
+        Session::flash('success', __('profile.photo_deleted'));
         Session::redirect('/profile');
     }
 

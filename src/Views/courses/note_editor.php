@@ -49,11 +49,11 @@ $backUrl    = $isEdit ? '/documents/view?id=' . (int)$note['id'] : '/documents?c
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
     </a>
     <p class="breadcrumb" style="margin:0">
-        <a href="/courses">Subjects</a> ›
+        <a href="/courses"><?= __('courses.subjects') ?></a> ›
         <a href="/themes?subject_id=<?= (int)$chapter['subject_id'] ?>"><?= htmlspecialchars($chapter['subject_name'], ENT_QUOTES) ?></a> ›
         <a href="/chapters?theme_id=<?= (int)$chapter['theme_id'] ?>"><?= htmlspecialchars($chapter['theme_name'], ENT_QUOTES) ?></a> ›
         <a href="/documents?chapter_id=<?= $chapterId ?>"><?= htmlspecialchars($chapter['name'], ENT_QUOTES) ?></a> ›
-        <?= $isEdit ? htmlspecialchars($note['title'], ENT_QUOTES) : 'New note' ?>
+        <?= $isEdit ? htmlspecialchars($note['title'], ENT_QUOTES) : __('courses.new_note_title') ?>
     </p>
 </div>
 
@@ -67,15 +67,15 @@ $backUrl    = $isEdit ? '/documents/view?id=' . (int)$note['id'] : '/documents?c
 
     <div class="editor-wrap">
         <div class="editor-meta">
-            <h1><?= $isEdit ? 'Edit note' : 'New note' ?></h1>
+            <h1><?= $isEdit ? __('courses.edit_note_title') : __('courses.new_note_title') ?></h1>
             <div class="field">
-                <label for="title">Title <span class="req">*</span></label>
+                <label for="title"><?= __('courses.doc_title') ?> <span class="req">*</span></label>
                 <input type="text" id="title" name="title" maxlength="255" autofocus
                        value="<?= $isEdit ? htmlspecialchars($note['title'], ENT_QUOTES) : '' ?>">
-                <span class="field-err" id="err-title">Please enter a title.</span>
+                <span class="field-err" id="err-title"><?= __('courses.title_required') ?></span>
             </div>
             <div class="field">
-                <label for="description">Description <span style="font-weight:400;color:var(--text-subtle)">(optional)</span></label>
+                <label for="description"><?= __('common.description') ?> <span style="font-weight:400;color:var(--text-subtle)">(<?= __('common.optional') ?>)</span></label>
                 <textarea id="description" name="description" maxlength="1000"><?= $isEdit ? htmlspecialchars($note['description'] ?? '', ENT_QUOTES) : '' ?></textarea>
             </div>
         </div>
@@ -159,12 +159,12 @@ $backUrl    = $isEdit ? '/documents/view?id=' . (int)$note['id'] : '/documents?c
         <div id="editor"
              class="editor-area"
              contenteditable="true"
-             data-placeholder="Start writing your note…"><?php if ($isEdit && !empty($note['content'])): ?><?= $note['content'] ?><?php endif; ?></div>
+             data-placeholder="<?= __('courses.note_placeholder') ?>"><?php if ($isEdit && !empty($note['content'])): ?><?= $note['content'] ?><?php endif; ?></div>
 
         <div class="editor-footer">
             <button type="submit" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                <?= $isEdit ? 'Save' : 'Create note' ?>
+                <?= $isEdit ? __('common.save') : __('courses.create_note') ?>
             </button>
         </div>
     </div>

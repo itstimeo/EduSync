@@ -30,7 +30,7 @@ $iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
     <a href="/themes?subject_id=<?= (int)$theme['subject_id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;"><a href="/courses">Subjects</a> › <a href="/themes?subject_id=<?= (int)$theme['subject_id'] ?>"><?= htmlspecialchars($theme['subject_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($theme['name'], ENT_QUOTES) ?></p>
+    <p class="breadcrumb" style="margin:0;"><a href="/courses"><?= __('courses.subjects') ?></a> › <a href="/themes?subject_id=<?= (int)$theme['subject_id'] ?>"><?= htmlspecialchars($theme['subject_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($theme['name'], ENT_QUOTES) ?></p>
 </div>
 <div class="page-hd">
     <h1>
@@ -42,13 +42,13 @@ $iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
-        <a href="/courses/export?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-secondary"><?= $iconExp ?> Export</a>
-        <a href="/chapters/create?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-primary">+ New chapter</a>
+        <a href="/courses/export?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-secondary"><?= $iconExp ?> <?= __('courses.export') ?></a>
+        <a href="/chapters/create?theme_id=<?= (int)$theme['id'] ?>" class="btn btn-primary"><?= __('courses.new_chapter') ?></a>
     </div>
 </div>
 
 <?php if (empty($chapters)): ?>
-    <p class="empty">No chapters yet.</p>
+    <p class="empty"><?= __('courses.no_chapters') ?></p>
 <?php else: ?>
     <div id="items">
         <?php foreach ($chapters as $c): ?>
@@ -64,7 +64,7 @@ $iconExp  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill
                         <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
                         <input type="hidden" name="theme_id" value="<?= (int)$theme['id'] ?>">
                         <button type="button" class="btn-icon btn-delete" title="Delete"
-                                onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($c['name']), ENT_QUOTES) ?>» and all its documents?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                onclick="esConfirm('<?= htmlspecialchars(sprintf(__('courses.delete_confirm'), addslashes($c['name'])), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>

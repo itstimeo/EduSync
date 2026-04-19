@@ -54,14 +54,14 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 </style>
 
 <div class="settings-header">
-    <a href="/revision" class="btn-back" title="Back"><?= $iconBack ?></a>
-    <h1>Revision settings</h1>
+    <a href="/revision" class="btn-back" title="<?= __('common.back') ?>"><?= $iconBack ?></a>
+    <h1><?= __('revision_settings.title') ?></h1>
 </div>
 
 <!-- Preset list -->
-<div class="section-title">Your presets</div>
+<div class="section-title"><?= __('revision_settings.your_presets') ?></div>
 <?php if (empty($presets)): ?>
-    <p class="empty" style="background:var(--surface);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:2rem;">No presets yet. Create one below.</p>
+    <p class="empty" style="background:var(--surface);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:2rem;"><?= __('revision_settings.no_presets') ?></p>
 <?php else: ?>
     <div class="preset-list" style="margin-bottom:2rem;">
         <?php foreach ($presets as $p):
@@ -71,7 +71,7 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
                 <span class="preset-name">
                     <?= htmlspecialchars($p['name'], ENT_QUOTES) ?>
                     <?php if ($p['is_default']): ?>
-                        <span class="badge-default">Default</span>
+                        <span class="badge-default"><?= __('revision_settings.default_badge') ?></span>
                     <?php endif; ?>
                 </span>
                 <div class="preset-steps">
@@ -87,15 +87,15 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
                 <div class="preset-actions">
                     <?php if ($p['is_default']): ?>
                         <form method="POST" action="/revision/settings/unset-default" style="display:inline">
-                            <button type="submit" class="btn-icon" title="Remove default" style="background:#fef9c3;color:#b45309;border-color:#fde68a;"><?= $iconStarFill ?></button>
+                            <button type="submit" class="btn-icon" title="<?= __('revision_settings.default_badge') ?>" style="background:#fef9c3;color:#b45309;border-color:#fde68a;"><?= $iconStarFill ?></button>
                         </form>
                     <?php else: ?>
                         <form method="POST" action="/revision/settings/set-default" style="display:inline">
                             <input type="hidden" name="preset_id" value="<?= (int)$p['id'] ?>">
-                            <button type="submit" class="btn-icon btn-icon-star" title="Set as default"><?= $iconStar ?></button>
+                            <button type="submit" class="btn-icon btn-icon-star" title="<?= __('revision_settings.default_badge') ?>"><?= $iconStar ?></button>
                         </form>
                     <?php endif; ?>
-                    <button type="button" class="btn-icon btn-edit" title="Edit"
+                    <button type="button" class="btn-icon btn-edit" title="<?= __('common.edit') ?>"
                         data-id="<?= (int)$p['id'] ?>"
                         data-name="<?= htmlspecialchars($p['name'], ENT_QUOTES) ?>"
                         data-intervals="<?= htmlspecialchars($p['intervals'], ENT_QUOTES) ?>"
@@ -104,8 +104,8 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
                     </button>
                     <form method="POST" action="/revision/settings/delete" style="display:inline">
                         <input type="hidden" name="preset_id" value="<?= (int)$p['id'] ?>">
-                        <button type="button" class="btn-icon btn-delete" title="Delete"
-                            onclick="esConfirm('Delete preset &quot;<?= htmlspecialchars($p['name'], ENT_QUOTES) ?>&quot;? Existing sessions are not affected.', () => this.closest('form').submit())">
+                        <button type="button" class="btn-icon btn-delete" title="<?= __('common.delete') ?>"
+                            onclick="esConfirm(MSG_DELETE_PRESET.replace('%s', '<?= htmlspecialchars($p['name'], ENT_QUOTES) ?>'), () => this.closest('form').submit())">
                             <?= $iconDel ?>
                         </button>
                     </form>
@@ -116,38 +116,48 @@ $iconClose    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
 <?php endif; ?>
 
 <!-- Create / Edit preset form -->
-<div class="section-title" id="form-title">New preset</div>
+<div class="section-title" id="form-title"><?= __('revision_settings.new_preset') ?></div>
 <div class="card">
     <form method="POST" action="/revision/settings/save" id="preset-form" novalidate>
         <input type="hidden" name="preset_id" id="preset_id" value="0">
 
         <div class="form-group">
-            <label for="name">Preset name <span style="color:#ef4444">*</span></label>
-            <input type="text" id="name" name="name" placeholder="e.g. Standard, Intensive, Light" maxlength="100">
+            <label for="name"><?= __('revision_settings.preset_name') ?> <span style="color:#ef4444">*</span></label>
+            <input type="text" id="name" name="name" placeholder="<?= htmlspecialchars(__('revision_settings.preset_placeholder'), ENT_QUOTES) ?>" maxlength="100">
             <span id="err-name" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.2rem;"></span>
         </div>
 
         <div class="form-group">
-            <label>Steps <span style="color:#ef4444">*</span></label>
+            <label><?= __('revision_settings.steps') ?> <span style="color:#ef4444">*</span></label>
             <div class="step-header">
-                <span class="col-day">Day (J+)</span>
-                <span class="col-action">Action label (optional)</span>
+                <span class="col-day"><?= __('revision_settings.col_day') ?></span>
+                <span class="col-action"><?= __('revision_settings.col_action') ?></span>
             </div>
             <div class="steps-editor" id="steps-editor"></div>
-            <button type="button" class="btn-icon btn-icon-plus" onclick="addStep()" title="Add step"><?= $iconPlus ?></button>
+            <button type="button" class="btn-icon btn-icon-plus" onclick="addStep()" title="<?= __('common.add') ?>"><?= $iconPlus ?></button>
             <span id="err-steps" style="display:none;font-size:.75rem;color:#ef4444;margin-top:.4rem;"></span>
-            <span class="hint" style="margin-top:.4rem;">Day 0 = today, day 1 = tomorrow, etc. Steps are followed in order.</span>
+            <span class="hint" style="margin-top:.4rem;"><?= __('revision_settings.step_hint') ?></span>
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary" id="form-submit-btn">Create preset</button>
-            <button type="button" class="btn btn-ghost" id="form-cancel-btn" style="display:none" onclick="resetForm()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="form-submit-btn"><?= __('revision_settings.create_preset') ?></button>
+            <button type="button" class="btn btn-ghost" id="form-cancel-btn" style="display:none" onclick="resetForm()"><?= __('common.cancel') ?></button>
         </div>
     </form>
 </div>
 
 <script>
 var SVG_CLOSE = <?= json_encode($iconClose) ?>;
+var MSG_DELETE_PRESET = <?= json_encode(__('revision_settings.delete_confirm')) ?>;
+var MSG_NAME_REQUIRED = <?= json_encode(__('revision_settings.name_required')) ?>;
+var MSG_STEP_REQUIRED = <?= json_encode(__('revision_settings.step_required')) ?>;
+var MSG_STEP_INVALID  = <?= json_encode(__('revision_settings.step_invalid')) ?>;
+var MSG_EDIT_PRESET   = <?= json_encode(__('revision_settings.edit_preset')) ?>;
+var MSG_NEW_PRESET    = <?= json_encode(__('revision_settings.new_preset')) ?>;
+var MSG_SAVE_CHANGES  = <?= json_encode(__('revision_settings.save_changes')) ?>;
+var MSG_CREATE_PRESET = <?= json_encode(__('revision_settings.create_preset')) ?>;
+var STEP_PLACEHOLDER  = <?= json_encode(__('revision_settings.step_placeholder')) ?>;
+var STEP_REMOVE_TITLE = <?= json_encode(__('revision_settings.remove_step')) ?>;
 
 function addStep(day, action) {
     var editor = document.getElementById('steps-editor');
@@ -157,8 +167,8 @@ function addStep(day, action) {
     row.innerHTML =
         '<span class="step-index">' + (idx + 1) + '</span>' +
         '<input type="number" name="steps[' + idx + '][day]" min="0" placeholder="Day" value="' + (day !== undefined ? day : '') + '">' +
-        '<input type="text" name="steps[' + idx + '][action]" placeholder="e.g. Re-read notes" value="' + (action !== undefined ? escHtml(action) : '') + '">' +
-        '<button type="button" class="btn-icon btn-delete" onclick="removeStep(this)" title="Remove step" style="width:28px;height:28px;">' + SVG_CLOSE + '</button>';
+        '<input type="text" name="steps[' + idx + '][action]" placeholder="' + escHtml(STEP_PLACEHOLDER) + '" value="' + (action !== undefined ? escHtml(action) : '') + '">' +
+        '<button type="button" class="btn-icon btn-delete" onclick="removeStep(this)" title="' + escHtml(STEP_REMOVE_TITLE) + '" style="width:28px;height:28px;">' + SVG_CLOSE + '</button>';
     row.querySelector('input[type="number"]').addEventListener('input', function () {
         this.classList.remove('step-invalid');
         document.getElementById('err-steps').style.display = 'none';
@@ -194,8 +204,8 @@ function loadEditForm(id, name, steps) {
     resetForm();
     document.getElementById('preset_id').value = id;
     document.getElementById('name').value = name;
-    document.getElementById('form-title').textContent = 'Edit preset';
-    document.getElementById('form-submit-btn').textContent = 'Save changes';
+    document.getElementById('form-title').textContent = MSG_EDIT_PRESET;
+    document.getElementById('form-submit-btn').textContent = MSG_SAVE_CHANGES;
     document.getElementById('form-cancel-btn').style.display = '';
     steps.forEach(function(s) { addStep(s.day, s.action || ''); });
     document.getElementById('form-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -205,8 +215,8 @@ function resetForm() {
     document.getElementById('preset_id').value = '0';
     document.getElementById('name').value = '';
     document.getElementById('steps-editor').innerHTML = '';
-    document.getElementById('form-title').textContent = 'New preset';
-    document.getElementById('form-submit-btn').textContent = 'Create preset';
+    document.getElementById('form-title').textContent = MSG_NEW_PRESET;
+    document.getElementById('form-submit-btn').textContent = MSG_CREATE_PRESET;
     document.getElementById('form-cancel-btn').style.display = 'none';
     document.getElementById('err-name').style.display = 'none';
     document.getElementById('err-steps').style.display = 'none';
@@ -225,7 +235,7 @@ document.getElementById('preset-form').addEventListener('submit', function(e) {
     var errSteps = document.getElementById('err-steps');
 
     if (!nameEl.value.trim()) {
-        errName.textContent = 'Preset name is required.';
+        errName.textContent = MSG_NAME_REQUIRED;
         errName.style.display = 'block';
         nameEl.classList.add('step-invalid');
         ok = false;
@@ -236,7 +246,7 @@ document.getElementById('preset-form').addEventListener('submit', function(e) {
 
     var rows = document.querySelectorAll('#steps-editor .step-row');
     if (rows.length === 0) {
-        errSteps.textContent = 'Add at least one step.';
+        errSteps.textContent = MSG_STEP_REQUIRED;
         errSteps.style.display = 'block';
         ok = false;
     } else {
@@ -252,7 +262,7 @@ document.getElementById('preset-form').addEventListener('submit', function(e) {
             }
         });
         if (invalid) {
-            errSteps.textContent = 'Each step must have a valid day (integer \u2265 0).';
+            errSteps.textContent = MSG_STEP_INVALID;
             errSteps.style.display = 'block';
             ok = false;
         } else {

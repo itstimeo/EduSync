@@ -9,12 +9,15 @@ USE edusync;
 -- ─────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS users (
-    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email      VARCHAR(255) NOT NULL UNIQUE,
-    password   VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name  VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id                     INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email                  VARCHAR(255) NOT NULL UNIQUE,
+    password               VARCHAR(255) NOT NULL,
+    first_name             VARCHAR(100) NOT NULL,
+    last_name              VARCHAR(100) NOT NULL,
+    profile_photo          MEDIUMBLOB   NULL,
+    profile_photo_original LONGBLOB     NULL,
+    profile_photo_type     VARCHAR(100) NULL,
+    created_at             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS user_trusted_ips (

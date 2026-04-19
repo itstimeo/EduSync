@@ -26,7 +26,7 @@ class DashboardController
 
         View::render('dashboard/index', [
             'flash'     => Session::getFlash(),
-            'title'     => 'Dashboard',
+            'title'     => __('dashboard.title'),
             'userName'  => Session::get('user_name', ''),
             'grades'    => $grades,
             'average'   => $average,

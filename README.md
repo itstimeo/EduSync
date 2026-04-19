@@ -1,6 +1,6 @@
 # EduSync
 
-Student management application built with PHP and MySQL — v1.8.1.
+Student management application built with PHP and MySQL — v1.9.0.
 
 ## Screenshots
 
@@ -25,10 +25,13 @@ Student management application built with PHP and MySQL — v1.8.1.
 ## Features
 
 - **Auth** — Register/login with email & password, email verification, new-IP detection with 6-digit code by email, Remember me (60-day token with rotation)
-- **Courses** — Subjects → Themes → Chapters → Documents (PDF, images, DOCX, PPT, TXT — up to 50 MB), inline viewer, HSV color picker, list/grid toggle
-- **Grades** — Per-subject grade tracking with coefficients, weighted average, custom subject dropdown with color badges, custom date picker, optional comment
-- **Planning** — Monthly calendar + event list, CRUD events, custom event types (add/rename/recolor/delete), dashboard week view
+- **Courses** — Subjects → Themes → Chapters → Documents (PDF, images, DOCX, PPT, TXT — up to 50 MB), inline viewer, HSV color picker, list/grid toggle, online WYSIWYG text editor, PDF download via Dompdf
+- **Grades** — Per-subject grade tracking with coefficients, weighted average, custom subject dropdown with color badges, custom date picker, optional comment; statistics tab with custom SVG line chart (cumulative weighted averages, overall average, dark/light mode live)
+- **Planning** — Monthly calendar + event list, CRUD events, custom event types (add/rename/recolor/delete), dashboard week view, Google Calendar one-way sync (OAuth2)
 - **Revision** — Spaced repetition (J+1/3/7/14/30 or custom intervals), link chapters or documents, preset management, today's widget on dashboard
+- **Export** — Grade report PDF (Dompdf, grouped by subject with averages); courses ZIP at any hierarchy level (subjects/themes/chapters), HTML notes converted to PDF
+- **Profile** — Edit name, upload/crop/delete profile photo (canvas cropper, original preserved), email change with dual-code verification, password change, Google Calendar connection
+- **Multi-language** — EN/FR interface, language selector with flag dropdown on profile page and auth pages
 
 ## Requirements
 
@@ -98,7 +101,8 @@ src/
   Models/       Database models
   Views/        PHP templates
   Services/     MailService, AuthService, GoogleCalendarService
-  Core/         Router, Database, Session, View
+  Core/         Router, Database, Session, View, Lang
+lang/           Translation files (en.php, fr.php)
 config/         Application configuration (loads .env)
 database/
   migrations/   schema.sql — full database schema

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= \EduSync\Core\Lang::current() ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,8 +35,21 @@
         .link { text-align: center; margin-top: 1rem; font-size: .85rem; }
         .link a { color: #6366f1; text-decoration: none; }
         .link a:hover { text-decoration: underline; }
-        #theme-toggle { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border-radius: 99px; background: var(--surface); border: 2px outset rgba(0,0,0,.2); color: var(--text-muted); cursor: pointer; }
+        .top-controls{position:fixed;top:1rem;right:1rem;display:flex;align-items:center;gap:.5rem;}
+        #theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border-radius: 99px; background: var(--surface); border: 2px outset rgba(0,0,0,.2); color: var(--text-muted); cursor: pointer; }
         html.dark #theme-toggle { border: 2px outset rgba(255,255,255,.15); }
+        .lang-dropdown{position:relative;display:inline-block}
+        .lang-dd-btn{display:flex;align-items:center;gap:.35rem;padding:.28rem .55rem .28rem .45rem;border-radius:8px;border:1px solid var(--border-soft);background:var(--surface);color:var(--text);cursor:pointer;font-size:.78rem;font-weight:600;font-family:inherit;transition:background .15s}
+        .lang-dd-btn:hover{background:var(--bg-subtle)}
+        .lang-flag{display:inline-flex;align-items:center;flex-shrink:0}
+        .lang-dd-code{font-size:.78rem;font-weight:600;color:var(--text-muted)}
+        .lang-dd-chevron{transition:transform .2s;color:var(--text-subtle);flex-shrink:0}
+        .lang-dropdown.open .lang-dd-chevron{transform:rotate(180deg)}
+        .lang-dd-menu{display:none;position:absolute;top:calc(100% + 5px);right:0;background:var(--surface);border:1px solid var(--border-soft);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);min-width:140px;overflow:hidden;z-index:1000}
+        .lang-dropdown.open .lang-dd-menu{display:block}
+        .lang-dd-option{display:flex;align-items:center;gap:.55rem;padding:.55rem .85rem;font-size:.85rem;color:var(--text);text-decoration:none;font-weight:500;transition:background .12s}
+        .lang-dd-option:hover{background:var(--bg-subtle)}
+        .lang-dd-option.active{color:#6366f1;font-weight:700;background:#f5f3ff}
         /* ── Global round checkboxes ── */
         input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:16px!important; height:16px; border-radius:50%; border:2px solid var(--border-soft); background:transparent!important; cursor:pointer; position:relative; flex-shrink:0; transition:background .15s,border-color .15s; vertical-align:middle; padding:0!important; }
         input[type="checkbox"]:checked { background:#6366f1!important; border-color:#6366f1!important; }
@@ -48,7 +61,10 @@
     </style>
 </head>
 <body>
-    <button id="theme-toggle" type="button" aria-label="Toggle dark mode"></button>
+    <div class="top-controls">
+        <?php include __DIR__ . '/_lang_dropdown.php'; ?>
+        <button id="theme-toggle" type="button" aria-label="Toggle dark mode"></button>
+    </div>
     <script>
     (function(){
         var MOON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';

@@ -43,7 +43,7 @@ function docIcon(string $type): string {
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;">
     <a href="/chapters?theme_id=<?= (int)$chapter['theme_id'] ?>" class="btn-back" title="Back"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
-    <p class="breadcrumb" style="margin:0;"><a href="/courses">Subjects</a> › <a href="/themes?subject_id=<?= (int)$chapter['subject_id'] ?>"><?= htmlspecialchars($chapter['subject_name'], ENT_QUOTES) ?></a> › <a href="/chapters?theme_id=<?= (int)$chapter['theme_id'] ?>"><?= htmlspecialchars($chapter['theme_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($chapter['name'], ENT_QUOTES) ?></p>
+    <p class="breadcrumb" style="margin:0;"><a href="/courses"><?= __('courses.subjects') ?></a> › <a href="/themes?subject_id=<?= (int)$chapter['subject_id'] ?>"><?= htmlspecialchars($chapter['subject_name'], ENT_QUOTES) ?></a> › <a href="/chapters?theme_id=<?= (int)$chapter['theme_id'] ?>"><?= htmlspecialchars($chapter['theme_name'], ENT_QUOTES) ?></a> › <?= htmlspecialchars($chapter['name'], ENT_QUOTES) ?></p>
 </div>
 <div class="page-hd">
     <h1>
@@ -55,14 +55,14 @@ function docIcon(string $type): string {
             <button id="btn-list" type="button" title="List">☰</button>
             <button id="btn-grid" type="button" title="Grid">⊞</button>
         </div>
-        <a href="/courses/export?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary"><?= $iconDl ?> Export</a>
-        <a href="/documents/note/new?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary">✎ Write</a>
-        <a href="/documents/upload?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-primary">+ Upload</a>
+        <a href="/courses/export?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary"><?= $iconDl ?> <?= __('courses.export') ?></a>
+        <a href="/documents/note/new?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-secondary"><?= __('courses.write') ?></a>
+        <a href="/documents/upload?chapter_id=<?= (int)$chapter['id'] ?>" class="btn btn-primary"><?= __('courses.upload') ?></a>
     </div>
 </div>
 
 <?php if (empty($documents)): ?>
-    <p class="empty">No documents yet.</p>
+    <p class="empty"><?= __('courses.no_documents') ?></p>
 <?php else: ?>
     <?php $cc = htmlspecialchars($chapter['color'], ENT_QUOTES); ?>
     <div id="items">
@@ -88,7 +88,7 @@ function docIcon(string $type): string {
                         <input type="hidden" name="id" value="<?= (int)$d['id'] ?>">
                         <input type="hidden" name="chapter_id" value="<?= (int)$chapter['id'] ?>">
                         <button type="button" class="btn-icon btn-delete" title="Delete"
-                                onclick="esConfirm('Delete «<?= htmlspecialchars(addslashes($d['title']), ENT_QUOTES) ?>»?',()=>this.closest('form').submit())"><?= $iconDel ?></button>
+                                onclick="esConfirm('<?= htmlspecialchars(sprintf(__('courses.delete_confirm'), addslashes($d['title'])), ENT_QUOTES) ?>',()=>this.closest('form').submit())"><?= $iconDel ?></button>
                     </form>
                 </div>
             </div>

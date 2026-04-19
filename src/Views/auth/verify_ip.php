@@ -1,22 +1,22 @@
-<?php $title = 'Verify new device'; ?>
+<?php $title = __('auth.verify_ip.title'); ?>
 <style>
 .field-err{display:none;font-size:.78rem;color:#ef4444;margin-top:.25rem}
 .field-err.show{display:block}
 .field-invalid{border-color:#ef4444!important;outline:none!important;box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
 </style>
-<h1>New device detected</h1>
+<h1><?= __('auth.verify_ip.title') ?></h1>
 <p style="margin-bottom:1rem;font-size:.9rem;color:#555;">
-    We sent a 6-digit code to your email address. Enter it below to continue.
+    <?= __('auth.verify_ip.subtitle') ?>
 </p>
 <form method="POST" action="/verify-ip" novalidate>
-    <label for="code">Verification code</label>
+    <label for="code"><?= __('auth.verify_ip.code') ?></label>
     <input type="text" id="code" name="code" autofocus
            maxlength="6" inputmode="numeric"
            placeholder="000000"
            style="text-align:center;font-size:1.5rem;letter-spacing:.3em">
-    <span class="field-err" id="err-code">Please enter the 6-digit code.</span>
+    <span class="field-err" id="err-code"><?= __('auth.errors.code_required') ?></span>
 
-    <button type="submit">Verify</button>
+    <button type="submit"><?= __('auth.verify_ip.submit') ?></button>
 </form>
 <p class="link"><a href="/login">Back to login</a></p>
 

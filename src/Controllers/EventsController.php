@@ -42,7 +42,7 @@ class EventsController
         }
 
         View::render('planning/index', [
-            'title'      => 'Planning',
+            'title'      => __('nav.planning'),
             'flash'      => Session::getFlash(),
             'userName'   => Session::get('user_name', ''),
             'month'      => $month,
@@ -66,7 +66,7 @@ class EventsController
         }
 
         View::render('planning/event_form', [
-            'title'       => 'New event',
+            'title'       => __('planning.new_event_title'),
             'flash'       => Session::getFlash(),
             'userName'    => Session::get('user_name', ''),
             'event'       => null,
@@ -96,7 +96,7 @@ class EventsController
                 }
             }
         } catch (\Throwable $e) {}
-        Session::flash('success', 'Event created.');
+        Session::flash('success', __('planning.event_created'));
         Session::redirect('/planning');
     }
 
@@ -112,7 +112,7 @@ class EventsController
         }
 
         View::render('planning/event_form', [
-            'title'       => 'Edit event',
+            'title'       => __('planning.edit_event_title'),
             'flash'       => Session::getFlash(),
             'userName'    => Session::get('user_name', ''),
             'event'       => $event,
@@ -148,7 +148,7 @@ class EventsController
                 }
             }
         } catch (\Throwable $e) {}
-        Session::flash('success', 'Event updated.');
+        Session::flash('success', __('planning.event_updated'));
         Session::redirect('/planning');
     }
 
@@ -166,7 +166,7 @@ class EventsController
                 }
             } catch (\Throwable $e) {}
             Event::delete($id, $userId);
-            Session::flash('success', 'Event deleted.');
+            Session::flash('success', __('planning.event_deleted'));
         }
 
         Session::redirect('/planning');
@@ -178,7 +178,7 @@ class EventsController
         $userId = $this->userId();
 
         View::render('planning/settings', [
-            'title'     => 'Planning settings',
+            'title'     => __('nav.planning') . ' — ' . __('common.settings'),
             'flash'     => Session::getFlash(),
             'userName'  => Session::get('user_name', ''),
             'typeList'  => EventTypeColor::getAllByUser($userId),
@@ -198,7 +198,7 @@ class EventsController
                 Event::deleteByType($userId, $typeRow['type']);
                 EventTypeColor::deleteById($deleteId, $userId);
             }
-            Session::flash('success', 'Type deleted.');
+            Session::flash('success', __('planning.type_deleted'));
             Session::redirect('/planning/settings');
         }
 
@@ -214,7 +214,7 @@ class EventsController
             }
         }
 
-        Session::flash('success', 'Settings saved.');
+        Session::flash('success', __('planning.settings_saved'));
         Session::redirect('/planning/settings');
     }
 
@@ -227,7 +227,7 @@ class EventsController
         $color = trim($_POST['new_color'] ?? '#6366f1');
 
         if ($label === '' || strlen($label) > 50) {
-            Session::flash('error', 'Type name is required (max 50 characters).');
+            Session::flash('error', __('planning.type_name_error'));
             Session::redirect('/planning/settings');
         }
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
@@ -237,7 +237,7 @@ class EventsController
         $typeKey = substr(strtolower(preg_replace('/[^a-z0-9]+/i', '_', $label)), 0, 50);
         EventTypeColor::insert($userId, $typeKey, $label, $color);
 
-        Session::flash('success', 'Type added.');
+        Session::flash('success', __('planning.type_added'));
         Session::redirect('/planning/settings');
     }
 
@@ -263,13 +263,13 @@ class EventsController
 
         $error = null;
         if ($title === '') {
-            $error = 'Title is required.';
+            $error = __('planning.title_required');
         } elseif (strlen($title) > 200) {
-            $error = 'Title is too long (max 200 characters).';
+            $error = __('planning.title_too_long');
         } elseif ($startDate === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate)) {
-            $error = 'Start date is required.';
+            $error = __('planning.start_date_required');
         } elseif ($endDate !== null && $endDate < $startDate) {
-            $error = 'End date must be on or after start date.';
+            $error = __('planning.end_date_invalid');
         }
 
         return [$title, $type, $color, $startDate, $endDate, $description, $error];
